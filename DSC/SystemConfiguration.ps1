@@ -8,28 +8,28 @@ Configuration System {
 
         # Set inactivity timeout
         Registry InactivityTimeout {
-            Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+            Key       = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
             ValueName = 'InactivityTimeoutSecs'
-            Ensure = 'Present'
+            Ensure    = 'Present'
             ValueType = 'Dword'
             ValueData = '30'
         }
 
         # Enable Hyper V
         WindowsOptionalFeature EnableHyperV {
-            Name = 'Microsoft-Hyper-V-All'
+            Name   = 'Microsoft-Hyper-V-All'
             Ensure = 'Enable'
         }
         
         # Enable Windows containers
         WindowsOptionalFeature WindowsContainers {
-            Name = 'Containers'
+            Name   = 'Containers'
             Ensure = 'Enable'
         }
 
         # Enable WSL 2
         WindowsOptionalFeature VirtualMachinePlatform {
-            Name = 'VirtualMachinePlatform'
+            Name   = 'VirtualMachinePlatform'
             Ensure = 'Enable'
         }
 
