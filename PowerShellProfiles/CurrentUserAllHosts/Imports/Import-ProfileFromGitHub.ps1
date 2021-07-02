@@ -24,8 +24,6 @@ function Import-ProfileFromGitHub {
         | Select-Object -ExpandProperty Content `
         | ConvertFrom-Json
 
-
-    
     Invoke-WebRequest "https://raw.githubusercontent.com/jasonmcboyd/Environment/$Branch/PowerShellProfiles/CurrentUserAllHosts/profile.ps1" -OutFile $profile.CurrentUserAllHosts
 
     $filesToImport = $directoryStructure.tree.path | Where-Object { $_ -like "$remoteImportsDirectory/*.ps1" }
