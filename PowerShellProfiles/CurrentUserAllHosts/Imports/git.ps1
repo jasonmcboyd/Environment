@@ -17,12 +17,13 @@ function Git-Graph {
         $Number = 10,
 
         [Parameter(Position = 1, Mandatory = $true, ParameterSetName = 'FullBranch')]
-        [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'FullAllBranches')]
+        [Parameter(Position = 1, Mandatory = $true, ParameterSetName = 'FullAllBranches')]
         [switch]
         $Full,
 
-        [switch]
-        $Color
+        [Parameter(Position = 2)]
+        [string]
+        $AdditionalGitParameters
     )
 
     Write-Debug "ParamterSetName: $($PSCmdlet.ParameterSetName)"
@@ -42,7 +43,7 @@ function Git-Graph {
     Write-Debug "branches: $branches"
 
     $command = 'git log --graph --oneline'
-    if ($Color) { $command += ' --color' }
+    $command += " $AdditionalGitParameters"
     if ($PSBoundParameters.ContainsKey('Number')) { $command += " -n $Number" }
     $command += $brances
 
