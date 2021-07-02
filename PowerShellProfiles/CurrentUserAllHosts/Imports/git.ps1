@@ -1,17 +1,31 @@
 function Git-Graph {
     [CmdletBinding()]
     param (
-        [Parameter(Position = 0, Mandatory = $false, ParameterSetName = 'SpecificBranches')]
+        [Parameter(Position = 0, ParameterSetName = 'TruncatedBranch')]
+        [Parameter(Position = 0, ParameterSetName = 'FullBranch')]
         [string[]]
         $Branch = '',
 
-        [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'AllBranches')]
+        [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'TruncatedAllBranches')]
+        [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'FullAllBranches')]
         [switch]
         $All,
 
+        [Parameter(Position = 1, ParameterSetName = 'TruncatedBranch')]
+        [Parameter(Position = 1, ParameterSetName = 'TruncatedAllBranches')]
         [int]
-        $Number
+        $Number = 10,
+
+        [Parameter(Position = 1, Mandatory = $true, ParameterSetName = 'FullBranch')]
+        [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'FullAllBranches')]
+        [switch]
+        $Full,
+
+        [switch]
+        $Color
     )
+
+    Write-Debug "ParamterSetName: $($PSCmdlet.ParameterSetName)"
 
     if ($PSCmdlet.ParameterSetName -eq 'AllBranches') {
         $branches = '--all' 
@@ -27,7 +41,14 @@ function Git-Graph {
 
     Write-Debug "branches: $branches"
 
-    & git log --graph --oneline $branches $(if ($PSBoundParameters.ContainsKey('Number')) { "-n $Number" })
+    $command = 'git log --graph --oneline'
+    if ($Color) { $command += ' --color' }
+    if ($PSBoundParameters.ContainsKey('Number')) { $command += " -n $Number" }
+    $command += $brances
+
+    Write-Debug "command: $command"
+
+    Invoke-Expression $command
 }
 
 function gs { & git status }
