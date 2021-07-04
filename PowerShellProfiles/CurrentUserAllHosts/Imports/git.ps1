@@ -1,23 +1,23 @@
 function Git-Graph {
     [CmdletBinding()]
     param (
-        [Parameter(Position = 0, ParameterSetName = 'SpecificBranch, TruncatedLogs')]
-        [Parameter(Position = 0, ParameterSetName = 'SpecificBranch, FullLogs')]
+        [Parameter(Position = 0, ParameterSetName = 'Branch, Number')]
+        [Parameter(Position = 0, ParameterSetName = 'Branch, Full')]
         [string[]]
         $Branch = '',
 
-        [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'AllBranches, TruncatedLogs')]
-        [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'AllBranches, FullLogs')]
+        [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'All, Number')]
+        [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'All, Full')]
         [switch]
         $All,
 
-        [Parameter(Position = 1, ParameterSetName = 'SpecificBranch, TruncatedLogs')]
-        [Parameter(Position = 1, ParameterSetName = 'AllBranches, TruncatedLogs')]
+        [Parameter(Position = 1, ParameterSetName = 'Branch, Number')]
+        [Parameter(Position = 1, ParameterSetName = 'All, Number')]
         [int]
         $Number = 10,
 
-        [Parameter(Position = 1, Mandatory = $true, ParameterSetName = 'SpecificBranch, FullLogs')]
-        [Parameter(Position = 1, Mandatory = $true, ParameterSetName = 'AllBranches, FullLogs')]
+        [Parameter(Position = 1, Mandatory = $true, ParameterSetName = 'Branch, Full')]
+        [Parameter(Position = 1, Mandatory = $true, ParameterSetName = 'All, Full')]
         [switch]
         $Full,
 
@@ -31,7 +31,7 @@ function Git-Graph {
 
     Write-Debug "ParamterSetName: $($PSCmdlet.ParameterSetName)"
 
-    if ($PSCmdlet.ParameterSetName -like '*AllBranches*') {
+    if ($PSCmdlet.ParameterSetName -like '*All*') {
         $branches = '--all' 
     }
     else {
@@ -44,7 +44,7 @@ function Git-Graph {
         'git log --graph --oneline'
     )
     if (![string]::IsNullOrEmpty($AdditionalGitParameters)) { $tokens += $AdditionalGitParameters }
-    if ($PSCmdlet.ParameterSetName -like '*TruncatedLogs*') { $tokens += "-n $Number" }
+    if ($PSCmdlet.ParameterSetName -like '*Number*') { $tokens += "-n $Number" }
     if (![string]::IsNullOrEmpty($branches)) { $tokens += $branches }
 
     $command = [string]::Join(' ', $tokens)
