@@ -38,4 +38,6 @@ function Import-ProfileFromGitHub {
 
         Invoke-WebRequest -Uri $url -OutFile $destination
     }
+
+    . $profile.CurrentUserAllHosts
 }
