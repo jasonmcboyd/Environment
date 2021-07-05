@@ -4,6 +4,7 @@ Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://choc
 
 # Packages
 
+- azure-cli
 - beyondcompare
 - brave
 - cascadia-code-nerd-font
