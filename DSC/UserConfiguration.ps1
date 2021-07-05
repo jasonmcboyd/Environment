@@ -6,11 +6,39 @@ Configuration User {
 
     Node $AllNodes.NodeName {
 
+        #region Windows Snap Settings
+
+        $desktopRegistryKey = "HKEY_CURRENT_USER\Control Panel\Desktop"
+
+        # Enable window snapping
+        Registry EnableWindowSnapping {
+            Key                  = $desktopRegistryKey
+            ValueName            = 'WindowArrangementActive'
+            Ensure               = 'Present'
+            ValueType            = 'String'
+            ValueData            = '1'
+            PsDscRunAsCredential = $Node.Credentials
+        }
+
+        $snapRegistryKey = 'HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+
+        # Disable snap assist (this is what asks what you want to snap next to the window you just snapped).
+        Registry DisableSnapAssist {
+            Key                  = $snapRegistryKey
+            ValueName            = 'SnapAssist'
+            Ensure               = 'Present'
+            ValueType            = 'Dword'
+            ValueData            = '0'
+            PsDscRunAsCredential = $Node.Credentials
+        }
+
+        #region Windows Snap Settings
+
         #region Windows Explorer Settings
-    
+
         $explorerAdvancedSettingsRegistryKey = 'HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
         $explorerCabinetStateRegistryKey = 'HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CabinetState'
-            
+
         # Show file extensions for known file types.
         Registry ShowFileExtensions {
             Key                  = $explorerAdvancedSettingsRegistryKey
@@ -50,7 +78,7 @@ Configuration User {
             ValueData            = '0'
             PsDscRunAsCredential = $Node.Credentials
         }
-    
+
         #endregion Windows Explorer Settings
 
         #region Touchpad Settings

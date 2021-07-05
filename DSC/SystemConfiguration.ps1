@@ -20,7 +20,7 @@ Configuration System {
             Name   = 'Microsoft-Hyper-V-All'
             Ensure = 'Enable'
         }
-        
+
         # Enable Windows containers
         WindowsOptionalFeature WindowsContainers {
             Name   = 'Containers'
