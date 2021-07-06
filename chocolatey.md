@@ -21,4 +21,6 @@ Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://choc
 - procexp
 - procmon
 - starship
+- terraform
+- visualstudio2019community
 - vscode
