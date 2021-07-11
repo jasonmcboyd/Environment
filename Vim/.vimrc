@@ -17,9 +17,15 @@ set timeoutlen=500
 " Enable incremental search
 set incsearch
 
+" Enable highlight search
+set hlsearch
+
 " Return to normal mode from insert mode
 inoremap <C-i> <Esc>
 inoremap jj <Esc>
+
+" Turn off search highlight
+nnoremap <esc> :noh<cr><esc>
 
 " Insert blank line above and return cursor to position
 nnoremap <leader>O moO<Esc>`o

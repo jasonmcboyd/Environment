@@ -1,0 +1,51 @@
+" Don't try to be vi compatible
+set nocompatible
+
+" Blink cursor on error instead of beeping (grr)
+set noerrorbells visualbell t_vb=
+autocmd GUIEnter * set visualbell t_vb=
+
+" Show relative line numbers
+set relativenumber
+
+" Set timeout length for leader key to 500 ms
+set timeoutlen=500
+
+" Enable incremental search
+set incsearch
+
+" Enable highlight search
+set hlsearch
+
+" Return to normal mode from insert mode
+inoremap <C-i> <esc>
+inoremap jj <esc>
+
+" Turn off search highlight
+nnoremap <esc> :noh<cr><esc>
+
+" Select text from current caret position to desired jump label (fwd and reverse directions supported)
+nnoremap <space><space> gS:vsc Tools.InvokePeasyMotionTextSelect<cr>
+
+" Insert blank line above and return cursor to position
+nnoremap <space>O moO<esc>`o
+" Insert blank line below and return cursor to position
+nnoremap <space>o moo<esc>`o
+
+" Center search in middle of the screen
+nnoremap n nzz
+nnoremap N Nzz
+
+" Change current line starting at first non-whitespace character and don't copy to the unnamed register
+nnoremap cc ^"_c$
+
+" Standard cc command
+nnoremap <space>cc cc
+
+" Delete current line and don't copy it to the unnamed register
+nnoremap <space>dd "_dd
+
+" x does not copy to unnamed register
+nnoremap x \"_x
+" space x does copy to unnamed register
+nnoremap <space>x x
