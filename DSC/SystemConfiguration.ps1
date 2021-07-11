@@ -12,7 +12,7 @@ Configuration System {
             ValueName = 'InactivityTimeoutSecs'
             Ensure    = 'Present'
             ValueType = 'Dword'
-            ValueData = '60'
+            ValueData = '120'
         }
 
         # Enable Hyper V
