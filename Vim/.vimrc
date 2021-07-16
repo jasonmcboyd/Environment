@@ -37,10 +37,10 @@ nnoremap n nzz
 nnoremap N Nzz
 
 " Change current line starting at first non-whitespace character and don't copy to the unnamed register
-nnoremap <leader>cc ^"_c$
+nnoremap cc ^"_c$
 
-" Delete current line and don't copy it to the unnamed register
-nnoremap <leader>dd "_dd
+" Standard cc command
+nnoremap <space>cc cc
 
 " x does not copy to unnamed register
 nnoremap x "_x
