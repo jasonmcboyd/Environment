@@ -3,7 +3,6 @@ set nocompatible
 
 " Blink cursor on error instead of beeping (grr)
 set noerrorbells visualbell t_vb=
-autocmd GUIEnter * set visualbell t_vb=
 
 " Show relative line numbers
 set relativenumber
