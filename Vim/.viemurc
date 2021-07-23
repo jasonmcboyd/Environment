@@ -23,8 +23,15 @@ inoremap jj <esc>
 " Turn off search highlight
 nnoremap <esc> :noh<cr><esc>
 
-" Select text from current caret position to desired jump label (fwd and reverse directions supported)
-nnoremap <space><space> :vsc Tools.InvokePeasyMotionTextSelect<cr>
+" Peasymotion mappings
+nnoremap <space><space> :vsc Tools.InvokePeasyMotion<cr>
+" Tools.InvokePeasyMotion
+" Tools.InvokePeasyMotionTextSelect
+" Tools.InvokePeasyMotionLineJumpToWordBegining
+" Tools.InvokePeasyMotionLineJumpToWordEnding
+" Tools.InvokePeasyMotionJumpToDocumentTab
+" Tools.InvokePeasyMotionJumpToLineBegining
+" Tools.InvokePeasyMotionTwoCharJump
 
 " Insert blank line above and return cursor to position
 nnoremap <space>O moO<esc>`o
