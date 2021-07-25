@@ -17,7 +17,7 @@ function Import-EnvironmentSettings {
     $all = !$PowerShell -and !$Vim -and !$WindowsTerminal
     Write-Debug "all: $all"
 
-    $noImportsDirectory = Get-Item "$PSScriptRoot/../NoImports" | Select-Object -ExpandProperty FullName
+    $noImportsDirectory = Get-Item "$PSScriptRoot/../../NoImports" | Select-Object -ExpandProperty FullName
     Write-Debug "noImportsDirectory: $noImportsDirectory"
 
     if ($all -or $PowerShell) {
