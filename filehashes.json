@@ -69,7 +69,7 @@
   },
   {
     "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Import-VimrcFromGitHub.ps1",
-    "FileHash": "EAB1C607AB95F3BFD0F142A7920AF26942CF3DE439DF154A54320B7FA48C5050"
+    "FileHash": "849D785752C51B562629FF8EA9F65040F5188DE2FD0F8B5971C480581C36C323"
   },
   {
     "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Import-WindowsTerminalFromGitHub.ps1",

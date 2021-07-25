@@ -7,21 +7,21 @@ param (
 )
 
 $targetDirectories = [System.Collections.Generic.HashSet[string]]::new()
-$targetDirectories.Add($HOME)
+$targetDirectories.Add($HOME) | Out-Null
 
 if (Test-Path Env:\HOME) {
     $path = $env:HOME
 
     Write-Debug "Env:\HOME exists, path is $path."
 
-    $targetDirectories.Add($path)
+    $targetDirectories.Add($path) | Out-Null
 }
 elseif ((Test-Path Env:\HOMEDRIVE) -and (Test-Path Env:\HOMEPATH)) {
     $path = Join-Path $env:HOMEDRIVE $env:HOMEPATH
 
     Write-Debug "Env:\HOMEDRIVE and Env:\HOMEPATH exists, path is $path."
 
-    $targetDirectories.Add($path)
+    $targetDirectories.Add($path) | Out-Null
 }
 
 Write-Debug "targetDirectories:`r`n$targetDirectories"
