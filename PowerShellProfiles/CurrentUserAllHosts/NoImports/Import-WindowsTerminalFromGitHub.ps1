@@ -26,7 +26,7 @@ $hashesMatch =
         -GitHubUrl $url `
         -RemoteFileHashes $RemoteFileHashes
 
-if ($hashesMatch) {
+if (!$hashesMatch) {
     Write-Verbose "Downloading $url"
     Invoke-WebRequest $url -OutFile "$windowsTerminalSettingsPath"
 }
