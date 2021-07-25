@@ -1,4 +1,17 @@
 [CmdletBinding()]
+param (
+    [Parameter(ParameterSetName = 'Credentials')]
+    [pscredential]
+    $Credentials,
+
+    [Parameter(ParameterSetName = 'NoCredentials')]
+    [switch]
+    $NoCredentials
+)
+
+if (!$NoCredentials -and ($null -eq $Credentials)) {
+    $Credentials = Get-Credential -Message 'Supply credentials for localhost'
+}
 
 Configuration User {
 
@@ -115,14 +128,26 @@ Configuration User {
     }
 }
 
-$configurationData = @{
-    AllNodes = @(
-        @{
-            NodeName                    = 'localhost'
-            PsDscAllowPlainTextPassword = $true
-            Credentials                 = Get-Credential -Message 'Supply credentials for localhost'
-        }
-    )
+if ($NoCredentials) {
+    $configurationData = @{
+        AllNodes = @(
+            @{
+                NodeName                    = 'localhost'
+                PsDscAllowPlainTextPassword = $true
+            }
+        )
+    }
+}
+else {
+    $configurationData = @{
+        AllNodes = @(
+            @{
+                NodeName                    = 'localhost'
+                PsDscAllowPlainTextPassword = $true
+                Credentials                 = $Credentials
+            }
+        )
+    }
 }
 
 User -ConfigurationData $configurationData
