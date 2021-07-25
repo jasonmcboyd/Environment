@@ -6,11 +6,6 @@ param (
     $RemoteFileHashes
 )
 
-$rootUrl = & "$PSScriptRoot/Get-GitHubRootUrl.ps1" -Branch $Branch
-
-$url = "$rootUrl`?recursive=1"
-Write-Debug "url: $url"
-
 $remoteImportsDirectory = 'PowerShellProfiles/CurrentUserAllHosts/Imports'
 $remoteNoImportsDirectory = 'PowerShellProfiles/CurrentUserAllHosts/NoImports'
 $localProfileDirectory = Split-Path $profile.CurrentUserAllHosts
@@ -30,11 +25,15 @@ if (!(Test-Path $localNoImportsDirectory)) {
     mkdir $localNoImportsDirectory
 }
 
+$directoryUrl = "https://api.github.com/repos/jasonmcboyd/Environment/git/trees/$Branch`?recursive=1"
+Write-Debug "directoryUrl: $directoryUrl"
+
 $directoryStructure = `
-    Invoke-WebRequest $url `
+    Invoke-WebRequest $directoryUrl `
     | Select-Object -ExpandProperty Content `
     | ConvertFrom-Json
 
+$rootUrl = & "$PSScriptRoot/Get-GitHubRootUrl.ps1" -Branch $Branch
 Invoke-WebRequest "$rootUrl/PowerShellProfiles/CurrentUserAllHosts/profile.ps1" -OutFile $profile.CurrentUserAllHosts
 
 $filesToImport = $directoryStructure.tree.path | Where-Object { $_ -like "$remoteImportsDirectory/*.ps1" }
