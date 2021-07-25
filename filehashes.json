@@ -65,7 +65,7 @@
   },
   {
     "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Import-ProfileFromGitHub.ps1",
-    "FileHash": "FD4394B47D2646E4B9988EED3D2C64928CB0AB2DA069E8020922C1F01BC09967"
+    "FileHash": "C45FC98C45F68A3934B5735084DA911721E34C9E5A2E1F2C8D2EF9A20531AFDC"
   },
   {
     "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Import-VimrcFromGitHub.ps1",
@@ -73,7 +73,7 @@
   },
   {
     "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Import-WindowsTerminalFromGitHub.ps1",
-    "FileHash": "131A140B7FD3C37FA74893CF0ACE664BF370057CE2D78C2558B0A0DD63DA9D9E"
+    "FileHash": "91B22FFDC8213BEFACBEF407743EEC466ECAA51C8E990B50D6D6ABAB5EF183B8"
   },
   {
     "RelativePath": "\\Vim\\.viemurc",
