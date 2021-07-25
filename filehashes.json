@@ -21,7 +21,7 @@
   },
   {
     "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\Imports\\Import-EnvironmentSettings.ps1",
-    "FileHash": "2130122486BE6E92495B7A106CA8DB4B08CBCD3E1DB10C8A8D4EAFB8676909A1"
+    "FileHash": "897264E8C29946D862B7D01002DA8F7331C18FDB2042B1305FD959068BB27E8A"
   },
   {
     "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\Imports\\misc-aliases.ps1",
@@ -52,16 +52,28 @@
     "FileHash": "26670EBE20666FCE1BE1311032458051CA9C504F2CA19C3130881AEC3BA2BA69"
   },
   {
+    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Compare-FileHash.ps1",
+    "FileHash": "26DFD1981C71D447C3B2F5C48D8803BD3A83F8E820463D44847972ECAC901D10"
+  },
+  {
+    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Get-GitHubRootUrl.ps1",
+    "FileHash": "81906D2F294EBD5CEC2F1A2FEF04548AD54AE088AEF7F239CDDC3995321D17E6"
+  },
+  {
+    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Get-RemoteFileHashes.ps1",
+    "FileHash": "74FA14124DCB04EFE28D1F0C6958403E1F296A89CAAE552E586FEC4E5FB75485"
+  },
+  {
     "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Import-ProfileFromGitHub.ps1",
-    "FileHash": "57B5E591E18EBADEE6C6773004EC0E1A48D4DB8FB004273E77504883A52EE644"
+    "FileHash": "FD4394B47D2646E4B9988EED3D2C64928CB0AB2DA069E8020922C1F01BC09967"
   },
   {
     "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Import-VimrcFromGitHub.ps1",
-    "FileHash": "9C2C528EE027BA300D761FC3D12D9BFA52CC987E24AA87F8E737E94EC6F1335C"
+    "FileHash": "562FBEC2F2AEFC5E83A8068A451D0BB22CE2393212292E1EE3488BB52450C6B6"
   },
   {
     "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Import-WindowsTerminalFromGitHub.ps1",
-    "FileHash": "76B5640946311D01DAFB2153B99A2B3D9F59313576DB2AB349C7C0318A199D97"
+    "FileHash": "131A140B7FD3C37FA74893CF0ACE664BF370057CE2D78C2558B0A0DD63DA9D9E"
   },
   {
     "RelativePath": "\\Vim\\.viemurc",

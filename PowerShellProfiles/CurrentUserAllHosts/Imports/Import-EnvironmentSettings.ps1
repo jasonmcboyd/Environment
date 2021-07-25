@@ -20,33 +20,26 @@ function Import-EnvironmentSettings {
     $noImportsDirectory = Get-Item "$PSScriptRoot/../../NoImports" | Select-Object -ExpandProperty FullName
     Write-Debug "noImportsDirectory: $noImportsDirectory"
 
+    $remoteFileHashes = & "$noImportsDirectory/Get-RemoteFileHashes.ps1" -Branch $Branch
+
     if ($all -or $PowerShell) {
 
         Write-Verbose "Importing PowerShell profile..."
 
-        # Dot source the PowerShell Profile import script.
-        . "$noImportsDirectory\Import-ProfileFromGitHub"
-
-        Import-ProfileFromGitHub -Branch $Branch
+        & "$noImportsDirectory/Import-ProfileFromGitHub.ps1" -Branch $Branch -RemoteFileHashes $remoteFileHashes
     }
 
     if ($all -or $Vim) {
 
         Write-Verbose "Importing Vimrc..."
 
-        # Dot source the Vimrc import script.
-        . "$noImportsDirectory\Import-VimrcFromGitHub"
-
-        Import-VimrcFromGitHub -Branch $Branch
+        & "$noImportsDirectory/Import-VimrcFromGitHub.ps1" -Branch $Branch -RemoteFileHashes $remoteFileHashes
     }
 
     if ($all -or $WindowsTerminal) {
 
         Write-Verbose "Importing Windows Terminal settings..."
 
-        # Dot source the Windows Terminal settings import script.
-        . "$noImportsDirectory\Import-WindowsTerminalFromGitHub"
-
-        Import-WindowsTerminalFromGitHub -Branch $Branch
+        & "$noImportsDirectory/Import-WindowsTerminalFromGitHub.ps1" -Branch $Branch -RemoteFileHashes $remoteFileHashes
     }
 }

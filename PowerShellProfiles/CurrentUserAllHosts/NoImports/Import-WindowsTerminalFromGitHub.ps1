@@ -1,19 +1,32 @@
-function Import-WindowsTerminalFromGitHub {
-    [CmdletBinding()]
-    param (
-        [string]
-        $Branch = 'master'
-    )
+[CmdletBinding()]
+param (
+    [string]
+    $Branch = 'master',
 
-    $userHome = $HOME
-    $windowsTerminalDirectory = Get-ChildItem "$userHome\AppData\Local\Packages" -Directory -Filter '*WindowsTerminal*'
-    $windowsTerminalSettingsPath = Join-Path $windowsTerminalDirectory 'LocalState\settings.json'
+    $RemoteFileHashes
+)
 
-    Write-Debug "windowsTerminalSettingsPath: $windowsTerminalSettingsPath"
+$userHome = $HOME
+$windowsTerminalDirectory = Get-ChildItem "$userHome\AppData\Local\Packages" -Directory -Filter '*WindowsTerminal*'
+$windowsTerminalSettingsPath = Join-Path $windowsTerminalDirectory 'LocalState\settings.json'
 
-    if (!(Test-Path $windowsTerminalSettingsPath)) {
-        throw "Windows Terminal settings not found."
-    }
+Write-Debug "windowsTerminalSettingsPath: $windowsTerminalSettingsPath"
 
-    Invoke-WebRequest "https://raw.githubusercontent.com/jasonmcboyd/Environment/$Branch/WindowsTerminal/settings.json" -OutFile "$windowsTerminalSettingsPath"
+if (!(Test-Path $windowsTerminalSettingsPath)) {
+    throw "Windows Terminal settings not found."
+}
+
+$rootUrl = & "$PSScriptRoot/Get-GitHubRootUrl.ps1" -Branch $Branch
+$url = "$rootUrl/WindowsTerminal/settings.json"
+
+$hashesMatch =
+    & "$PSScriptRoot/Compare-FileHash.ps1" `
+        -Branch $Branch `
+        -FilePath $windowsTerminalSettingsPath `
+        -GitHubUrl $url `
+        -RemoteFileHashes $RemoteFileHashes
+
+if ($hashesMatch) {
+    Write-Verbose "Downloading $url"
+    Invoke-WebRequest $url -OutFile "$windowsTerminalSettingsPath"
 }
