@@ -53,7 +53,7 @@
   },
   {
     "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Compare-FileHash.ps1",
-    "FileHash": "26DFD1981C71D447C3B2F5C48D8803BD3A83F8E820463D44847972ECAC901D10"
+    "FileHash": "CB353C1057FA1BFEDEEB0A6AE7A7E3D54BE60AB40BFCB848E00A2446744697CE"
   },
   {
     "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Get-GitHubRootUrl.ps1",
@@ -69,7 +69,7 @@
   },
   {
     "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Import-VimrcFromGitHub.ps1",
-    "FileHash": "562FBEC2F2AEFC5E83A8068A451D0BB22CE2393212292E1EE3488BB52450C6B6"
+    "FileHash": "EAB1C607AB95F3BFD0F142A7920AF26942CF3DE439DF154A54320B7FA48C5050"
   },
   {
     "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Import-WindowsTerminalFromGitHub.ps1",
