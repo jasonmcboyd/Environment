@@ -4,7 +4,7 @@ param (
     [pscredential]
     $Credentials,
 
-    [Parameter(ParameterSetName = 'NoCredentials')]
+    [Parameter(Mandatory = $true, ParameterSetName = 'NoCredentials')]
     [switch]
     $NoCredentials
 )
