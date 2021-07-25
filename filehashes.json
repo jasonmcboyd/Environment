@@ -1,0 +1,78 @@
+[
+  {
+    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\profile.ps1",
+    "FileHash": "9443F680ED28306244569901B58035A63620C4B74B713F9F4184AD2D7D7B5A1B"
+  },
+  {
+    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\Imports\\base64.ps1",
+    "FileHash": "4B239058C72B81887B89DCABC62A3A53C564DDD1A378E4AC0924E0ECA84CFF2A"
+  },
+  {
+    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\Imports\\docker.ps1",
+    "FileHash": "C339B048D2BC0E858815B85E64AB1CBE8CAB6C9749899A6995808F763B1C3F2D"
+  },
+  {
+    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\Imports\\executables.ps1",
+    "FileHash": "7282381F24F31694AD8B7C9631E926B9A53BC33C310249BBB8520DBBBF0C6BF5"
+  },
+  {
+    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\Imports\\git.ps1",
+    "FileHash": "8FA97D2FD62149C1BADE0AF721BC6857C6D8535B5A853844E30A02E3557AB9D9"
+  },
+  {
+    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\Imports\\Import-EnvironmentSettings.ps1",
+    "FileHash": "2130122486BE6E92495B7A106CA8DB4B08CBCD3E1DB10C8A8D4EAFB8676909A1"
+  },
+  {
+    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\Imports\\misc-aliases.ps1",
+    "FileHash": "9688A727E205AA5D43FFB801C4A2866290DD69293BD827583D0AB96769A7606A"
+  },
+  {
+    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\Imports\\psreadline.ps1",
+    "FileHash": "4E047C9F25581AC85D50963AFAE019F74617EC71D7AD6FA9F272A26FF5F72F22"
+  },
+  {
+    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\Imports\\starship.ps1",
+    "FileHash": "E91DF77D5891B8AAAE1DC0B83D7A1469514A007E2C7828D9260D3BF200C91717"
+  },
+  {
+    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\Imports\\terraform.ps1",
+    "FileHash": "2390F572BA290D561F90532CC895AC28D51FB1C17F077479CAA3A94F1AF060EC"
+  },
+  {
+    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\Imports\\utility-functions.ps1",
+    "FileHash": "437FA28F10FB430F5F0E9DDE7D73EE4730446B29D9E538CDEC3F80CE4C0A9F23"
+  },
+  {
+    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\Imports\\visual-studio.ps1",
+    "FileHash": "F7E50A278D6137E09F062FACF7404D47B2D6FB94A28E5F91D98BE2C46343A1F9"
+  },
+  {
+    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\Imports\\watch.ps1",
+    "FileHash": "26670EBE20666FCE1BE1311032458051CA9C504F2CA19C3130881AEC3BA2BA69"
+  },
+  {
+    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Import-ProfileFromGitHub.ps1",
+    "FileHash": "57B5E591E18EBADEE6C6773004EC0E1A48D4DB8FB004273E77504883A52EE644"
+  },
+  {
+    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Import-VimrcFromGitHub.ps1",
+    "FileHash": "9C2C528EE027BA300D761FC3D12D9BFA52CC987E24AA87F8E737E94EC6F1335C"
+  },
+  {
+    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Import-WindowsTerminalFromGitHub.ps1",
+    "FileHash": "76B5640946311D01DAFB2153B99A2B3D9F59313576DB2AB349C7C0318A199D97"
+  },
+  {
+    "RelativePath": "\\Vim\\.viemurc",
+    "FileHash": "AD86C44C01301E07667EFD6A4BAC78EFE8EBA800E473C301C069B4881036AF0F"
+  },
+  {
+    "RelativePath": "\\Vim\\.vimrc",
+    "FileHash": "BE21B1A078F44B3208A5F5B9CDE594478A51A08658F7FA8337893117C749C59F"
+  },
+  {
+    "RelativePath": "\\WindowsTerminal\\settings.json",
+    "FileHash": "4FD214191C01043D59C13E6728CDB9759AED59DE8BC83BFFA91FF58925A57B4B"
+  }
+]
