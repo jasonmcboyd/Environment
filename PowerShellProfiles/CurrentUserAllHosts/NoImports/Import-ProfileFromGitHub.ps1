@@ -10,12 +10,12 @@ function Import-ProfileFromGitHub {
 
     $remoteImportsDirectory = 'PowerShellProfiles/CurrentUserAllHosts/Imports'
     $localProfileDirectory = Split-Path $profile.CurrentUserAllHosts
-    $localImportsDirectory = Join-Path $localProfileDirectory 'Imports'
+    $localImportsDirectory = Join-Path $localProfileDirectory 'Imports/Personal'
 
-    Write-Debug "importsDirectory: $localImportsDirectory"
+    Write-Debug "localImportsDirectory: $localImportsDirectory"
 
     if (!(Test-Path $localImportsDirectory)) {
-        Write-Verbose "Creatimg Imports directory..."
+        Write-Verbose "Creatimg local imports directory..."
         mkdir $localImportsDirectory
     }
 
