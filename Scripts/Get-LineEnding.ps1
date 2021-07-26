@@ -1,10 +1,10 @@
 [CmdletBinding()]
 param (
   [string]
-  $FilePath
+  $Path
 )
 
-$content = Get-Content -Path $FilePath -Raw
+$content = Get-Content -Path $Path -Raw
 $index = $content.IndexOf("`n")
 
 if ($content[$index - 1] -eq "`r") {

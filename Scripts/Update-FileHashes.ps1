@@ -33,12 +33,23 @@ $files += Get-ChildItem $windowsTerminalDirectory
 
 foreach ($file in $files) {
   $relativePath = ($file | Select-Object -ExpandProperty FullName).Replace($repositoryDirectory, '').Replace('\', '/')
-  $fileHash = Get-FileHash -Path $file
+  $lineEnding = & "$PSScriptRoot/Get-LineEnding.ps1" -Path $file
+  if ($lineEnding -eq 'CRLF') {
+    $crlfHash = (Get-FileHash -Path $file).Hash
+    $lfHash = (Get-FileHash -InputStream ([IO.MemoryStream]::new([Text.Encoding]::UTF8.GetBytes((Get-Content -Path $file -Raw).Replace("`r`n", "`r"))))).Hash
+  }
+  else {
+    $crlfHash = (Get-FileHash -InputStream ([IO.MemoryStream]::new([Text.Encoding]::UTF8.GetBytes((Get-Content -Path $file -Raw).Replace("`r", "`r`n"))))).Hash
+    $lfHash = (Get-FileHash -Path $file).Hash
+  }
   $obj = [PSCustomObject]@{
     RelativePath = $relativePath
-    FileHash     = $fileHash.Hash
+    FileHash     = [PSCustomObject]@{
+      CRLF = $crlfHash
+      LF = $lfHash
+    }
   }
   $hashes += $obj
 }
 
-$hashes | ConvertTo-Json | Set-Content -Path $filehashesPath
+$hashes | ConvertTo-Json -Depth 10 | Set-Content -Path $filehashesPath
