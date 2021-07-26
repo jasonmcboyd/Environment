@@ -25,13 +25,7 @@ if (!(Test-Path $localNoImportsDirectory)) {
     mkdir $localNoImportsDirectory
 }
 
-$directoryUrl = "https://api.github.com/repos/jasonmcboyd/Environment/git/trees/$Branch`?recursive=1"
-Write-Debug "directoryUrl: $directoryUrl"
-
-$directoryStructure = `
-    Invoke-WebRequest $directoryUrl `
-    | Select-Object -ExpandProperty Content `
-    | ConvertFrom-Json
+$directoryStructure = & "$PSScriptRoot/Get-GitHubDirectoryStructure.ps1" -Branch $Branch
 
 $rootUrl = & "$PSScriptRoot/Get-GitHubRootUrl.ps1" -Branch $Branch
 Invoke-WebRequest "$rootUrl/PowerShellProfiles/CurrentUserAllHosts/profile.ps1" -OutFile $profile.CurrentUserAllHosts
