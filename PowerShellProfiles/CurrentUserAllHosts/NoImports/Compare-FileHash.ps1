@@ -9,7 +9,7 @@ param (
   $RemoteFileHashes
 )
 
-if (Test-Path) {
+if (Test-Path $FilePath) {
   $localFileHash = Get-FileHash -Path $FilePath | Select-Object -ExpandProperty Hash
 }
 else {
