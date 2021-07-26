@@ -21,7 +21,7 @@
   },
   {
     "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\Imports\\Personal\\Import-EnvironmentSettings.ps1",
-    "FileHash": "71AB347BC1BCDC85D734997E3D25E156DDF132EEBD87FBBEC1EF67C6CDB2BB96"
+    "FileHash": "E4D16430936F748A4ADACB170EA40D7EFAF3AF42089E0B7ABAD2751310DA6B76"
   },
   {
     "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\Imports\\Personal\\misc-aliases.ps1",
@@ -78,18 +78,6 @@
   {
     "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Get-WindowsTerminalDeploymentInfo.ps1",
     "FileHash": "DD0AAF6478B60DAC4C94226EFEE5C7A1B7328C87477587CBEF0226996668667B"
-  },
-  {
-    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Import-ProfileFromGitHub.ps1",
-    "FileHash": "05C2378E67C10A7DD10269BC767F8DF8687CB2615E226D0EF25222FE46D725DC"
-  },
-  {
-    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Import-VimrcFromGitHub.ps1",
-    "FileHash": "849D785752C51B562629FF8EA9F65040F5188DE2FD0F8B5971C480581C36C323"
-  },
-  {
-    "RelativePath": "\\PowerShellProfiles\\CurrentUserAllHosts\\NoImports\\Import-WindowsTerminalFromGitHub copy.ps1",
-    "FileHash": "91B22FFDC8213BEFACBEF407743EEC466ECAA51C8E990B50D6D6ABAB5EF183B8"
   },
   {
     "RelativePath": "\\Vim\\.viemurc",

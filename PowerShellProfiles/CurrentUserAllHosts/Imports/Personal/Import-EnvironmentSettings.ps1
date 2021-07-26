@@ -43,7 +43,7 @@ function Import-EnvironmentSettings {
             -Key $deploymentInfo.Url.Replace($rootUrl, '') `
             -RemoteFileHashes $RemoteFileHashes
 
-        if ($hashesMatch) {
+        if (!$hashesMatch) {
             Write-Verbose "Deploying $($deploymentInfo.Destination)..."
 
             Invoke-WebRequest $deploymentInfo.Url -OutFile "$($deploymentInfo.Destination)"
