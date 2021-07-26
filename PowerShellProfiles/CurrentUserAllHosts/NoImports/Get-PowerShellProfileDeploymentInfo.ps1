@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param (
-    [string]
-    $Branch = 'master'
+  [string]
+  $Branch = 'master'
 )
 
 $rootUrl = & "$PSScriptRoot/Get-GitHubRootUrl.ps1" -Branch $Branch
@@ -11,8 +11,8 @@ $remotePaths = $directoryStructure.tree.path | Where-Object { $_ -like '*PowerSh
 $localProfileDirectory = Split-Path $profile.CurrentUserAllHosts
 
 foreach ($remotePath in $remotePaths) {
-    [PSCustomObject]@{
-        Url = "$rootUrl/$remotePath"
-        Destination = "$localProfileDirectory\$($remotePath.Replace('PowerShellProfiles/CurrentUserAllHosts/', '').Replace('/', '\'))"
-    }
+  [PSCustomObject]@{
+    Url         = "$rootUrl/$remotePath"
+    Destination = "$localProfileDirectory\$($remotePath.Replace('PowerShellProfiles/CurrentUserAllHosts/', '').Replace('/', '\'))"
+  }
 }

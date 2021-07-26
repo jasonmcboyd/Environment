@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param (
-    [string]
-    $Branch = 'master'
+  [string]
+  $Branch = 'master'
 )
 
 $windowsTerminalDirectory = Get-ChildItem "$Home\AppData\Local\Packages" -Directory -Filter '*WindowsTerminal*'
@@ -11,6 +11,6 @@ $rootUrl = & "$PSScriptRoot/Get-GitHubRootUrl.ps1" -Branch $Branch
 $url = "$rootUrl/WindowsTerminal/settings.json"
 
 [PSCustomObject]@{
-    Url = $url
-    Destination = $windowsTerminalSettingsPath
+  Url         = $url
+  Destination = $windowsTerminalSettingsPath
 }

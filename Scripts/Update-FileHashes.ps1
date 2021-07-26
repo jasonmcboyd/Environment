@@ -36,7 +36,7 @@ foreach ($file in $files) {
   $fileHash = Get-FileHash -Path $file
   $obj = [PSCustomObject]@{
     RelativePath = $relativePath
-    FileHash = $fileHash.Hash
+    FileHash     = $fileHash.Hash
   }
   $hashes += $obj
 }

@@ -1,13 +1,13 @@
 function Get-BinObjFolder {
-    [CmdletBinding()]
-    param ()
+  [CmdletBinding()]
+  param ()
 
-    Get-ChildItem -Recurse -Directory | Where-Object { $_.Name -match '^(bin|obj)$' }
+  Get-ChildItem -Recurse -Directory | Where-Object { $_.Name -match '^(bin|obj)$' }
 }
 
 function Remove-BinObjFolder {
-    [CmdletBinding()]
-    param ()
+  [CmdletBinding()]
+  param ()
 
-    Get-BinObjFolder | Remove-Item -Recurse -Force
+  Get-BinObjFolder | Remove-Item -Recurse -Force
 }
