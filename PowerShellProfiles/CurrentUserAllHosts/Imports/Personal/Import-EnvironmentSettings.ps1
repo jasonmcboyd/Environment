@@ -17,7 +17,7 @@ function Import-EnvironmentSettings {
     $all = !$PowerShell -and !$Vim -and !$WindowsTerminal
     Write-Debug "all: $all"
 
-    $noImportsDirectory = Get-Item "$PSScriptRoot/../NoImports" | Select-Object -ExpandProperty FullName
+    $noImportsDirectory = Get-Item "$PSScriptRoot/../../NoImports" | Select-Object -ExpandProperty FullName
 
     $deploymentInfos = @()
 
@@ -45,18 +45,11 @@ function Import-EnvironmentSettings {
 
         if ($hashesMatch) {
             Write-Verbose "Deploying $($deploymentInfo.Destination)..."
+
+            Invoke-WebRequest $deploymentInfo.Url -OutFile "$($deploymentInfo.Destination)"
         }
         else {
-            Write-Verbose "Skipping $(deploymentInfo.Destination)..."
+            Write-Verbose "Skipping $($deploymentInfo.Destination)..."
         }
-
-        # if (!$hashesMatch) {
-        #     Write-Verbose "Downloading $url"
-        #     Invoke-WebRequest $url -OutFile "$destination"
-
-        #     foreach ($targetDirectory in $targetDirectories | Select-Object -Skip 1) {
-        #         Copy-Item $destination "$targetDirectory/$file"
-        #     }
-        # }
     }
 }
