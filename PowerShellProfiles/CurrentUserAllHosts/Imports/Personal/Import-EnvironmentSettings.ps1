@@ -53,7 +53,7 @@ function Import-EnvironmentSettings {
         $fileContent = $fileContent -replace "`n", "`r`n"
       }
 
-      Set-Content -Path $deploymentInfo.Destination -Value $fileContent
+      Set-Content -Path $deploymentInfo.Destination -Value $fileContent -NoNewLine
     }
     else {
       Write-Verbose "Skipping $($deploymentInfo.Destination)..."
