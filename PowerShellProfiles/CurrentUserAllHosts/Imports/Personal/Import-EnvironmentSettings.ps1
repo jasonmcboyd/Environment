@@ -47,7 +47,13 @@ function Import-EnvironmentSettings {
     if (!$hashesMatch) {
       Write-Verbose "Deploying $($deploymentInfo.Destination)..."
 
-      Invoke-WebRequest $deploymentInfo.Url -OutFile "$($deploymentInfo.Destination)"
+      $fileContent = (Invoke-WebRequest $deploymentInfo.Url).Content
+
+      if ($deploymentInfo.LineEnding -eq 'CRLF') {
+        $fileContent = $fileContent -replace "`n", "`r`n"
+      }
+
+      Set-Content -Path $deploymentInfo.Destination -Value $fileContent
     }
     else {
       Write-Verbose "Skipping $($deploymentInfo.Destination)..."
