@@ -39,6 +39,7 @@ foreach ($file in $files) {
     [PSCustomObject]@{
       Url         = $url
       Destination = $destination
+      LineEnding  = "LF"
     }
   }
 }

@@ -41,6 +41,7 @@ function Import-EnvironmentSettings {
       & "$noImportsDirectory/Compare-FileHash.ps1" `
       -FilePath $deploymentInfo.Destination `
       -Key $deploymentInfo.Url.Replace($rootUrl, '') `
+      -LineEnding $deploymentInfo.LineEnding `
       -RemoteFileHashes $RemoteFileHashes
 
     if (!$hashesMatch) {

@@ -14,5 +14,6 @@ foreach ($remotePath in $remotePaths) {
   [PSCustomObject]@{
     Url         = "$rootUrl/$remotePath"
     Destination = "$localProfileDirectory\$($remotePath.Replace('PowerShellProfiles/CurrentUserAllHosts/', '').Replace('/', '\'))"
+    LineEnding  = "CRLF"
   }
 }

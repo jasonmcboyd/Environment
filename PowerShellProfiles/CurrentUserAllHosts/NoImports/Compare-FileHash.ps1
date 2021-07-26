@@ -6,6 +6,10 @@ param (
   [string]
   $Key,
 
+  [ValidateSet('LF', 'CRLF')]
+  [string]
+  $LineEnding,
+
   $RemoteFileHashes
 )
 
@@ -19,7 +23,8 @@ else {
 $remoteFileHash =
   $RemoteFileHashes `
   | Where-Object { $_.RelativePath -eq $Key } `
-  | Select-Object -ExpandProperty FileHash
+  | Select-Object -ExpandProperty FileHash `
+  | Select-Object -ExpandProperty $LineEnding
 
 $hashesMatch = $localFileHash -eq $remoteFileHash
 Write-Debug @"
@@ -28,4 +33,5 @@ Hash Comparison:
     $Key : $remoteFileHash
     Match : $hashesMatch
 "@
+
 $hashesMatch

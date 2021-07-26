@@ -13,4 +13,5 @@ $url = "$rootUrl/WindowsTerminal/settings.json"
 [PSCustomObject]@{
   Url         = $url
   Destination = $windowsTerminalSettingsPath
+  LineEnding  = "CRLF"
 }
