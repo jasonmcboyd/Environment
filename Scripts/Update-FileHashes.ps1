@@ -32,7 +32,7 @@ $files += Get-ChildItem $vimDirectory
 $files += Get-ChildItem $windowsTerminalDirectory
 
 foreach ($file in $files) {
-  $relativePath = ($file | Select-Object -ExpandProperty FullName).Replace($repositoryDirectory, '')
+  $relativePath = ($file | Select-Object -ExpandProperty FullName).Replace($repositoryDirectory, '').Replace('\', '/')
   $fileHash = Get-FileHash -Path $file
   $obj = [PSCustomObject]@{
     RelativePath = $relativePath
