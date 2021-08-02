@@ -22,8 +22,7 @@ elseif ((Test-Path Env:\HOMEDRIVE) -and (Test-Path Env:\HOMEPATH)) {
   $targetDirectories.Add($path) | Out-Null
 }
 
-Write-Debug "targetDirectories:`r`n$targetDirectories"
-Write-Debug $targetDirectories.Length
+Write-Debug "targetDirectories:`r`n`t$($targetDirectories -join "`r`n`t")"
 
 $rootUrl = & "$PSScriptRoot/Get-GitHubRootUrl.ps1" -Branch $Branch
 $files = @('.vimrc', '.viemurc')
