@@ -53,6 +53,13 @@ function Import-EnvironmentSettings {
         $fileContent = $fileContent -replace "`n", "`r`n"
       }
 
+      $destinationDirectory = $deploymentInfo.Destination | Split-Path
+
+      if (!(Test-Path $destinationDirectory)) {
+        Write-Debug "Creating destination directory..."
+        New-Item -ItemType Directory -Path $destinationDirectory -Force | Out-Null
+      }
+
       Set-Content -Path $deploymentInfo.Destination -Value $fileContent -NoNewLine
     }
     else {
