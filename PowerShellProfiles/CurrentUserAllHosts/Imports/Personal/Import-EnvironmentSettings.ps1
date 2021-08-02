@@ -33,6 +33,11 @@ function Import-EnvironmentSettings {
     $deploymentInfos += & "$noImportsDirectory/Get-WindowsTerminalDeploymentInfo.ps1" -Branch $Branch
   }
 
+  if ($deploymentInfos.Length -eq 0) {
+    Write-Verbose "Nothing to deploy."
+    return
+  }
+
   $remoteFileHashes = & "$noImportsDirectory/Get-RemoteFileHashes.ps1" -Branch $Branch
   $rootUrl = & "$noImportsDirectory/Get-GitHubRootUrl.ps1" -Branch $Branch
 
