@@ -23,6 +23,7 @@ set hlsearch
 " Return to normal mode from insert mode
 inoremap <C-i> <Esc>
 inoremap jj <Esc>
+inoremap JJ <Esc>
 
 " Turn off search highlight
 nnoremap <esc> :noh<cr><esc>
