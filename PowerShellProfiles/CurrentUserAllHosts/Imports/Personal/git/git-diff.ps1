@@ -1,8 +1,13 @@
 function gd {
   [CmdletBinding()]
   param (
+    [Parameter(Position = 0, ParameterSetName = 'Count')]
     [int]
     $Count,
+
+    [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'Branch')]
+    [string]
+    $Branch,
 
     [switch]
     $NameOnly
@@ -12,6 +17,10 @@ function gd {
 
   if ($PSBoundParameters.ContainsKey('Count')) {
     $command += " HEAD~$Count"
+  }
+
+  if ($PSBoundParameters.ContainsKey('Branch')) {
+    $command += " $Branch"
   }
 
   if ($NameOnly) {
