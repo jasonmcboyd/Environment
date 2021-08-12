@@ -24,3 +24,4 @@ Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://choc
 - terraform
 - visualstudio2019community
 - vscode
+- wsl2
