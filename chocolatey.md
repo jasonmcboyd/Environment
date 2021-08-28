@@ -12,6 +12,7 @@ Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://choc
 - DotNet4.5.2
 - dotnetcore-sdk
 - dotnetfx
+- fiddler
 - git
 - linqpad5
 - linqpad6
