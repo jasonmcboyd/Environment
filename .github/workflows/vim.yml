@@ -41,7 +41,7 @@ jobs:
 
       - name: Get Previous Release
         id: get-previous-release
-        if: ${{ steps.file-diff-count.outputs.FILE_DIFF_COUNT != 0 }}
+        # if: ${{ steps.file-diff-count.outputs.FILE_DIFF_COUNT != 0 }}
         uses: oprypin/find-latest-tag@15bced4d90eca49f28fe470349173502af3dcd24
         with:
           repository: jasonmcboyd/Environment
@@ -49,7 +49,7 @@ jobs:
           prefix: "vim-"
 
       - name: Write Previous Release
-        if: ${{ steps.file-diff-count.outputs.FILE_DIFF_COUNT != 0 }}
+        # if: ${{ steps.file-diff-count.outputs.FILE_DIFF_COUNT != 0 }}
         run: echo "${{ steps.get-previous-release.outputs.tag }}"
 
       # Runs a single command using the runners shell
