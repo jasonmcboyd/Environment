@@ -58,7 +58,7 @@ jobs:
 
       - name: Get Next Release Tag
         id: get-next-release-tag
-        run: echo "vim-${{ steps.get-major-number.outputs.TAG + 1}}.0.0"
+        run: echo "vim-${{ steps.get-major-number.outputs.TAG + 1 }}.0.0"
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
