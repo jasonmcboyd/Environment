@@ -45,7 +45,7 @@ jobs:
         uses: oprypin/find-latest-tag@15bced4d90eca49f28fe470349173502af3dcd24
         with:
           repository: jasonmcboyd/Environment
-          release-only: true
+          releases-only: true
           prefix: "vim-"
 
       - name: Write Previous Release
