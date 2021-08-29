@@ -56,6 +56,9 @@ jobs:
         id: get-version-number
         run: echo "::set-output name=VERSION_NUMBER::$(echo {{ steps.get-previous-release.outputs.tag }} | cut -d - -f 2)"
 
+      - name: Write Version Number
+        run: echo "${{ steps.get-version-number.outputs.VERSION_NUMBER }}"
+
       - name: Get Next Release Tag
         uses: christian-draeger/increment-semantic-version@1.0.2
         id: get-next-release-tag
