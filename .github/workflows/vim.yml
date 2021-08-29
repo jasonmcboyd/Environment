@@ -37,7 +37,7 @@ jobs:
       - name: Zip Files
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         shell: pwsh
-        run: Compress-Archive -Path ./Vim/* -DestinationPath ./vim.zip; get-item .; dir -recurse *.zip
+        run: Compress-Archive -Path ./Vim/* -DestinationPath ./vim.zip -Verbose
 
       - name: Get Archive Hash
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
