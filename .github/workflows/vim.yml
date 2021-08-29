@@ -41,14 +41,18 @@ jobs:
       # Test diff count
       - name: File Diff Count
         id: file-diff-count
-        run: echo "::set-output name=FILE_DIFF_COUNT::$(git diff HEAD~ --name-only | wc -l)"
+        run: echo "::set-output name=FILE_DIFF_COUNT::$(git diff HEAD~ --name-only -- ./Vim | wc -l)"
 
       - name: Write File Diff Count
         run: echo "${{ steps.file-diff-count.outputs.FILE_DIFF_COUNT }}"
 
+      - name: Zip Files
+        # if: ${{ steps.file-diff-count.outputs.FILE_DIFF_COUNT != 0 }}
+        run: zip ./Vim/* ./vim.zip
+
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: echo Hello, world!
+        run: ls
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
