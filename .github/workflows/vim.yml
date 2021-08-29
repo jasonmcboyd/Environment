@@ -52,6 +52,14 @@ jobs:
         # if: ${{ steps.file-diff-count.outputs.FILE_DIFF_COUNT != 0 }}
         run: echo "${{ steps.get-previous-release.outputs.tag }}"
 
+      - name: Get Major Number
+        id: get-major-number
+        run: echo "::set-output name=TAG::$(echo {{steps.get-previous-release.coutputs.tag}} | cut -d - -f 2 | cut -d . -f 1)"
+
+      - name: Get Next Release Tag
+        id: get-next-release-tag
+        run: echo "vim-{{ steps.get-major-number.outputs.TAG + 1}}.0.0"
+
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: ls
