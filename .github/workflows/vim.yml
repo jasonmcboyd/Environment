@@ -24,12 +24,17 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      
+
       # Hash the Vim folder
       - name: Folder Hash
+        id: folder-hash
         uses: theowenyoung/folder-hash@dbee806babae73233242b3b50270e96ad1b46fd7
         with:
           path: ./Vim
+
+      # Test hash output
+      - name: Write Hash
+        run: echo "{{ steps.folder-hash.outupts.hash }}"
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
