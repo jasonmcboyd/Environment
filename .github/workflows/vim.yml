@@ -54,7 +54,7 @@ jobs:
 
       - name: Get Version Number
         id: get-version-number
-        run: echo "::set-output name=VERSION_NUMBER::$(echo {{ steps.get-previous-release.outputs.tag }} | cut -d - -f 2)"
+        run: echo "::set-output name=VERSION_NUMBER::$(echo ${{ steps.get-previous-release.outputs.tag }} | cut -d - -f 2)"
 
       - name: Write Version Number
         run: echo "${{ steps.get-version-number.outputs.VERSION_NUMBER }}"
