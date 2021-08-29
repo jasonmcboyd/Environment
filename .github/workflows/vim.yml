@@ -60,7 +60,7 @@ jobs:
           echo "::set-output name=NEXT_RELEASE::vim-v{{ $Matches.major }}.0.0"
 
       - name: Write Next Release
-        run: echo "${{ steps.get-next-release.outputs.VERSION_NUMBER }}"
+        run: echo "${{ steps.get-next-release.outputs.NEXT_RELEASE }}"
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
