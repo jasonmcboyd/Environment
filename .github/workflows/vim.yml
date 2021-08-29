@@ -18,7 +18,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -29,18 +29,17 @@ jobs:
 
       - name: Get Files Changed Count
         id: files-changed-count
-        run: echo "::set-output name=COUNT::$(git diff HEAD~ --name-only -- ./Vim | wc -l)"
+        run: echo "::set-output name=COUNT::$(git diff HEAD~ --name-only -- ./Vim | Measure-Object).Count"
 
       - name: Write Files Changed Count
         run: echo "${{ steps.file-diff-count.outputs.COUNT }}"
 
       - name: Zip Files
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        run: zip -r -j vim.zip ./Vim
+        run: Compress-Archive ./Vim/* ./vim.zip
 
       - name: Get Archive Hash
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        shell: pwsh
         run: echo "::set-output name=HASH::$(Get-FileHash -Path ./vim.zip -Algorithm sha512)"
 
       - name: Get Previous Release
@@ -59,20 +58,17 @@ jobs:
       - name: Get Next Version
         id: get-next-version
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        shell: pwsh
         run: |
           '${{ steps.get-previous-release.outputs.tag }}' -match 'vim-v(?<major>\d+)\.'
           echo "::set-output name=VERSION::$($Matches.major + 1).0.0"
 
       - name: Write Next Version
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        shell: pwsh
         run: echo "${{ steps.get-next-version.outputs.VERSION }}"
 
       - name: Get Next Release
         id: get-next-release
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        shell: pwsh
         run: echo "::set-output name=NEXT_RELEASE::vim-v${{ steps.get-next-version.outputs.VERSION }}"
 
       - name: Write Next Release
@@ -90,11 +86,9 @@ jobs:
         uses: actions/setup-dotnet@v1
 
       - name: Upate Nuspec
-        shell: pwsh
         run: |
           cd Nuspec/environment-vim-config
           $xml = [xml](Get-Content ./environment-vim-config.nuspec -Raw)
           $xml.package.metadata.version = "${{ steps.get-next-version.outputs.VERSION }}"
           Set-Content -Path ./environment-vim-config.nuspec -Value $xml.OuterXml
           choco pack ./environment-vim-config.nuspec
-          ls
