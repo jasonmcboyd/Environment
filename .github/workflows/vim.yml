@@ -35,8 +35,11 @@ jobs:
         run: echo "${{ steps.file-diff-count.outputs.COUNT }}"
 
       - name: Zip Files
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        run: zip -r -j vim.zip ./Vim
+        # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        shell: pwsh
+        run: |
+          Compress-Archive -Path ./Vim/* -DestinationPath ./vim.zip
+          echo "::set-output name=ARCHIVE_HASH::$(Get-FileHash -Path ./vim.zip -Algorithm sha512)"
 
       - name: Get Previous Release
         id: get-previous-release
@@ -69,3 +72,6 @@ jobs:
         with:
           files: vim.zip
           tag_name: ${{ steps.get-next-release.outputs.NEXT_RELEASE }}
+
+      - name: Setup .NET Core
+        uses: actions/setupk-dotnet@v1
