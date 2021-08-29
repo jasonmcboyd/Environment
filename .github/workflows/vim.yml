@@ -57,7 +57,7 @@ jobs:
         shell: pwsh
         run: |
           '${{ steps.get-previous-release.outputs.tag }}' -match 'vim-v(?<major>\d+)\.'
-          echo "::set-output name=NEXT_RELEASE::vim-v$($Matches.major + 1).0.0"
+          echo "::set-output name=NEXT_RELEASE::vim-v$([int]$Matches.major + 1).0.0"
 
       - name: Write Next Release
         run: echo "${{ steps.get-next-release.outputs.NEXT_RELEASE }}"
