@@ -58,7 +58,7 @@ jobs:
 
       - name: Get Next Version
         id: get-next-version
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         shell: pwsh
         run: |
           '${{ steps.get-previous-release.outputs.tag }}' -match 'vim-v(?<major>\d+)\.'
