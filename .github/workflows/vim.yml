@@ -94,8 +94,7 @@ jobs:
         run: |
           cd Nuspec/environment-vim-config
           $xml = [xml](Get-Content ./environment-vim-config.nuspec -Raw)
-          echo "${{ steps.get-next-version.outputs.VERSION }}"
           $xml.package.metadata.version = "${{ steps.get-next-version.outputs.VERSION }}"
-          $xml.OuterXml
           Set-Content -Path ./environment-vim-config.nuspec -Value $xml.OuterXml
-          cat ./environment-vim-config.nuspec
+          nuget pack ./environment-vim-config.nuspec
+          ls
