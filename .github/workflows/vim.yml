@@ -64,6 +64,11 @@ jobs:
           '${{ steps.get-previous-release.outputs.tag }}' -match 'vim-v(?<major>\d+)\.'
           echo "::set-output name=VERSION::$($Matches.major + 1).0.0"
 
+      - name: Write Next Version
+        # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        shell: pwsh
+        run: echo "${{ steps.get-next-version.outputs.VERSION }}"
+
       - name: Get Next Release
         id: get-next-release
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
