@@ -57,7 +57,7 @@ jobs:
         run: echo "${{ steps.get-previous-release.outputs.tag }}"
 
       - name: Get Next Version
-        id: get-vext-version
+        id: get-next-version
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         shell: pwsh
         run: |
