@@ -74,4 +74,4 @@ jobs:
           tag_name: ${{ steps.get-next-release.outputs.NEXT_RELEASE }}
 
       - name: Setup .NET Core
-        uses: actions/setupk-dotnet@v1
+        uses: actions/setup-dotnet@v1
