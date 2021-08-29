@@ -38,7 +38,7 @@ jobs:
 
       # Test diff count
       - name: File Diff Count
-        id: fild-diff-count
+        id: file-diff-count
         run: echo "::set-output name=FILE_DIFF_COUNT::$(git diff HEAD~ --name-only | wc -l)"
 
       - name: Write File Diff Count
