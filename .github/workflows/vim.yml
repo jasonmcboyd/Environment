@@ -37,11 +37,12 @@ jobs:
       - name: Zip Files
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         shell: pwsh
-        run: |
-          Compress-Archive -Path ./Vim/* -DestinationPath ./vim.zip
-          pwd
-          ls
-          echo "::set-output name=ARCHIVE_HASH::$(Get-FileHash -Path ./vim.zip -Algorithm sha512)"
+        run: Compress-Archive -Path ./Vim/* -DestinationPath ./vim.zip
+
+      - name: Get Archive Hash
+        # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        shell: pwsh
+        run: echo "::set-output name=HASH::$(Get-FileHash -Path ./vim.zip -Algorithm sha512)"
 
       - name: Get Previous Release
         id: get-previous-release
