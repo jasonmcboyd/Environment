@@ -52,22 +52,15 @@ jobs:
         # if: ${{ steps.file-diff-count.outputs.FILE_DIFF_COUNT != 0 }}
         run: echo "${{ steps.get-previous-release.outputs.tag }}"
 
-      - name: Get Version Number
-        id: get-version-number
-        run: echo "::set-output name=VERSION_NUMBER::$(echo ${{ steps.get-previous-release.outputs.tag }} | cut -d - -f 2)"
+      - name: Get Next Release
+        id: get-next-release
+        shell: pwsh
+        run: |
+          ${{ steps.get-previous-release.outputs.tag }} -match "vim-v(?<major>\d+)\."
+          echo "::set-output name=NEXT_RELEASE::vim-v{{ $Matches.major }}.0.0"
 
-      - name: Write Version Number
-        run: echo "${{ steps.get-version-number.outputs.VERSION_NUMBER }}"
-
-      - name: Get Next Release Tag
-        uses: christian-draeger/increment-semantic-version@1.0.2
-        id: get-next-release-tag
-        with:
-          current-version: ${{ steps.get-version-number.outputs.VERSION_NUMBER }}
-          version-fragment: 'major'
-
-      - name: Write Next Release Tag
-        run: echo "${{ steps.get-next-release-tag.outputs.next-version }}"
+      - name: Write Next Release
+        run: echo "${{ steps.get-next-release.outputs.VERSION_NUMBER }}"
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
