@@ -32,7 +32,7 @@ jobs:
         run: echo "::set-output name=COUNT::$(git diff HEAD~ --name-only -- ./Vim | Measure-Object).Count"
 
       - name: Write Files Changed Count
-        run: echo "${{ steps.file-diff-count.outputs.COUNT }}"
+        run: echo "${{ steps.files-changed-count.outputs.COUNT }}"
 
       - name: Zip Files
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
