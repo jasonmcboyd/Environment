@@ -44,7 +44,7 @@ jobs:
 
       - name: Get Previous Release
         id: get-previous-release
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         uses: oprypin/find-latest-tag@e6d7a96b985a7dda6080e43e12771ad3a90fd389
         with:
           repository: jasonmcboyd/Environment
@@ -52,7 +52,7 @@ jobs:
           prefix: "vim-"
 
       - name: Write Previous Release
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: echo "${{ steps.get-previous-release.outputs.tag }}"
 
       - name: Get Next Version
@@ -68,11 +68,11 @@ jobs:
 
       - name: Get Next Release
         id: get-next-release
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: echo "::set-output name=NEXT_RELEASE::vim-v${{ steps.get-next-version.outputs.VERSION }}"
 
       - name: Write Next Release
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: echo "${{ steps.get-next-release.outputs.NEXT_RELEASE }}"
 
       - name: Release
@@ -92,3 +92,4 @@ jobs:
           $xml.package.metadata.version = "${{ steps.get-next-version.outputs.VERSION }}"
           Set-Content -Path ./environment-vim-config.nuspec -Value $xml.OuterXml
           choco pack ./environment-vim-config.nuspec
+          ls
