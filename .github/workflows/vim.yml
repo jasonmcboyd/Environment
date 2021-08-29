@@ -60,7 +60,7 @@ jobs:
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: |
           '${{ steps.get-previous-release.outputs.tag }}' -match 'vim-v(?<major>\d+)\.'
-          echo "::set-output name=VERSION::$($Matches.major + 1).0.0"
+          echo "::set-output name=VERSION::$([int]$Matches.major + 1).0.0"
 
       - name: Write Next Version
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
