@@ -56,13 +56,19 @@ jobs:
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: echo "${{ steps.get-previous-release.outputs.tag }}"
 
-      - name: Get Next Release
-        id: get-next-release
+      - name: Get Next Version
+        id: get-vext-version
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         shell: pwsh
         run: |
           '${{ steps.get-previous-release.outputs.tag }}' -match 'vim-v(?<major>\d+)\.'
-          echo "::set-output name=NEXT_RELEASE::vim-v$([int]$Matches.major + 1).0.0"
+          echo "::set-output name=VERSION::$($Matches.major + 1).0.0"
+
+      - name: Get Next Release
+        id: get-next-release
+        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        shell: pwsh
+        run: echo "::set-output name=NEXT_RELEASE::vim-v${{ $steps.get-next-version.outputs.VERSION }}"
 
       - name: Write Next Release
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
@@ -77,3 +83,12 @@ jobs:
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
+
+      - name: Upate Nuspec
+        shell: pwsh
+        run: |
+          cd Nuspec/environment-vim-config
+          $xml = [xml](Get-Content ./environment-vim-config.nuspec -Raw)
+          $xml.package.metadata.version = ${{ steps.get-next-version.outputs.VERSION }}
+          Set-Content -Path ./environment-vim-config.nuspec -Value $xml.OuterXml
+          cat ./environment-vim-config/nuspec
