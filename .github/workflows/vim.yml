@@ -68,7 +68,7 @@ jobs:
         id: get-next-release
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         shell: pwsh
-        run: echo "::set-output name=NEXT_RELEASE::vim-v${{ $steps.get-next-version.outputs.VERSION }}"
+        run: echo "::set-output name=NEXT_RELEASE::vim-v${{ steps.get-next-version.outputs.VERSION }}"
 
       - name: Write Next Release
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
