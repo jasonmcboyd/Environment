@@ -36,6 +36,14 @@ jobs:
       - name: Write Hash
         run: echo "${{ steps.folder-hash.outputs.hash }}"
 
+      # Test diff count
+      - name: File Diff Count
+        id: fild-diff-count
+        run: echo '::set-output name=FILE_DIFF_COUNT::(git diff HEAD~ --name-only | wc -l)"
+
+      - name: Write File Diff Count
+        run: echo "${{ steps.file-diff-count.outputs.FILE_DIFF_COUNT }}"
+
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: echo Hello, world!
