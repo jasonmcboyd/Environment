@@ -48,7 +48,7 @@ jobs:
 
       - name: Zip Files
         # if: ${{ steps.file-diff-count.outputs.FILE_DIFF_COUNT != 0 }}
-        run: zip -r -j vim.zip ./Vim/*
+        run: zip -r -j vim.zip ./Vim
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
