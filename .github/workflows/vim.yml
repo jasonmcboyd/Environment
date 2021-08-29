@@ -39,6 +39,7 @@ jobs:
         run: Compress-Archive ./Vim/* ./vim.zip
 
       - name: Get Archive Hash
+        id: get-archive-hash
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: echo "::set-output name=HASH::$(Get-FileHash -Path ./vim.zip -Algorithm sha512)"
 
@@ -85,11 +86,25 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
 
-      - name: Upate Nuspec
+      - name: Pack Nuspec
         run: |
           cd Nuspec/environment-vim-config
           $xml = [xml](Get-Content ./environment-vim-config.nuspec -Raw)
           $xml.package.metadata.version = "${{ steps.get-next-version.outputs.VERSION }}"
           Set-Content -Path ./environment-vim-config.nuspec -Value $xml.OuterXml
           choco pack ./environment-vim-config.nuspec
-          ls
+          Set-Content -Path ./tools/chocolateyInstall.ps1 -Value @"
+          Set-StrictMode -Version Latest
+          $ErrorActionPreference = 'Stop'
+
+          $packageArgs = @{
+            packageName   = 'environment-vim-config'
+            unzipLocation = $env:USERPROFILE
+            url           = 'https://github.com/jasonmcboyd/Environment/releases/download/${{ steps.get-next-release.outputs.NEXT_RELEASE }}/vim.zip'
+            checksum      = '${{ steps.get-archive-hash.outputs.HASH }}'
+            checksumType  = 'sha512'
+          }
+
+          Install-ChocolateyZipPackage @packageArgs
+          "@
+          cat ./tools/chocolateyInstall.ps1
