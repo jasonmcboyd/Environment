@@ -62,6 +62,12 @@ jobs:
       - name: Write Next Release
         run: echo "${{ steps.get-next-release.outputs.NEXT_RELEASE }}"
 
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: vim.zip
+          tag_name: ${{ steps.get-next-release.outputs.NEXT_RELEASE }}
+
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: ls
