@@ -42,7 +42,7 @@ jobs:
         run: |
           pwd
           ls
-          Compress-Archive -Path [./profile.ps1, ./Imports/, ./NoImports/] -DestinationPath powershell.zip
+          Compress-Archive -Path profile.ps1, Imports, NoImports -DestinationPath powershell.zip
 
 
       - name: Get Archive Hash
