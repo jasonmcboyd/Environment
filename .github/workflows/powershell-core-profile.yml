@@ -40,8 +40,9 @@ jobs:
           Push-Location ./PowerShellProfiles/CurrentUserAllHosts
           pwd
           ls
-          Compress-Archive -Path [./profile.ps1, ./Imports/, ./NoImports/] -DestinationPath ./powershell.zip
           Pop-Location
+
+      # Compress-Archive -Path [./profile.ps1, ./Imports/, ./NoImports/] -DestinationPath ./powershell.zip
 
       - name: Get Archive Hash
         id: get-archive-hash
