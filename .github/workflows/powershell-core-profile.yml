@@ -38,17 +38,17 @@ jobs:
         run: echo "${{ steps.files-changed-count.outputs.COUNT }}"
 
       - name: Zip Files
+        id: zip-files
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: |
-          pwd
-          ls
           Compress-Archive -Path profile.ps1, Imports, NoImports -DestinationPath powershell.zip
+          echo "::set-output name=ARCHIVE_NAME::"powershell.zip"
 
 
       - name: Get Archive Hash
         id: get-archive-hash
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        run: echo "::set-output name=HASH::$($(Get-FileHash -Path ./powershell.zip -Algorithm sha512).Hash)"
+        run: echo "::set-output name=HASH::$($(Get-FileHash -Path ${{ steps.zip-files.outputs.ARCHIVE_NAME}} -Algorithm sha512).Hash)"
 
       - name: Get Previous Release
         id: get-previous-release
@@ -77,7 +77,7 @@ jobs:
       - name: Get Next Release
         id: get-next-release
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        run: echo "::set-output name=NEXT_RELEASE::powershell-core-v${{ steps.get-next-version.outputs.VERSION }}"
+        run: echo "::set-output name=NEXT_RELEASE::powershell-core-profile-v${{ steps.get-next-version.outputs.VERSION }}"
 
       - name: Write Next Release
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
@@ -87,7 +87,7 @@ jobs:
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         uses: softprops/action-gh-release@v1
         with:
-          files: powershell.zip
+          files: ${{ steps.zip-files.outputs.ARCHIVE_NAME }}
           tag_name: ${{ steps.get-next-release.outputs.NEXT_RELEASE }}
 
       - name: Setup .NET Core
@@ -111,7 +111,7 @@ jobs:
           $packageArgs = @{
             packageName   = 'environment-powershell-core-profile'
             unzipLocation = $destination
-            url           = 'https://github.com/jasonmcboyd/Environment/releases/download/${{ steps.get-next-release.outputs.NEXT_RELEASE }}/powershell.zip'
+            url           = 'https://github.com/jasonmcboyd/Environment/releases/download/${{ steps.get-next-release.outputs.NEXT_RELEASE }}/${{ steps.zip-files.outputs.ARCHIVE_NAME }}'
             checksum      = '${{ steps.get-archive-hash.outputs.HASH }}'
             checksumType  = 'sha512'
           }
