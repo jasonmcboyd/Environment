@@ -43,7 +43,8 @@ jobs:
         run: |
           Compress-Archive ./WindowsTerminal/settings.json ./${{ env.RELEASE_PREFIX }}.zip
           echo "::set-output name=ARCHIVE_NAME::${{ env.RELEASE_PREFIX }}.zip"
-- name: Get Archive Hash
+
+      - name: Get Archive Hash
         id: get-archive-hash
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: echo "::set-output name=HASH::$($(Get-FileHash -Path ${{ steps.zip-files.outputs.ARCHIVE_NAME}} -Algorithm sha512).Hash)"
