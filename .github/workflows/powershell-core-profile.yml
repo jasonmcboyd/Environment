@@ -19,9 +19,6 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: windows-latest
-    defaults:
-      run:
-        working-directory: PowerShellProfiles/CurrentUserAllHosts
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -32,7 +29,7 @@ jobs:
 
       - name: Get Files Changed Count
         id: files-changed-count
-        run: echo "::set-output name=COUNT::$((git diff HEAD~ --name-only -- ., ../../.github/workflows/powershell-core-profile.yml | Measure-Object).Count)"
+        run: echo "::set-output name=COUNT::$((git diff HEAD~ --name-only -- ./PowerShellProfiles/CurrentUserAllHosts, ./.github/workflows/powershell-core-profile.yml | Measure-Object).Count)"
 
       - name: Write Files Changed Count
         run: echo "${{ steps.files-changed-count.outputs.COUNT }}"
@@ -41,13 +38,19 @@ jobs:
         id: zip-files
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: |
-          Compress-Archive -Path profile.ps1, Imports, NoImports -DestinationPath powershell.zip
+          Push-Location ./PowerShellProfiles/CurrentUserAllHosts
+          Compress-Archive -Path profile.ps1, Imports, NoImports -DestinationPath ../../powershell.zip
           echo "::set-output name=ARCHIVE_NAME::powershell.zip"
+          Pop-Location
 
       - name: Get Archive Hash
         id: get-archive-hash
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: echo "::set-output name=HASH::$($(Get-FileHash -Path ${{ steps.zip-files.outputs.ARCHIVE_NAME}} -Algorithm sha512).Hash)"
+
+      - name: Write Archive Hash
+        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        run: echo "${{ steps.get-archie-hash.outputs.HASH }}"
 
       - name: Get Previous Release
         id: get-previous-release
