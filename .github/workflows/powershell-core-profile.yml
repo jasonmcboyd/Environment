@@ -90,11 +90,11 @@ jobs:
           tag_name: ${{ steps.get-next-release.outputs.NEXT_RELEASE }}
 
       - name: Setup .NET Core
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         uses: actions/setup-dotnet@v1
 
       - name: Push NuGet Package
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: |
           cd Nuspec/environment-powershell-core-profile
           $xml = [xml](Get-Content ./environment-powershell-core-profile.nuspec -Raw)
