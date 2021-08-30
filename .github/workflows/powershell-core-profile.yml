@@ -39,6 +39,7 @@ jobs:
         run: |
           Push-Location ./PowerShellProfiles/CurrentUserAllHosts
           pwd
+          ls
           Compress-Archive -Path [./profile.ps1, ./Imports/, ./NoImports/] -DestinationPath ./powershell.zip
           Pop-Location
 
@@ -91,32 +92,32 @@ jobs:
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         uses: actions/setup-dotnet@v1
 
-      #- name: Push NuGet Package
-      #  if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-      #  run: |
-      #    cd Nuspec/environment-powershell-core-profile
-      #    $xml = [xml](Get-Content ./environment-powershell-core-profile.nuspec -Raw)
-      #    $xml.package.metadata.version = "${{ steps.get-next-version.outputs.VERSION }}"
-      #    Set-Content -Path ./environment-powershell-core-profile.nuspec -Value $xml.OuterXml
-      #    mkdir ./tools
-      #    Set-Content -Path ./tools/chocolateyInstall.ps1 -Value @"
-      #    Set-StrictMode -Version Latest
-      #    $ErrorActionPreference = 'Stop'
+      - name: Push NuGet Package
+        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        run: |
+          cd Nuspec/environment-powershell-core-profile
+          $xml = [xml](Get-Content ./environment-powershell-core-profile.nuspec -Raw)
+          $xml.package.metadata.version = "${{ steps.get-next-version.outputs.VERSION }}"
+          Set-Content -Path ./environment-powershell-core-profile.nuspec -Value $xml.OuterXml
+          mkdir ./tools
+          Set-Content -Path ./tools/chocolateyInstall.ps1 -Value @"
+          Set-StrictMode -Version Latest
+          $ErrorActionPreference = 'Stop'
+          $destination = "`$env:USERPROFILE/Documents/PowerShell"
+          Remove-Item "$destination/Imports/Personal/*"
+          Remove-Item "$destination/NoImports/*"
+          $packageArgs = @{
+            packageName   = 'environment-powershell-core-profile'
+            unzipLocation = $destination
+            url           = 'https://github.com/jasonmcboyd/Environment/releases/download/${{ steps.get-next-release.outputs.NEXT_RELEASE }}/powershell.zip'
+            checksum      = '${{ steps.get-archive-hash.outputs.HASH }}'
+            checksumType  = 'sha512'
+          }
 
-      #    $destination = "`$env:USERPROFILE/Documents/PowerShell"
-      #    Remove-Item "$destination/Imports/Personal/*"
-      #    Remove-Item "$destination/NoImports/*"
-#
-      #    $packageArgs = @{
-      #      packageName   = 'environment-powershell-core-profile'
-      #      unzipLocation = $destination
-      #      url           = 'https://github.com/jasonmcboyd/Environment/releases/download/${{ steps.get-next-release.outputs.NEXT_RELEASE }}/powershell.zip'
-      #      checksum      = '${{ steps.get-archive-hash.outputs.HASH }}'
-      #      checksumType  = 'sha512'
-      #    }
-#
-      #    Install-ChocolateyZipPackage @packageArgs
-      #    "@
-      #    choco pack ./environment-powershell-core-profile.nuspec
-      #    dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name environment --username ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
+          Install-ChocolateyZipPackage @packageArgs
+          "@
+          choco pack ./environment-powershell-core-profile.nuspec
+          dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name environment --username ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
+          ls
+          cat ./environment-powershell-core-profile.nuspec
       #    dotnet nuget push environment-powershell-core-profile.${{ steps.get-next-version.outputs.VERSION }}.nupkg --source environment --api-key AzureDevOps
