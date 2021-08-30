@@ -44,7 +44,6 @@ jobs:
           Compress-Archive -Path profile.ps1, Imports, NoImports -DestinationPath powershell.zip
           echo "::set-output name=ARCHIVE_NAME::powershell.zip"
 
-
       - name: Get Archive Hash
         id: get-archive-hash
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
@@ -120,5 +119,4 @@ jobs:
           "@
           choco pack ./environment-powershell-core-profile.nuspec
           dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name environment --username ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
-          cat ./tools/chocolateyInstall.ps1
-        #  dotnet nuget push environment-powershell-core-profile.${{ steps.get-next-version.outputs.VERSION }}.nupkg --source environment --api-key AzureDevOps
+          dotnet nuget push environment-powershell-core-profile.${{ steps.get-next-version.outputs.VERSION }}.nupkg --source environment --api-key AzureDevOps
