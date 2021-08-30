@@ -97,7 +97,7 @@ jobs:
       - name: Push NuGet Package
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: |
-          cd Nuspec/environment-powershell-core-profile
+          cd ../../Nuspec/environment-powershell-core-profile
           $xml = [xml](Get-Content ./environment-powershell-core-profile.nuspec -Raw)
           $xml.package.metadata.version = "${{ steps.get-next-version.outputs.VERSION }}"
           Set-Content -Path ./environment-powershell-core-profile.nuspec -Value $xml.OuterXml
