@@ -98,7 +98,7 @@ jobs:
 
           $packageArgs = @{
             packageName   = 'environment-vim-config'
-            unzipLocation = $env:USERPROFILE
+            unzipLocation = `$env:USERPROFILE
             url           = 'https://github.com/jasonmcboyd/Environment/releases/download/${{ steps.get-next-release.outputs.NEXT_RELEASE }}/vim.zip'
             checksum      = '${{ steps.get-archive-hash.outputs.HASH }}'
             checksumType  = 'sha512'
@@ -108,4 +108,5 @@ jobs:
           "@
           choco pack ./environment-vim-config.nuspec
           cat ./tools/chocolateyInstall.ps1
+          echo "${{ secrets.AZURE_DEVOPS_NUGET_FEED }}"
           dotnet nuget add source '{{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name Azure --username {{ secrets.AZURE_DEVOPS_USERNAME }} --password {{ secrets.AZURE_DEVOPS_PAT }}
