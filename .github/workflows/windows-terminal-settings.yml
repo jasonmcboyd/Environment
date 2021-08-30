@@ -100,7 +100,7 @@ jobs:
       - name: Push NuGet Package
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: |
-          cd Nuspec/environment-${{ env.RELEASE_PREFIX }}
+          cd ./Nuspec/environment-${{ env.RELEASE_PREFIX }}
           $xml = [xml](Get-Content ./environment-${{ env.RELEASE_PREFIX }}.nuspec -Raw)
           $xml.package.metadata.version = "${{ steps.get-next-version.outputs.VERSION }}"
           Set-Content -Path ./environment-${{ env.RELEASE_PREFIX }}.nuspec -Value $xml.OuterXml
@@ -109,17 +109,17 @@ jobs:
           Set-StrictMode -Version Latest
           `$ErrorActionPreference = 'Stop'
 
-          `$windowsTerminalDirectory = Get-ChildItem "`$Home\AppData\Local\Packages" -Directory -Filter '*WindowsTerminal*'
+          `$destination = Get-ChildItem "`$Home\AppData\Local\Packages" -Directory -Filter '*WindowsTerminal*'
 
-          if ((`$null -eq `$windowsTerminalDirectory) -or !(Test-Path `$windowsTerminalDirectory)) {
+          if ((`$null -eq `$destination) -or !(Test-Path `$destination)) {
             throw "Windows Terminal does not appear to be installed."
           }
 
-          `$windowsTerminalSettingsPath = Join-Path `$windowsTerminalDirectory 'LocalState'
+          `$destination = Join-Path `$destination 'LocalState'
 
           `$packageArgs = @{
             packageName   = 'environment-${{ env.RELEASE_PREFIX }}'
-            unzipLocation = `$windowsTerminalSettingsPath
+            unzipLocation = `$destination
             url           = 'https://github.com/jasonmcboyd/Environment/releases/download/${{ steps.get-next-release.outputs.NEXT_RELEASE }}/${{ steps.zip-files.outputs.ARCHIVE_NAME }}'
             checksum      = '${{ steps.get-archive-hash.outputs.HASH }}'
             checksumType  = 'sha512'

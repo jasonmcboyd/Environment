@@ -20,6 +20,9 @@ jobs:
     # The type of runner that the job will run on
     runs-on: windows-latest
 
+    env:
+      RELEASE_PREFIX: 'powershell-core-profile'
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -29,7 +32,7 @@ jobs:
 
       - name: Get Files Changed Count
         id: files-changed-count
-        run: echo "::set-output name=COUNT::$((git diff HEAD~ --name-only -- ./PowerShellProfiles/CurrentUserAllHosts, ./.github/workflows/powershell-core-profile.yml | Measure-Object).Count)"
+        run: echo "::set-output name=COUNT::$((git diff HEAD~ --name-only -- ./PowerShellProfiles/CurrentUserAllHosts, ./.github/workflows/${{ env.RELEASE_PREFIX }}.yml | Measure-Object).Count)"
 
       - name: Write Files Changed Count
         run: echo "${{ steps.files-changed-count.outputs.COUNT }}"
@@ -39,8 +42,8 @@ jobs:
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: |
           Push-Location ./PowerShellProfiles/CurrentUserAllHosts
-          Compress-Archive -Path profile.ps1, Imports, NoImports -DestinationPath ../../powershell.zip
-          echo "::set-output name=ARCHIVE_NAME::powershell.zip"
+          Compress-Archive -Path profile.ps1, Imports, NoImports -DestinationPath ../../${{ env.RELEASE_PREFIX }}.zip
+          echo "::set-output name=ARCHIVE_NAME::${{ env.RELEASE_PREFIX }}.zip"
           Pop-Location
 
       - name: Get Archive Hash
@@ -59,7 +62,7 @@ jobs:
         with:
           repository: jasonmcboyd/Environment
           releases-only: true
-          prefix: "powershell-core-profile-v"
+          prefix: "${{ env.RELEASE_PREFIX }}-v"
 
       - name: Write Previous Release
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
@@ -69,7 +72,7 @@ jobs:
         id: get-next-version
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: |
-          '${{ steps.get-previous-release.outputs.tag }}' -match 'powershell-core-profile-v(?<major>\d+)\.'
+          '${{ steps.get-previous-release.outputs.tag }}' -match '${{ env.RELEASE_PREFIX }}-v(?<major>\d+)\.'
           echo "::set-output name=VERSION::$([int]$Matches.major + 1).0.0"
 
       - name: Write Next Version
@@ -79,7 +82,7 @@ jobs:
       - name: Get Next Release
         id: get-next-release
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        run: echo "::set-output name=NEXT_RELEASE::powershell-core-profile-v${{ steps.get-next-version.outputs.VERSION }}"
+        run: echo "::set-output name=NEXT_RELEASE::${{ env.RELEASE_PREFIX }}-v${{ steps.get-next-version.outputs.VERSION }}"
 
       - name: Write Next Release
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
@@ -99,10 +102,10 @@ jobs:
       - name: Push NuGet Package
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: |
-          cd ./Nuspec/environment-powershell-core-profile
-          $xml = [xml](Get-Content ./environment-powershell-core-profile.nuspec -Raw)
+          cd ./Nuspec/environment-${{ env.RELEASE_PREFIX }}
+          $xml = [xml](Get-Content ./environment-${{ env.RELEASE_PREFIX }}.nuspec -Raw)
           $xml.package.metadata.version = "${{ steps.get-next-version.outputs.VERSION }}"
-          Set-Content -Path ./environment-powershell-core-profile.nuspec -Value $xml.OuterXml
+          Set-Content -Path ./environment-${{ env.RELEASE_PREFIX }}.nuspec -Value $xml.OuterXml
           mkdir ./tools
           Set-Content -Path ./tools/chocolateyInstall.ps1 -Value @"
           Set-StrictMode -Version Latest
@@ -114,7 +117,7 @@ jobs:
           Remove-Item "`$destination/NoImports/*" -Recurse -Force
 
           `$packageArgs = @{
-            packageName   = 'environment-powershell-core-profile'
+            packageName   = 'environment-${{ env.RELEASE_PREFIX }}'
             unzipLocation = `$destination
             url           = 'https://github.com/jasonmcboyd/Environment/releases/download/${{ steps.get-next-release.outputs.NEXT_RELEASE }}/${{ steps.zip-files.outputs.ARCHIVE_NAME }}'
             checksum      = '${{ steps.get-archive-hash.outputs.HASH }}'
@@ -123,6 +126,6 @@ jobs:
 
           Install-ChocolateyZipPackage @packageArgs
           "@
-          choco pack ./environment-powershell-core-profile.nuspec
+          choco pack ./environment-${{ env.RELEASE_PREFIX }}.nuspec
           dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name environment --username ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
-          dotnet nuget push environment-powershell-core-profile.${{ steps.get-next-version.outputs.VERSION }}.nupkg --source environment --api-key AzureDevOps
+          dotnet nuget push environment-${{ env.RELEASE_PREFIX }}.${{ steps.get-next-version.outputs.VERSION }}.nupkg --source environment --api-key AzureDevOps
