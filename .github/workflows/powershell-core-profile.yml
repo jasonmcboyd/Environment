@@ -36,7 +36,9 @@ jobs:
 
       - name: Zip Files
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        run: Compress-Archive ./PowerShellProfiles/CurrentUserAllHosts/* ./powershell.zip
+        run: |
+          Push-Location ./PowerShellProfiles/CurrentUserAllHosts
+          Compress-Archive -Path [./profile.ps1, ./Imports/, ./NoImports/] -DestinationPath ./powershell.zip
 
       - name: Get Archive Hash
         id: get-archive-hash
