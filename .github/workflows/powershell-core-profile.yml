@@ -32,7 +32,7 @@ jobs:
 
       - name: Get Files Changed Count
         id: files-changed-count
-        run: echo "::set-output name=COUNT::$((git diff HEAD~ --name-only -- ./PowerShellProfiles/CurrentUserAllHosts | Measure-Object).Count)"
+        run: echo "::set-output name=COUNT::$((git diff HEAD~ --name-only -- ., ../../.github/workflows/powershell-core-profile.yml | Measure-Object).Count)"
 
       - name: Write Files Changed Count
         run: echo "${{ steps.files-changed-count.outputs.COUNT }}"
