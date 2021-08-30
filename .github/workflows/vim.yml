@@ -41,7 +41,7 @@ jobs:
       - name: Get Archive Hash
         id: get-archive-hash
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        run: echo "::set-output name=HASH::$(Get-FileHash -Path ./vim.zip -Algorithm sha512)"
+        run: echo "::set-output name=HASH::$($(Get-FileHash -Path ./vim.zip -Algorithm sha512).Hash)"
 
       - name: Get Previous Release
         id: get-previous-release
@@ -92,7 +92,6 @@ jobs:
           $xml = [xml](Get-Content ./environment-vim-config.nuspec -Raw)
           $xml.package.metadata.version = "${{ steps.get-next-version.outputs.VERSION }}"
           Set-Content -Path ./environment-vim-config.nuspec -Value $xml.OuterXml
-          choco pack ./environment-vim-config.nuspec
           Set-Content -Path ./tools/chocolateyInstall.ps1 -Value @"
           Set-StrictMode -Version Latest
           $ErrorActionPreference = 'Stop'
@@ -107,4 +106,6 @@ jobs:
 
           Install-ChocolateyZipPackage @packageArgs
           "@
+          choco pack ./environment-vim-config.nuspec
           cat ./tools/chocolateyInstall.ps1
+          dotnet nuget sources add '{{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name Azure --username {{ secrets.AZURE_DEVOPS_USERNAME }} --password {{ secrets.AZURE_DEVOPS_PAT }}
