@@ -110,4 +110,4 @@ jobs:
           "@
           choco pack ./environment-vim-config.nuspec
           dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name environment --username ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
-          dotnet nuget push environment-vim-config.${{ steps.get-next-version.outputs.VERSION }}.nupkg --source environment
+          dotnet nuget push environment-vim-config.${{ steps.get-next-version.outputs.VERSION }}.nupkg --source environment --api-key AzureDevOps
