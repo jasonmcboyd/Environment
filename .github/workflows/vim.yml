@@ -108,5 +108,4 @@ jobs:
           "@
           choco pack ./environment-vim-config.nuspec
           cat ./tools/chocolateyInstall.ps1
-          echo "${{ secrets.AZURE_DEVOPS_NUGET_FEED }}"
-          dotnet nuget add source '{{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name Azure --username {{ secrets.AZURE_DEVOPS_USERNAME }} --password {{ secrets.AZURE_DEVOPS_PAT }}
+          dotnet nuget add source '{{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name Azure --username {{ secrets.AZURE_DEVOPS_USERNAME }} -p {{ secrets.AZURE_DEVOPS_PAT }}
