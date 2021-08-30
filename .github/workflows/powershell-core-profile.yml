@@ -104,9 +104,12 @@ jobs:
           Set-Content -Path ./tools/chocolateyInstall.ps1 -Value @"
           Set-StrictMode -Version Latest
           `$ErrorActionPreference = 'Stop'
+
           `$destination = "`$env:USERPROFILE/Documents/PowerShell"
-          Remove-Item "$destination/Imports/Personal/*"
-          Remove-Item "$destination/NoImports/*"
+
+          Remove-Item "`$destination/Imports/Personal/*" -Recurse -Force
+          Remove-Item "`$destination/NoImports/*" -Recurse -Force
+
           `$packageArgs = @{
             packageName   = 'environment-powershell-core-profile'
             unzipLocation = `$destination
