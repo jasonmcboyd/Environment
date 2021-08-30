@@ -39,7 +39,7 @@ jobs:
 
       - name: Zip Files
         id: zip-files
-        # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: |
           Compress-Archive -Path profile.ps1, Imports, NoImports -DestinationPath powershell.zip
           echo "::set-output name=ARCHIVE_NAME::powershell.zip"
@@ -47,12 +47,12 @@ jobs:
 
       - name: Get Archive Hash
         id: get-archive-hash
-        # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: echo "::set-output name=HASH::$($(Get-FileHash -Path ${{ steps.zip-files.outputs.ARCHIVE_NAME}} -Algorithm sha512).Hash)"
 
       - name: Get Previous Release
         id: get-previous-release
-        # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         uses: oprypin/find-latest-tag@e6d7a96b985a7dda6080e43e12771ad3a90fd389
         with:
           repository: jasonmcboyd/Environment
@@ -60,27 +60,27 @@ jobs:
           prefix: "powershell-core-profile-v"
 
       - name: Write Previous Release
-        # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: echo "${{ steps.get-previous-release.outputs.tag }}"
 
       - name: Get Next Version
         id: get-next-version
-        # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: |
           '${{ steps.get-previous-release.outputs.tag }}' -match 'powershell-core-profile-v(?<major>\d+)\.'
           echo "::set-output name=VERSION::$([int]$Matches.major + 1).0.0"
 
       - name: Write Next Version
-        # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: echo "${{ steps.get-next-version.outputs.VERSION }}"
 
       - name: Get Next Release
         id: get-next-release
-        # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: echo "::set-output name=NEXT_RELEASE::powershell-core-profile-v${{ steps.get-next-version.outputs.VERSION }}"
 
       - name: Write Next Release
-        # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: echo "${{ steps.get-next-release.outputs.NEXT_RELEASE }}"
 
       - name: Release
@@ -91,26 +91,26 @@ jobs:
           tag_name: ${{ steps.get-next-release.outputs.NEXT_RELEASE }}
 
       - name: Setup .NET Core
-        # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         uses: actions/setup-dotnet@v1
 
       - name: Push NuGet Package
-        # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: |
           cd ../../Nuspec/environment-powershell-core-profile
-          $xml = [xml](Get-Content ./environment-powershell-core-profile.nuspec -Raw)
-          $xml.package.metadata.version = "${{ steps.get-next-version.outputs.VERSION }}"
+          `$xml = [xml](Get-Content ./environment-powershell-core-profile.nuspec -Raw)
+          `$xml.package.metadata.version = "${{ steps.get-next-version.outputs.VERSION }}"
           Set-Content -Path ./environment-powershell-core-profile.nuspec -Value $xml.OuterXml
           mkdir ./tools
           Set-Content -Path ./tools/chocolateyInstall.ps1 -Value @"
           Set-StrictMode -Version Latest
-          $ErrorActionPreference = 'Stop'
-          $destination = "`$env:USERPROFILE/Documents/PowerShell"
+          `$ErrorActionPreference = 'Stop'
+          `$destination = "`$env:USERPROFILE/Documents/PowerShell"
           Remove-Item "$destination/Imports/Personal/*"
           Remove-Item "$destination/NoImports/*"
-          $packageArgs = @{
+          `$packageArgs = @{
             packageName   = 'environment-powershell-core-profile'
-            unzipLocation = $destination
+            unzipLocation = `$destination
             url           = 'https://github.com/jasonmcboyd/Environment/releases/download/${{ steps.get-next-release.outputs.NEXT_RELEASE }}/${{ steps.zip-files.outputs.ARCHIVE_NAME }}'
             checksum      = '${{ steps.get-archive-hash.outputs.HASH }}'
             checksumType  = 'sha512'
@@ -121,4 +121,4 @@ jobs:
           choco pack ./environment-powershell-core-profile.nuspec
           dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name environment --username ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
           cat ./tools/chocolateyInstall.ps1
-      #    dotnet nuget push environment-powershell-core-profile.${{ steps.get-next-version.outputs.VERSION }}.nupkg --source environment --api-key AzureDevOps
+        #  dotnet nuget push environment-powershell-core-profile.${{ steps.get-next-version.outputs.VERSION }}.nupkg --source environment --api-key AzureDevOps

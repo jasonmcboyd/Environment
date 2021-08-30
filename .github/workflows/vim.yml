@@ -97,9 +97,9 @@ jobs:
           mkdir ./tools
           Set-Content -Path ./tools/chocolateyInstall.ps1 -Value @"
           Set-StrictMode -Version Latest
-          $ErrorActionPreference = 'Stop'
+          `$ErrorActionPreference = 'Stop'
 
-          $packageArgs = @{
+          `$packageArgs = @{
             packageName   = 'environment-vim-config'
             unzipLocation = `$env:USERPROFILE
             url           = 'https://github.com/jasonmcboyd/Environment/releases/download/${{ steps.get-next-release.outputs.NEXT_RELEASE }}/vim.zip'
