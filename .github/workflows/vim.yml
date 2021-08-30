@@ -94,6 +94,7 @@ jobs:
           $xml = [xml](Get-Content ./environment-vim-config.nuspec -Raw)
           $xml.package.metadata.version = "${{ steps.get-next-version.outputs.VERSION }}"
           Set-Content -Path ./environment-vim-config.nuspec -Value $xml.OuterXml
+          mkdir ./tools
           Set-Content -Path ./tools/chocolateyInstall.ps1 -Value @"
           Set-StrictMode -Version Latest
           $ErrorActionPreference = 'Stop'
