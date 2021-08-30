@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>environment-windows-terminal-settings</id>
+    <version></version>
+    <title>Windows Terminal Settings</title>
+    <authors>Jason Boyd</authors>
+    <owners>Jason Boyd</owners>
+    <licenseUrl>https://raw.githubusercontent.com/jasonmcboyd/Environment/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/jasonmcboyd/Environment</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Windows Terminal Settings</description>
+    <summary></summary>
+    <releaseNotes></releaseNotes>
+    <tags></tags>
+    <projectSourceUrl>https://github.com/jasonmcboyd/Environment</projectSourceUrl>
+    <packageSourceUrl>https://github.com/jasonmcboyd/Environment</packageSourceUrl>
+    <bugTrackerUrl>https://github.com/jasonmcboyd/Environment/issues</bugTrackerUrl>
+    <dependencies>
+      <dependency id="microsoft-windows-terminal"/>
+    </dependencies>
+  </metadata>
+</package>
