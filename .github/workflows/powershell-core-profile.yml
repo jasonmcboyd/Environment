@@ -42,7 +42,7 @@ jobs:
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: |
           Compress-Archive -Path profile.ps1, Imports, NoImports -DestinationPath powershell.zip
-          echo "::set-output name=ARCHIVE_NAME::"powershell.zip"
+          echo "::set-output name=ARCHIVE_NAME::powershell.zip"
 
 
       - name: Get Archive Hash
