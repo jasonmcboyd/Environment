@@ -57,7 +57,7 @@ jobs:
         with:
           repository: jasonmcboyd/Environment
           releases-only: true
-          prefix: "powershell-core-v"
+          prefix: "powershell-core-profile-v"
 
       - name: Write Previous Release
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
@@ -67,7 +67,7 @@ jobs:
         id: get-next-version
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: |
-          '${{ steps.get-previous-release.outputs.tag }}' -match 'powershell-core-v(?<major>\d+)\.'
+          '${{ steps.get-previous-release.outputs.tag }}' -match 'powershell-core-profile-v(?<major>\d+)\.'
           echo "::set-output name=VERSION::$([int]$Matches.major + 1).0.0"
 
       - name: Write Next Version
