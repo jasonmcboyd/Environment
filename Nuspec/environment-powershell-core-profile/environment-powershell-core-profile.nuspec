@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>environment-powershell-core-profile</id>
+    <version></version>
+    <title>PowerShell Core Profile</title>
+    <authors>Jason Boyd</authors>
+    <owners>Jason Boyd</owners>
+    <licenseUrl>https://raw.githubusercontent.com/jasonmcboyd/Environment/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/jasonmcboyd/Environment</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>PowerShell Core Profile</description>
+    <summary></summary>
+    <releaseNotes></releaseNotes>
+    <tags></tags>
+    <projectSourceUrl>https://github.com/jasonmcboyd/Environment</projectSourceUrl>
+    <packageSourceUrl>https://github.com/jasonmcboyd/Environment</packageSourceUrl>
+    <bugTrackerUrl>https://github.com/jasonmcboyd/Environment/issues</bugTrackerUrl>
+    <dependencies>
+      <dependency id="powershell-core" />
+    </dependencies>
+  </metadata>
+</package>
