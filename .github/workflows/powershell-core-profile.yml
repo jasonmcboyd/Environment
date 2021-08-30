@@ -38,7 +38,9 @@ jobs:
         # if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: |
           Push-Location ./PowerShellProfiles/CurrentUserAllHosts
+          pwd
           Compress-Archive -Path [./profile.ps1, ./Imports/, ./NoImports/] -DestinationPath ./powershell.zip
+          Pop-Location
 
       - name: Get Archive Hash
         id: get-archive-hash
@@ -100,10 +102,14 @@ jobs:
       #    Set-Content -Path ./tools/chocolateyInstall.ps1 -Value @"
       #    Set-StrictMode -Version Latest
       #    $ErrorActionPreference = 'Stop'
+
+      #    $destination = "`$env:USERPROFILE/Documents/PowerShell"
+      #    Remove-Item "$destination/Imports/Personal/*"
+      #    Remove-Item "$destination/NoImports/*"
 #
       #    $packageArgs = @{
       #      packageName   = 'environment-powershell-core-profile'
-      #      unzipLocation = `$env:USERPROFILE
+      #      unzipLocation = $destination
       #      url           = 'https://github.com/jasonmcboyd/Environment/releases/download/${{ steps.get-next-release.outputs.NEXT_RELEASE }}/powershell.zip'
       #      checksum      = '${{ steps.get-archive-hash.outputs.HASH }}'
       #      checksumType  = 'sha512'
