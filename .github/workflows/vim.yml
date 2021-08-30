@@ -86,7 +86,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
 
-      - name: Pack Nuspec
+      - name: Push NuGet Package
         run: |
           cd Nuspec/environment-vim-config
           $xml = [xml](Get-Content ./environment-vim-config.nuspec -Raw)
@@ -107,6 +107,6 @@ jobs:
           Install-ChocolateyZipPackage @packageArgs
           "@
           choco pack ./environment-vim-config.nuspec
-          cat ./tools/chocolateyInstall.ps1
+          dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name environment --username ${{ secrets.AZURE_DEVOPS_USERNAME }} --password ${{ secrets.AZURE_DEVOPS_PAT }}
           dotnet nuget list source
-          dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name Azure --username ${{ secrets.AZURE_DEVOPS_USERNAME }} --password ${{ secrets.AZURE_DEVOPS_PAT }}
+          ls
