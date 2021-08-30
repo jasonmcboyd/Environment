@@ -111,7 +111,7 @@ jobs:
 
           `$destination = Get-ChildItem "`$(`$env:USERPROFILE)\AppData\Local\Packages" -Directory -Filter '*WindowsTerminal*'
 
-          Write-Host "destination: $destination"
+          Write-Host "destination: `$destination"
 
           if ((`$null -eq `$destination) -or !(Test-Path `$destination)) {
             throw "Windows Terminal does not appear to be installed."
