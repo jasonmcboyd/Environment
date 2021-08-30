@@ -42,7 +42,7 @@ jobs:
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: |
           Push-Location ./PowerShellProfiles/CurrentUserAllHosts
-          Compress-Archive -Path profile.ps1, Imports, NoImports -DestinationPath ../../${{ env.RELEASE_PREFIX }}.zip
+          Compress-Archive -Path profile.ps1, Imports -DestinationPath ../../${{ env.RELEASE_PREFIX }}.zip
           echo "::set-output name=ARCHIVE_NAME::${{ env.RELEASE_PREFIX }}.zip"
           Pop-Location
 
@@ -114,7 +114,7 @@ jobs:
           `$destination = "`$env:USERPROFILE/Documents/PowerShell"
 
           Remove-Item "`$destination/Imports/Personal/*" -Recurse -Force
-          Remove-Item "`$destination/NoImports/*" -Recurse -Force
+          Remove-Item "`$destination/NoImports" -Recurse -Force
 
           `$packageArgs = @{
             packageName   = 'environment-${{ env.RELEASE_PREFIX }}'
