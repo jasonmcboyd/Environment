@@ -1,10 +1,10 @@
 [CmdletBinding()]
 param (
-    [Parameter(ParameterSetName = 'Credentials')]
+    [Parameter(Position = 0, ParameterSetName = 'Credentials')]
     [pscredential]
     $Credentials,
 
-    [Parameter(Mandatory = $true, ParameterSetName = 'NoCredentials')]
+    [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'NoCredentials')]
     [switch]
     $NoCredentials
 )
@@ -18,6 +18,42 @@ Configuration User {
     Import-DscResource -ModuleName PSDesiredStateConfiguration
 
     Node $AllNodes.NodeName {
+
+        #region Screensaver
+
+        $controlPanelDesktopRegistryKey = 'HKEY_CURRENT_USER\Control Panel\Desktop'
+
+        # Turn on the screen saver.
+        Registry EnableScreenSaver {
+            Key                  = $controlPanelDesktopRegistryKey
+            ValueName            = 'ScreenSaveActive'
+            Ensure               = 'Present'
+            ValueType            = 'String'
+            ValueData            = '1'
+            PsDscRunAsCredential = $Node.Credentials
+        }
+
+        # Require logging in when returning from the screen saver.
+        Registry EnableScreenSaverLogin {
+            Key                  = $controlPanelDesktopRegistryKey
+            ValueName            = 'ScreenSaverIsSecure'
+            Ensure               = 'Present'
+            ValueType            = 'String'
+            ValueData            = '1'
+            PsDscRunAsCredential = $Node.Credentials
+        }
+
+        # Screen saver timeout.
+        Registry SetScreensaverTimer {
+            Key                  = $controlPanelDesktopRegistryKey
+            ValueName            = 'ScreenSaveTimeOut'
+            Ensure               = 'Present'
+            ValueType            = 'String'
+            ValueData            = '300'
+            PsDscRunAsCredential = $Node.Credentials
+        }
+
+        #endregion Screensaver
 
         #region Windows Snap Settings
 
@@ -45,7 +81,7 @@ Configuration User {
             PsDscRunAsCredential = $Node.Credentials
         }
 
-        #region Windows Snap Settings
+        #endregion Windows Snap Settings
 
         #region Windows Explorer Settings
 
