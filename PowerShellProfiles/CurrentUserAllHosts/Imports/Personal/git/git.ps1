@@ -1,7 +1,8 @@
-function gs { & git status }
+function gis { & git status }
 
-function gb { & git branch }
+function gib { & git branch }
 
-function wgg { watch { Git-Graph -Full -AdditionalGitParameters '--color --decorate --all' } }
+function wgig { watch { Git-Graph -Full -AdditionalGitParameters '--color --decorate --all' } }
 
-Set-Alias -Name gg -Value Git-Graph
+Set-Alias -Name gig -Value Git-Graph
+Set-Alias -Name gid -Value Git-Diff

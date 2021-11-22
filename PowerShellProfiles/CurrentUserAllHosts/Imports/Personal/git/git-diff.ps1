@@ -1,4 +1,4 @@
-function gd {
+function Git-Diff {
   [CmdletBinding()]
   param (
     [Parameter(Position = 0, ParameterSetName = 'Count')]
