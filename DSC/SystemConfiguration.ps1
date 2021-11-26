@@ -24,6 +24,15 @@ Configuration System {
             ValueData = '300'
         }
 
+        # Disable fast boot.
+        Registry FastBoot {
+            Key       = 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power'
+            ValueName = 'HiberbootEnabled'
+            Ensure    = 'Present'
+            ValueType = 'Dword'
+            ValueData = '0'
+        }
+
         # Enable Hyper V
         WindowsOptionalFeature EnableHyperV {
             Name   = 'Microsoft-Hyper-V-All'

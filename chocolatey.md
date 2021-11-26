@@ -13,6 +13,7 @@ Remember to replace the end of the Azure DevOps feed url `v3/index.json` with `v
 - beyondcompare
 - brave
 - cascadia-code-nerd-font
+- citrix-workspace
 - docker-desktop
 - DotNet4.5.2
 - dotnetcore-sdk
@@ -30,6 +31,7 @@ Remember to replace the end of the Azure DevOps feed url `v3/index.json` with `v
 - procexp
 - procmon
 - starship
+- sysinternals
 - terraform
 - visualstudio2019community
 - vscode

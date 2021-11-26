@@ -161,6 +161,18 @@ Configuration User {
 
         #endregion Internet Options
 
+        #region Miscellaneous
+
+        Registry ClipboardHistory {
+            Key                  = 'HKEY_CURRENT_USER\SOFTWARE\Microsoft\Clipboard'
+            ValueName            = 'EnableClipboardHistory'
+            Ensure               = 'Present'
+            ValueType            = 'Dword'
+            ValueData            = '1'
+            PsDscRunAsCredential = $Node.Credentials
+        }
+
+        #endregion Miscellaneous
     }
 }
 
