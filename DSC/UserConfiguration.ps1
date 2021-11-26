@@ -161,18 +161,21 @@ Configuration User {
 
         #endregion Internet Options
 
-        #region Miscellaneous
+        #region Clipboard
 
+        # I like the idea of clipboard history but, unfortunately, it makes copying sensitive information problematic since you
+        # simply copy something else to replace the sensitive information in the clipboard.
         Registry ClipboardHistory {
-            Key                  = 'HKEY_CURRENT_USER\SOFTWARE\Microsoft\Clipboard'
+            Key                  = 'HKEY_CURRENT_USER\Software\Microsoft\Clipboard'
             ValueName            = 'EnableClipboardHistory'
             Ensure               = 'Present'
             ValueType            = 'Dword'
-            ValueData            = '1'
+            ValueData            = '0'
             PsDscRunAsCredential = $Node.Credentials
         }
 
-        #endregion Miscellaneous
+        #endregion Internet Options
+
     }
 }
 
