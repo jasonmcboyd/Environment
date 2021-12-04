@@ -113,7 +113,9 @@ jobs:
 
           `$destination = "`$env:USERPROFILE/Documents/PowerShell"
 
-          Remove-Item "`$destination/Imports/Personal/*" -Recurse -Force
+          if (Test-Path "`$destination/Imports/Personal") {
+            Remove-Item "`$destination/Imports/Personal/*" -Recurse -Force
+          }
 
           `$packageArgs = @{
             packageName   = 'environment-${{ env.RELEASE_PREFIX }}'
