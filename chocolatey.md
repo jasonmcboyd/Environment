@@ -23,6 +23,7 @@ Remember to replace the end of the Azure DevOps feed url `v3/index.json` with `v
 - environment-windows-terminal-settings
 - fiddler
 - git
+- gsudo
 - linqpad5
 - linqpad6
 - microsoft-windows-terminal
