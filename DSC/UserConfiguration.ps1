@@ -1,16 +1,33 @@
 [CmdletBinding()]
 param (
-    [Parameter(Position = 0, ParameterSetName = 'Credentials')]
+    [Parameter(Position = 0, ParameterSetName = 'Credential')]
     [pscredential]
-    $Credentials,
+    $Credential,
 
-    [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'NoCredentials')]
+    [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'NoCredential')]
     [switch]
-    $NoCredentials
+    $NoCredential
 )
 
-if (!$NoCredentials -and ($null -eq $Credentials)) {
-    $Credentials = Get-Credential -Message 'Supply credentials for localhost'
+if (!$NoCredential -and ($null -eq $Credential)) {
+    $Credential = Get-Credential -Message 'Supply credentials for localhost'
+}
+
+Configuration PowerShellPackageManagement {
+
+    Import-DscResource -ModuleName PackageManagement -ModuleVersion '1.4.7'
+
+    PackageManagement SecretManagement {
+        Ensure = 'Present'
+        Name   = 'Microsoft.PowerShell.SecretManagement'
+        PsDscRunAsCredential = $Node.Credential
+    }
+
+    PackageManagement SecretStore {
+        Ensure = 'Present'
+        Name   = 'Microsoft.PowerShell.SecretStore'
+        PsDscRunAsCredential = $Node.Credential
+    }
 }
 
 Configuration User {
@@ -18,6 +35,10 @@ Configuration User {
     Import-DscResource -ModuleName PSDesiredStateConfiguration
 
     Node $AllNodes.NodeName {
+
+        PowerShellPackageManagement PowerShellPackageManagement {
+
+        }
 
         #region Screensaver
 
@@ -30,7 +51,7 @@ Configuration User {
             Ensure               = 'Present'
             ValueType            = 'String'
             ValueData            = '1'
-            PsDscRunAsCredential = $Node.Credentials
+            PsDscRunAsCredential = $Node.Credential
         }
 
         # Require logging in when returning from the screen saver.
@@ -40,7 +61,7 @@ Configuration User {
             Ensure               = 'Present'
             ValueType            = 'String'
             ValueData            = '1'
-            PsDscRunAsCredential = $Node.Credentials
+            PsDscRunAsCredential = $Node.Credential
         }
 
         # Screen saver timeout.
@@ -50,7 +71,7 @@ Configuration User {
             Ensure               = 'Present'
             ValueType            = 'String'
             ValueData            = '300'
-            PsDscRunAsCredential = $Node.Credentials
+            PsDscRunAsCredential = $Node.Credential
         }
 
         #endregion Screensaver
@@ -66,7 +87,7 @@ Configuration User {
             Ensure               = 'Present'
             ValueType            = 'String'
             ValueData            = '1'
-            PsDscRunAsCredential = $Node.Credentials
+            PsDscRunAsCredential = $Node.Credential
         }
 
         $snapRegistryKey = 'HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
@@ -78,7 +99,7 @@ Configuration User {
             Ensure               = 'Present'
             ValueType            = 'Dword'
             ValueData            = '0'
-            PsDscRunAsCredential = $Node.Credentials
+            PsDscRunAsCredential = $Node.Credential
         }
 
         #endregion Windows Snap Settings
@@ -95,7 +116,7 @@ Configuration User {
             Ensure               = 'Present'
             ValueType            = 'Dword'
             ValueData            = '0'
-            PsDscRunAsCredential = $Node.Credentials
+            PsDscRunAsCredential = $Node.Credential
         }
 
         # Display the full path in the address bar.
@@ -105,7 +126,7 @@ Configuration User {
             Ensure               = 'Present'
             ValueType            = 'Dword'
             ValueData            = '1'
-            PsDscRunAsCredential = $Node.Credentials
+            PsDscRunAsCredential = $Node.Credential
         }
 
         # Show hidden file, folders, and drives.
@@ -115,7 +136,7 @@ Configuration User {
             Ensure               = 'Present'
             ValueType            = 'Dword'
             ValueData            = '1'
-            PsDscRunAsCredential = $Node.Credentials
+            PsDscRunAsCredential = $Node.Credential
         }
 
         # Hide protected operating system files
@@ -125,7 +146,7 @@ Configuration User {
             Ensure               = 'Present'
             ValueType            = 'Dword'
             ValueData            = '0'
-            PsDscRunAsCredential = $Node.Credentials
+            PsDscRunAsCredential = $Node.Credential
         }
 
         #endregion Windows Explorer Settings
@@ -141,7 +162,7 @@ Configuration User {
             Ensure               = 'Present'
             ValueType            = 'Dword'
             ValueData            = '4'
-            PsDscRunAsCredential = $Node.Credentials
+            PsDscRunAsCredential = $Node.Credential
         }
 
         #endregion Touchpad Settings
@@ -156,7 +177,7 @@ Configuration User {
             Ensure               = 'Present'
             ValueType            = 'String'
             ValueData            = 'https://www.duckduckgo.com'
-            PsDscRunAsCredential = $Node.Credentials
+            PsDscRunAsCredential = $Node.Credential
         }
 
         #endregion Internet Options
@@ -171,7 +192,7 @@ Configuration User {
             Ensure               = 'Present'
             ValueType            = 'Dword'
             ValueData            = '0'
-            PsDscRunAsCredential = $Node.Credentials
+            PsDscRunAsCredential = $Node.Credential
         }
 
         #endregion Internet Options
@@ -179,7 +200,7 @@ Configuration User {
     }
 }
 
-if ($NoCredentials) {
+if ($NoCredential) {
     $configurationData = @{
         AllNodes = @(
             @{
@@ -195,7 +216,7 @@ else {
             @{
                 NodeName                    = 'localhost'
                 PsDscAllowPlainTextPassword = $true
-                Credentials                 = $Credentials
+                Credential                  = $Credential
             }
         )
     }
