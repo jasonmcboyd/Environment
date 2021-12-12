@@ -56,13 +56,15 @@ Configuration ChocolateyPackages {
     $windowsBuild = [Environment]::OSVersion.Version.Build
 
     if ($windowsBuild -ge 18362) {
-        $chocolateyPackages += 'microsoft-windows-terminal'
-        $chocolateyPackages += 'starship'
+        $chocolateyPackages += @(
+            'environment-windows-terminal-settings'
+            'microsoft-windows-terminal'
+            'starship'
+        )
     }
 
     if ((Get-WindowsOptionalFeature -Online -FeatureName 'Microsoft-Hyper-V-All').State -eq 'Enabled') {
         $chocolateyPackages += 'wsl2'
-        $chocolateyPackages += 'environment-windows-terminal-settings'
     }
 
     foreach ($package in $chocolateyPackages) {
