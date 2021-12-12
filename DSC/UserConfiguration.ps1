@@ -6,7 +6,11 @@ param (
 
     [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'NoCredential')]
     [switch]
-    $NoCredential
+    $NoCredential,
+
+    [Parameter(Position = 1, Mandatory = $true)]
+    [pscredential]
+    $AzureDevOpsPAT
 )
 
 if (!$NoCredential -and ($null -eq $Credential)) {
@@ -22,6 +26,15 @@ Configuration Chocolatey {
         InstallDir = 'C:\ProgramData\chocolatey'
     }
 
+    # Add environment config Chocolatey source
+    cChocoSource Environment {
+        Name                 = 'environment'
+        Source               = 'https://jasonmcboyd.pkgs.visualstudio.com/be7551c8-9f9d-4c13-b99b-8ee316e13f02/_packaging/environment-settings/nuget/v2'
+        Credentials          = $AzureDevOpsPAT
+        PsDscRunAsCredential = $Node.Credential
+        DependsOn            = '[cChocoInstaller]Chocolatey'
+    }
+
 }
 
 Configuration ChocolateyPackages {
@@ -30,6 +43,8 @@ Configuration ChocolateyPackages {
 
     $chocolateyPackages = @(
         'cascadia-code-nerd-font'
+        'environment-powershell-core-profile'
+        'environment-vim-config'
         'git'
         'gsudo'
         'notepadplusplus'
@@ -47,11 +62,13 @@ Configuration ChocolateyPackages {
 
     if ((Get-WindowsOptionalFeature -Online -FeatureName 'Microsoft-Hyper-V-All').State -eq 'Enabled') {
         $chocolateyPackages += 'wsl2'
+        $chocolateyPackages += 'environment-windows-terminal-settings'
     }
 
     foreach ($package in $chocolateyPackages) {
         cChocoPackageInstaller $package {
-            Name = $package
+            Name                 = $package
+            PsDscRunAsCredential = $Node.Credential
         }
     }
 }
@@ -61,14 +78,14 @@ Configuration PowerShellPackageManagement {
     Import-DscResource -ModuleName PackageManagement -ModuleVersion '1.4.7'
 
     PackageManagement SecretManagement {
-        Ensure = 'Present'
-        Name   = 'Microsoft.PowerShell.SecretManagement'
+        Ensure               = 'Present'
+        Name                 = 'Microsoft.PowerShell.SecretManagement'
         PsDscRunAsCredential = $Node.Credential
     }
 
     PackageManagement SecretStore {
-        Ensure = 'Present'
-        Name   = 'Microsoft.PowerShell.SecretStore'
+        Ensure               = 'Present'
+        Name                 = 'Microsoft.PowerShell.SecretStore'
         PsDscRunAsCredential = $Node.Credential
     }
 }
