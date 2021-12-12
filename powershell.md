@@ -1,11 +1,6 @@
-# Initial Config
+# PowerShell Modules
 
-Run these commands as admin.
-
-`Set-ExecutionPolicy RemotedSigned`
-
-`Update-Help`
-
-`Install-PackageProvider NuGet -Force`
-
-`Install-Module Microsoft.PowerShell.SecretManagement -Scope AllUsers -Force`
+- cChoco
+- Microsoft.PowerShell.SecretManagement
+- Microsoft.PowerShell.SecretStore
+- PackageManagement

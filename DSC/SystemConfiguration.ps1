@@ -1,10 +1,24 @@
 [CmdletBinding()]
 
+Configuration DscResources {
+    Import-DscResource -ModuleName PackageManagement -ModuleVersion '1.4.7'
+
+    # Install Chocolatey DSC resources
+    PackageManagement cChocoPackage {
+        Ensure = 'Present'
+        Name   = 'cChoco'
+        PsDscRunAsCredential = $Node.Credentials
+    }
+}
+
 Configuration System {
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
 
     Node $AllNodes.NodeName {
+
+        DscResources DscResources {}
+
         # Enable "Console lock display off timeout" under "Power Options / Advanced Settings / Display".
         Registry LockDisplayConfigSectionEnabled {
             Key       = 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\7516b95f-f776-4464-8c53-06167f40cc99\8EC4B3A5-6868-48c2-BE75-4F3044BE88A7'
