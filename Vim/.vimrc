@@ -44,8 +44,8 @@ nnoremap cc ^"_c$
 nnoremap <leader>cc cc
 
 " Change in and change around do not copy to the unnamed register
-nnoremap <leader>ciw "_ciw
-nnoremap <leader>caw "_caw
+nnoremap ciw "_ciw
+nnoremap caw "_caw
 
 " Delete the current line and copy to the unnamed register
 nnoremap dd "_dd

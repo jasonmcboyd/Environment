@@ -50,8 +50,8 @@ nnoremap cc ^"xc$
 nnoremap <space>cc cc
 
 " Change in and change around do not copy to the unnamed register
-nnoremap <space>ciw \"xciw
-nnoremap <space>caw \"xcaw
+nnoremap ciw \"xciw
+nnoremap caw \"xcaw
 
 " Delete current line and don't copy it to the unnamed register
 nnoremap <space>dd \"xdd
