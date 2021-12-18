@@ -41,9 +41,20 @@ nnoremap N Nzz
 nnoremap cc ^"_c$
 
 " Standard cc command
-nnoremap <space>cc cc
+nnoremap <leader>cc cc
+
+" Change in and change around do not copy to the unnamed register
+nnoremap <leader>ciw "_ciw
+nnoremap <leader>caw "_caw
+
+" Delete the current line and copy to the unnamed register
+nnoremap dd "_dd
+
+" Standard dd command
+nnoremap <leader>dd dd
 
 " x does not copy to unnamed register
 nnoremap x "_x
+
 " leader x does copy to unnamed register
 nnoremap <leader>x x
