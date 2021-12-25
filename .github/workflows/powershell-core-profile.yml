@@ -32,7 +32,7 @@ jobs:
 
       - name: Get Files Changed Count
         id: files-changed-count
-        run: echo "::set-output name=COUNT::$((git diff HEAD~ --name-only -- ./PowerShellProfiles/CurrentUserAllHosts ./.github/workflows/${{ env.RELEASE_PREFIX }}.yml | Measure-Object).Count)"
+        run: echo "::set-output name=COUNT::$((git diff HEAD~ --name-only -- ./PowerShellProfiles/CurrentUserAllHosts ./.github/workflows/${{ env.RELEASE_PREFIX }}.yml ./Nuspec/environment-${{ env.RELEASE_PREFIX }} | Measure-Object).Count)"
 
       - name: Write Files Changed Count
         run: echo "${{ steps.files-changed-count.outputs.COUNT }}"
