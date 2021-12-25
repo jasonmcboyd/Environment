@@ -110,14 +110,14 @@ jobs:
           `$ErrorActionPreference = 'Stop'
 
           Install-ChocolateyEnvironmentVariable `
-            -VariableName STARSHIP_CONFIG `
+            -VariableName 'STARSHIP_CONFIG' `
             -VariableValue "`$HOME\.starship\config.toml" `
-            -VariableType User
+            -VariableType 'User'
 
           Install-ChocolateyEnvironmentVariable `
-            -VariableName STARSHIP_CACHE `
+            -VariableName 'STARSHIP_CACHE' `
             -VariableValue "`$HOME\.starship\cache" `
-            -VariableType User
+            -VariableType 'User'
 
           `$destination = Split-Path `$ENV:STARSHIP_CONFIG
 
