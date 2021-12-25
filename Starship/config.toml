@@ -1,0 +1,11 @@
+# [azure]
+# disabled = false
+# format = "on [$symbol($subscription)]($style) "
+# symbol = "ﴃ "
+# style = "blue bold"
+
+[git_status]
+conflicted = ""
+ahead = "⇡${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+behind = "⇣${count}"
