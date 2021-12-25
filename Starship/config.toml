@@ -1,8 +1,5 @@
-# [azure]
-# disabled = false
-# format = "on [$symbol($subscription)]($style) "
-# symbol = "ﴃ "
-# style = "blue bold"
+[azure]
+disabled = false
 
 [git_status]
 conflicted = ""
