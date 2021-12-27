@@ -27,6 +27,7 @@ Remember to replace the end of the Azure DevOps feed url `v3/index.json` with `v
 - linqpad5
 - linqpad6
 - microsoft-windows-terminal
+- microsoftazurestorageexplorer
 - notepadplusplus
 - powershell-core
 - procexp
