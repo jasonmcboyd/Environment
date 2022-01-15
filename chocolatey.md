@@ -36,5 +36,6 @@ Remember to replace the end of the Azure DevOps feed url `v3/index.json` with `v
 - sysinternals
 - terraform
 - visualstudio2019community
+- visualstudio2022community
 - vscode
 - wsl2
