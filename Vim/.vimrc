@@ -58,3 +58,6 @@ nnoremap x "_x
 
 " leader x does copy to unnamed register
 nnoremap <leader>x x
+
+" remap easymotion
+nnoremap <leader><leader> <leader><leader><leader>bdw
