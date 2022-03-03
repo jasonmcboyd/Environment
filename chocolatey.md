@@ -30,6 +30,7 @@ Remember to replace the end of the Azure DevOps feed url `v3/index.json` with `v
 - microsoftazurestorageexplorer
 - notepadplusplus
 - powershell-core
+- powertoys
 - procexp
 - procmon
 - starship
