@@ -21,3 +21,18 @@ function Prop {
     }
   }
 }
+
+function Any {
+  [CmdletBinding()]
+  param (
+    [parameter(ValueFromPipeline = $true)]
+    [object[]]
+    $InputObject
+  )
+
+  if ($null -eq $InputObject) {
+    return $false
+  }
+
+  ($InputObject | Select-Object -First 1).Count -gt 0
+}
