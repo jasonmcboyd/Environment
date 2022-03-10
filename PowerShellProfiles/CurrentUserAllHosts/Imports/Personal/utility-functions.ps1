@@ -36,3 +36,7 @@ function Any {
 
   ($InputObject | Select-Object -First 1).Count -gt 0
 }
+
+function Guid {
+  New-Guid | Set-Clipboard -PassThru
+}
