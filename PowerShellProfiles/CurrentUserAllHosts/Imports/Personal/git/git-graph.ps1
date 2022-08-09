@@ -24,7 +24,11 @@ function Git-Graph {
 
     [Parameter(Position = 2)]
     [string]
-    $AdditionalGitParameters
+    $AdditionalGitParameters,
+
+    [Parameter(Position = 3)]
+    [switch]
+    $FirstParent
   )
 
   Set-StrictMode -Version 'latest'
@@ -47,6 +51,7 @@ function Git-Graph {
   if (![string]::IsNullOrEmpty($AdditionalGitParameters)) { $tokens += $AdditionalGitParameters }
   if ($PSCmdlet.ParameterSetName -like '*Number*') { $tokens += "-n $Number" }
   if (![string]::IsNullOrEmpty($branches)) { $tokens += $branches }
+  if ($FirstParent) { $tokens += '--first-parent' }
 
   $command = [string]::Join(' ', $tokens)
 
