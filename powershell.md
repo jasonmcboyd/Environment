@@ -4,3 +4,4 @@
 - Microsoft.PowerShell.SecretManagement
 - Microsoft.PowerShell.SecretStore
 - PackageManagement
+- psHosts
