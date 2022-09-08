@@ -1,6 +1,11 @@
 [azure]
 disabled = false
 
+[cmd_duration]
+disabled = false
+min_time = 0
+show_milliseconds = true
+
 [git_status]
 conflicted = ""
 ahead = "⇡${count}"
