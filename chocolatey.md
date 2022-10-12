@@ -6,7 +6,9 @@
 
 `choco sources add -n environment -u <username> -p <azure-devops-pat> -s <azure-devops-feed>`
 
-Remember to replace the end of the Azure DevOps feed url `v3/index.json` with `v2`.
+- Replace the end of the Azure DevOps feed url `v3/index.json` with `v2`.
+- The Azure DevOps PAT must have read permissions for the **Package** scope.
+
 # Packages
 
 - azure-cli
