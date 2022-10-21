@@ -40,3 +40,46 @@ function Any {
 function Guid {
   New-Guid | Set-Clipboard -PassThru
 }
+
+function Start-Presentation {
+  [CmdletBinding()]
+  param (
+      $Seconds = 30
+  )
+
+  Start-Job `
+    -Name 'Presentation Mode' `
+    -ScriptBlock {
+      $myShell = New-Object -com "Wscript.Shell"
+
+      while ($true) {
+        Start-Sleep -Seconds $Seconds
+        $myShell.sendkeys("{F13}")
+      }
+    }
+}
+
+function Get-Presentation {
+  [CmdletBinding()]
+  param ()
+
+  Get-Job -Name 'Presentation Mode'
+}
+
+function To {
+  [CmdletBinding()]
+  param (
+    [string]
+    $Variable,
+
+    [Parameter(ValueFromPipeline = $true)]
+    [PsObject]
+    $InputObject
+  )
+
+  process {
+    Set-Variable -Name $Variable -Scope Global -Value $InputObject
+
+    $InputObject
+  }
+}
