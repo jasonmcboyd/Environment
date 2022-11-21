@@ -6,6 +6,7 @@ set noerrorbells visualbell t_vb=
 autocmd GUIEnter * set visualbell t_vb=
 
 " Show relative line numbers
+set number
 set relativenumber
 
 " Pick a leader key
@@ -21,9 +22,10 @@ set incsearch
 set hlsearch
 
 " Return to normal mode from insert mode
-inoremap <C-i> <Esc>
 inoremap jj <Esc>
 inoremap JJ <Esc>
+
+inoremap <S-Tab> <C-d>
 
 " Turn off search highlight
 nnoremap <esc> :noh<cr><esc>
@@ -48,10 +50,7 @@ nnoremap ciw "_ciw
 nnoremap caw "_caw
 
 " Delete the current line and copy to the unnamed register
-nnoremap dd "_dd
-
-" Standard dd command
-nnoremap <leader>dd dd
+nnoremap <leader>dd "_dd
 
 " x does not copy to unnamed register
 nnoremap x "_x
@@ -59,5 +58,15 @@ nnoremap x "_x
 " leader x does copy to unnamed register
 nnoremap <leader>x x
 
-" remap easymotion
+" remap easymotion (VS Code)
 nnoremap <leader><leader> <leader><leader><leader>bdw
+
+" Peasymotion mappings (Visual Studio)
+nnoremap <leader><leader> :vsc Tools.InvokePeasyMotion<cr>
+" Tools.InvokePeasyMotion
+" Tools.InvokePeasyMotionTextSelect
+" Tools.InvokePeasyMotionLineJumpToWordBegining
+" Tools.InvokePeasyMotionLineJumpToWordEnding
+" Tools.InvokePeasyMotionJumpToDocumentTab
+" Tools.InvokePeasyMotionJumpToLineBegining
+" Tools.InvokePeasyMotionTwoCharJump
