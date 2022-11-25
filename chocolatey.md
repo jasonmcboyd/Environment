@@ -9,6 +9,12 @@
 - Replace the end of the Azure DevOps feed url `v3/index.json` with `v2`.
 - The Azure DevOps PAT must have read permissions for the **Packaging** scope.
 
+# Updating The Environment Settings Source PAT
+
+As far as I can tell there is no way to simply update the password for the source. You must first remove the source (command below) and then rerun the above command to readd the source with the new PAT.
+
+`choco sources remove --name environment`
+
 # Packages
 
 - azure-cli
