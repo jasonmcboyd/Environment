@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Test
 
 # Controls when the workflow will run
 on:
@@ -12,3 +12,6 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     uses: jasonmcboyd/Environment/.github/workflows/get-changed-files-count.yml@bdc376a312d3b9912550d83a7acc44c72f6e5f55
+    with:
+      subdirectory: vim
+      release_prefix: vim-config
