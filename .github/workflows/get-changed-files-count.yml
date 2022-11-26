@@ -20,10 +20,6 @@ jobs:
     # The type of runner that the job will run on
     runs-on: windows-latest
 
-    env:
-      SUBDIRECTORY: ''
-      RELEASE_PREFIX: ''
-
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Get Files Changed Count
