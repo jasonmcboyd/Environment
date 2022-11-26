@@ -23,13 +23,13 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@main
         with:
           fetch-depth: 2
 
       - name: Get Files Changed Count
         id: files-changed-count
-        run: echo "name=COUNT=$((git diff HEAD~ --name-only -- ./${{ inputs.subdirectory }} ./.github/workflows/${{ inputs.release_prefix }}.yml ./Nuspec/environment-${{ inputs.release_prefix }} | Measure-Object).Count)" >> $env:GITHUB_OUTPUT
+        run: echo "ChangedFileCount=$((git diff HEAD~ --name-only -- ./${{ inputs.subdirectory }} ./.github/workflows/${{ inputs.release_prefix }}.yml ./Nuspec/environment-${{ inputs.release_prefix }} | Measure-Object).Count)" >> $env:GITHUB_OUTPUT
 
       - name: Write Files Changed Count
-        run: echo "${{ steps.files-changed-count.outputs.COUNT }}"
+        run: echo "${{ steps.files-changed-count.outputs.ChangedFileCount }}"
