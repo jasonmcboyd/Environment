@@ -4,14 +4,14 @@ name: get-changed-files-count
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      subdirectory:
+        required: true
+        type: string
+      release_prefix:
+        required: true
+        type: string
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -26,14 +26,9 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
-
       - name: Get Files Changed Count
         id: files-changed-count
-        run: echo "::set-output name=COUNT::$((git diff HEAD~ --name-only -- ./${{ env.SUBDIRECTORY}} ./.github/workflows/${{ env.RELEASE_PREFIX }}.yml ./Nuspec/environment-${{ env.RELEASE_PREFIX }} | Measure-Object).Count)"
+        run: echo "::set-output name=COUNT::$((git diff HEAD~ --name-only -- ./${{ inputs.subdirectory }} ./.github/workflows/${{ inputs.release_prefix }}.yml ./Nuspec/environment-${{ inputs.release_prefix }} | Measure-Object).Count)"
 
       - name: Write Files Changed Count
         run: echo "${{ steps.files-changed-count.outputs.COUNT }}"
