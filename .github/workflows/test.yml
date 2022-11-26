@@ -11,7 +11,7 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
-    uses: jasonmcboyd/Environment/.github/workflows/get-changed-files-count.yml@bdc376a312d3b9912550d83a7acc44c72f6e5f55
+    uses: jasonmcboyd/Environment/.github/workflows/get-changed-files-count.yml@master
     with:
       subdirectory: vim
       release_prefix: vim-config
