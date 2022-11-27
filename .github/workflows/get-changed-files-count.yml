@@ -12,6 +12,9 @@ on:
       release_prefix:
         required: true
         type: string
+      files_to_archive:
+        required: true
+        type: string
     secrets:
       AZURE_DEVOPS_NUGET_FEED:
         required: true
@@ -35,11 +38,11 @@ jobs:
           fetch-depth: 2
 
       - name: Get Files Changed Count
-        id: files-changed-count
-        run: echo "ChangedFileCount=$((git diff HEAD~ --name-only -- ./${{ inputs.subdirectory }} ./.github/workflows/${{ inputs.release_prefix }}.yml ./Nuspec/environment-${{ inputs.release_prefix }} | Measure-Object).Count)" >> $env:GITHUB_OUTPUT
+        id: changed-files-count
+        run: echo "ChangedFilesCount=$((git diff HEAD~ --name-only -- ./${{ inputs.subdirectory }} ./.github/workflows/${{ inputs.release_prefix }}.yml ./Nuspec/environment-${{ inputs.release_prefix }} | Measure-Object).Count)" >> $env:GITHUB_OUTPUT
 
       - name: Write Files Changed Count
-        run: echo "${{ steps.files-changed-count.outputs.ChangedFileCount }}"
+        run: echo "${{ steps.changed-files-count.outputs.ChangedFilesCount }}"
 
       - name: Get Latest Tag
         id: get-latest-tag
@@ -49,12 +52,34 @@ jobs:
           releases-only: true
           prefix: "${{ inputs.release_prefix }}-v"
 
-      - name: Get Previous
+      - name: Get Previous Release Information
         id: previous-release
         run: |
           echo "PreviousRelease=${{ steps.get-latest-tag.outputs.tag }}" >> $env:GITHUB_OUTPUT
           '${{ steps.get-latest-tag.outputs.tag }}' -match '${{ inputs.release_prefix }}-v(?<major>\d+)\.'
           echo "LatestReleaseMajorVersionNumber=$($Matches.major)" >> $env:GITHUB_OUTPUT
+
+      - name: Zip Files
+        id: zip-files
+        if: ${{ steps.changed-files-count.outputs.ChangedFilesCount != 0 }}
+        run: |
+          Compress-Archive (${{ inputs.files_to_archive }}.split('|') -join ' ') ./${{ inputs.release_prefix }}.zip
+          echo "ArchiveName=${{ inputs.release_prefix }}.zip" >> $env:GITHUB_OUTPUT
+
+      - name: Get Archive Hash
+        id: get-archive-hash
+        if: ${{ steps.changed-files-count.outputs.ChangedFilesCount != 0 }}
+        run: echo "ArchiveFileHash::$($(Get-FileHash -Path ${{ steps.zip-files.outputs.ARCHIVE_NAME}} -Algorithm sha512).Hash)" >> $env:GITHUB_OUTPUT
+
+      - name: Write Archive Hash
+        if: ${{ steps.changed-files-count.outputs.ChangedFilesCount != 0 }}
+        run: echo "${{ steps.get-archive-hash.outputs.ArchiveFileHash }}"
+
+      - name: Get Next Version
+        id: get-next-version
+        if: ${{ steps.changed-files-count.outputs.ChangedFilesCount != 0 }}
+        run: |
+          echo "NextVersion=$([int]${{ steps.previous-releasel.output.LatestReleaseMajorVersionNumber }} + 1).0.0"
 
       - name: Get Chocolatey Version
         id: chocolatey-version
@@ -67,3 +92,7 @@ jobs:
           echo "${{ steps.previous-release.outputs.PreviousRelease }}"
           echo "${{ steps.previous-release.outputs.LatestReleaseMajorVersionNumber }}"
           echo "${{ steps.chocolatey.outputs.ChocolateyVersion }}"
+
+      - name: Setup .NET Core
+        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        uses: actions/setup-dotnet@v1
