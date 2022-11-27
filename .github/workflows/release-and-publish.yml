@@ -137,7 +137,6 @@ jobs:
       - name: Push NuGet Package
         run: |
           cd ./Publish/environment-${{ inputs.release_prefix }}
-          echo "${{ steps.chocolatey-version.outputs.ChocolateyPackageVersion }} : $latestReleaseVersion"
           mkdir /working/tools
           Invoke-WebRequest ${{ steps.latest-release-after-release.outputs.LatestReleaseUrl }} -OutFile /working/package.zip
           $releaseFileHash = (Get-FileHash -Path /working/package.zip -Algorithm sha512).Hash
@@ -147,6 +146,4 @@ jobs:
           cd /working
           choco pack ./environment-${{ inputs.release_prefix }}.nuspec --version=$latestReleaseVersion
           dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name environment --username ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
-          echo "`r`n$(cat ./tools/chocolateyInstall.ps1)"
-          echo "`r`n$(ls -recurse | select -expandproperty fullname)"
-          echo "`r`n$releaseFileHash"
+          echo "${{ steps.chocolatey-version.outputs.ChocolateyPackageVersion }} : ${{ steps.latest-release-after-release.outputs.LatestReleaseVersion }}"
