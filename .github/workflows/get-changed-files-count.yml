@@ -122,7 +122,7 @@ jobs:
           prefix: "${{ inputs.release_prefix }}-v"
 
       - name: Get Previous Release Information After Releasing
-        id: previous-release
+        id: previous-release-after-release
         run: |
           echo "PreviousRelease=${{ steps.get-latest-tag-after-release.outputs.tag }}" >> $env:GITHUB_OUTPUT
           '${{ steps.get-latest-tag-after-release.outputs.tag }}' -match '${{ inputs.release_prefix }}-v(?<major>\d+)\.' | Out-Null
