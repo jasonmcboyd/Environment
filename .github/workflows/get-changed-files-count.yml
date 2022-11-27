@@ -15,13 +15,10 @@ on:
     secrets:
       AZURE_DEVOPS_NUGET_FEED:
         required: true
-        type: string
       AZURE_DEVOPS_USERNAME:
         required: true
-        type: string
       AZURE_DEVOPS_PAT:
         required: true
-        type: string
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
