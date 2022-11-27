@@ -101,12 +101,13 @@ jobs:
         run: |
           choco sources add -n environment -u ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }} -s ${{ secrets.AZURE_DEVOPS_NUGET_FEED }}
           $sources = choco sources
-          $chocolateyPackage = choco search environment-${{ inputs.release_prefix }} --limitoutput --exact
+          $chocolateyPackage = choco search environment-${{ inputs.release_prefix }} --source environment --limitoutput --exact
           $chocolateyVersion = $chocolateyPackage.Split('|')[1]
           echo "ChocolateyVersion=$chocolateyVersion" >> $env:GITHUB_OUTPUT
           echo "Chocolatey Package: $chocolateyPackage"
           echo "Chocolatey Version: $chocolateyVersion"
-          echo "Sources: $sources"
+          echo "Sources: $sources
+          echo "$([Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes(${{ secrets.AZURE_DEVOPS_NUGET_FEED }})))"
 
       - name: Setup .NET Core
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
