@@ -77,7 +77,7 @@ jobs:
           echo "ArchiveName=${{ inputs.release_prefix }}.zip" >> $env:GITHUB_OUTPUT
 
       - name: Get Next Release Information
-        id: get-next-version
+        id: get-next-release
         if: ${{ steps.changed-files-count.outputs.ChangedFilesCount != 0 }}
         run: |
           $nextVersion ="$([int]${{ steps.latest-release.outputs.LatestReleaseMajorVersionNumber }} + 1).0.0"
