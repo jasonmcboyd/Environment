@@ -50,7 +50,9 @@ jobs:
           echo "${{ steps.get-previous-release.outputs.LatestReleaseMajorVersionNumber }}"
 
       - name: Get Chocolatey Version
-        run: echo "ChocolateyVersion=$((choco search environment-${{ inputs.release_prefix }} --limitoutput --exact).Split('|')[1])" >> $env:GITHUB_OUTPUT
+        run: |
+          choco sources add -n environment -u {{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }} -s ${{ secrets.AZURE_DEVOPS_NUGET_FEED }}
+          echo "ChocolateyVersion=$((choco search environment-${{ inputs.release_prefix }} --source environment --limitoutput --exact).Split('|')[1])" >> $env:GITHUB_OUTPUT
 
       - name: Write Stuff
         run: |
