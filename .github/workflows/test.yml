@@ -15,3 +15,7 @@ jobs:
     with:
       subdirectory: vim
       release_prefix: vim-config
+    secrets:
+      AZURE_DEVOPS_NUGET_FEED: ${{ secrets.AZURE_DEVOPS_NUGET_FEED }}
+      AZURE_DEVOPS_USERNAME: ${{ secrets.AZURE_DEVOPS_USERNAME }}
+      AZURE_DEVOPS_PAT: ${{ secrets:AZURE_DEVOPS_PAT }}

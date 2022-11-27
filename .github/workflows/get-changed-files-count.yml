@@ -12,6 +12,16 @@ on:
       release_prefix:
         required: true
         type: string
+    secrets:
+      AZURE_DEVOPS_NUGET_FEED:
+        required: true
+        type: string
+      AZURE_DEVOPS_USERNAME:
+        required: true
+        type: string
+      AZURE_DEVOPS_PAT:
+        required: true
+        type: string
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -51,7 +61,7 @@ jobs:
 
       - name: Get Chocolatey Version
         run: |
-          choco sources add -n environment -u {{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }} -s ${{ secrets.AZURE_DEVOPS_NUGET_FEED }}
+          choco sources add -n environment -u ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }} -s ${{ secrets.AZURE_DEVOPS_NUGET_FEED }}
           echo "ChocolateyVersion=$((choco search environment-${{ inputs.release_prefix }} --source environment --limitoutput --exact).Split('|')[1])" >> $env:GITHUB_OUTPUT
 
       - name: Write Stuff
