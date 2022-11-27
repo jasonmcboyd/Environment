@@ -90,7 +90,7 @@ jobs:
           echo "Next Release: $nextRelease"
 
       - name: Release
-        if: ${{ steps.changed-files-count.outputs.COUNT != 0 }}
+        if: ${{ steps.changed-files-count.outputs.changedFilesCount != 0 }}
         uses: softprops/action-gh-release@v1
         with:
           files: ${{ steps.zip-files.outputs.ArchiveName }}
@@ -102,18 +102,17 @@ jobs:
           $chocolateyNugetFeedUrl = "${{ secrets.AZURE_DEVOPS_NUGET_FEED }}".Replace('v3/index.json', 'v2')
           choco sources add -n environment -u ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }} -s "$chocolateyNugetFeedUrl"
           $chocolateyPackage = choco search environment-${{ inputs.release_prefix }} --source environment --limitoutput --exact
-          $chocolateyVersion = $chocolateyPackage.Split('|')[1]
-          echo "ChocolateyVersion=$chocolateyVersion" >> $env:GITHUB_OUTPUT
+          $chocolateyPackageVersion = $chocolateyPackage.Split('|')[1]
+          echo "ChocolateyPackageVersion=$chocolateyPackageVersion" >> $env:GITHUB_OUTPUT
           echo "Chocolatey Package: $chocolateyPackage"
-          echo "Chocolatey Version: $chocolateyVersion"
+          echo "Chocolatey Package Version: $chocolateyPackageVersion"
 
       - name: Setup .NET Core
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
+        if: ${{ steps.changed-files-count.outputs.changedFilesCount != 0 }}
         uses: actions/setup-dotnet@v1
 
       - name: Get Latest Tag After Releasing
         id: get-latest-tag-after-release
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         uses: oprypin/find-latest-tag@v1.1.1
         with:
           repository: jasonmcboyd/Environment
@@ -122,7 +121,6 @@ jobs:
 
       - name: Get Previous Release Information After Releasing
         id: previous-release-after-release
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: |
           $previousRelease = '${{ steps.get-latest-tag.outputs.tag }}'
           '${{ steps.get-latest-tag.outputs.tag }}' -match '${{ inputs.release_prefix }}-v(?<major>\d+)\.' | Out-Null
@@ -131,3 +129,7 @@ jobs:
           echo "LatestReleaseMajorVersionNumber=$majorVersionNumber" >> $env:GITHUB_OUTPUT
           echo "Previous Release = $previousRelease"
           echo "Latest Release Major Version Number = $majorVersionNumber"
+
+      - name: Push NuGet Package
+        run: |
+          echo "${{ steps.chocolatey-version.outputs.ChocolateyPackageVersion }} : ${{ steps.previous-release-after-release.outputs.LatestReleaseMajorVersionNumber }}"
