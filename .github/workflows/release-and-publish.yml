@@ -146,4 +146,4 @@ jobs:
           cd /working
           choco pack ./environment-${{ inputs.release_prefix }}.nuspec --version=$latestReleaseVersion
           dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name environment --username ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
-          echo "${{ steps.chocolatey-version.outputs.ChocolateyPackageVersion }} : ${{ steps.latest-release-after-release.outputs.LatestReleaseVersion }}"
+          echo "${{ steps.chocolatey-version.outputs.ChocolateyPackageVersion }} : ${{ steps.latest-release-after-release.outputs.LatestReleaseVersionNumber }}"
