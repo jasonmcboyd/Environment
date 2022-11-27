@@ -132,6 +132,7 @@ jobs:
 
       - name: Push NuGet Package
         run: |
+          cd ./Nuspec/environment-${{ inputs.release_prefix }}
           $latestReleaseVersion = "${{ steps.latest-release-after-release.outputs.LatestReleaseMajorVersionNumber }}.0.0"
           echo "${{ steps.chocolatey-version.outputs.ChocolateyPackageVersion }} : $latestReleaseVersion"
           mkdir ./tools
