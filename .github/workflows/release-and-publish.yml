@@ -40,7 +40,7 @@ jobs:
       - name: Get Files Changed Count
         id: changed-files-count
         run: |
-          $changedFilesCount = $((git diff HEAD~ --name-only -- ./${{ inputs.subdirectory }} ./.github/workflows/${{ inputs.release_prefix }}.yml ./Nuspec/environment-${{ inputs.release_prefix }} | Measure-Object).Count)
+          $changedFilesCount = $((git diff HEAD~ --name-only -- ./${{ inputs.subdirectory }} ./.github/workflows/${{ inputs.release_prefix }}.yml ./Publish/environment-${{ inputs.release_prefix }} | Measure-Object).Count)
           echo "ChangedFilesCount=$changedFilesCount" >> $env:GITHUB_OUTPUT
           echo "Changed Files: $changedFilesCount"
 
@@ -80,7 +80,7 @@ jobs:
         id: get-next-version
         if: ${{ steps.changed-files-count.outputs.ChangedFilesCount != 0 }}
         run: |
-          $nextVersion =$([int]${{ steps.latest-release.output.LatestReleaseMajorVersionNumber }} + 1).0.0"
+          $nextVersion ="$([int]${{ steps.latest-release.output.LatestReleaseMajorVersionNumber }} + 1).0.0"
           $nextRelease = "${{ inputs.release_prefix }}-v$nextVersion"
           echo "NextVersion=$nextVersion" >> $env:GITHUB_OUTPUT
           echo "NextRelease=$nextRelease" >> $env:GITHUB_OUTPUT
