@@ -44,3 +44,12 @@ jobs:
 
       - name: Write Previous Release
         run: echo "${{ steps.get-previous-release.outputs.tag }}"
+
+      - name: Test
+        id: test
+        uses: jasonmcboyd/Environment/.github/workflows/get-latest-release-and-version.yml@master
+        with:
+          release-prefix: ${{ inputs.release_prefix }}
+
+      - name: Write Something
+        run: echo "${{ steps.test.outputs.LatestReleaseVersionMajor }}"

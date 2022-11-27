@@ -19,11 +19,6 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@main
-        with:
-          fetch-depth: 2
-
       - name: Get Previous Release
         id: get-previous-release
         uses: oprypin/find-latest-tag@v1.1.1
