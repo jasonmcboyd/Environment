@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>environment-vim-config</id>
+    <version>0.0.0</version>
+    <title>Vim Config</title>
+    <authors>Jason Boyd</authors>
+    <owners>Jason Boyd</owners>
+    <licenseUrl>https://raw.githubusercontent.com/jasonmcboyd/Environment/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/jasonmcboyd/Environment</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Vim config</description>
+    <summary></summary>
+    <releaseNotes></releaseNotes>
+    <tags></tags>
+    <projectSourceUrl>https://github.com/jasonmcboyd/Environment</projectSourceUrl>
+    <packageSourceUrl>https://github.com/jasonmcboyd/Environment</packageSourceUrl>
+    <bugTrackerUrl>https://github.com/jasonmcboyd/Environment/issues</bugTrackerUrl>
+  </metadata>
+</package>

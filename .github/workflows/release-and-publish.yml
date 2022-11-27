@@ -132,24 +132,13 @@ jobs:
 
       - name: Push NuGet Package
         run: |
-          cd ./Nuspec/environment-${{ inputs.release_prefix }}
+          cd ./Publish/environment-${{ inputs.release_prefix }}
           $latestReleaseVersion = "${{ steps.latest-release-after-release.outputs.LatestReleaseMajorVersionNumber }}.0.0"
           echo "${{ steps.chocolatey-version.outputs.ChocolateyPackageVersion }} : $latestReleaseVersion"
-          mkdir ./tools
-          Set-Content -Path ./tools/chocolateyInstall.ps1 -Value @"
-          Set-StrictMode -Version Latest
-          `$ErrorActionPreference = 'Stop'
-
-          `$packageArgs = @{
-            packageName   = 'environment-${{ inputs.release_prefix }}'
-            unzipLocation = `$env:USERPROFILE
-            url           = 'https://github.com/jasonmcboyd/Environment/releases/download/${{ steps.get-next-release.outputs.NEXT_RELEASE }}/${{ steps.zip-files.outputs.ARCHIVE_NAME }}'
-            checksum      = '${{ steps.get-archive-hash.outputs.HASH }}'
-            checksumType  = 'sha512'
-          }
-
-          Install-ChocolateyZipPackage @packageArgs
-          "@
+          mkdir /working/tools
+          Copy-Item ./*.nuspec /working
+          Set-Content -Path /working/tools/chocolateyInstall.ps1 -Value (./createChocolateyInstallScript.ps1 -ReleaseVersion $latestReleaseVersion -ArchiveFileName ${{ steps.zip-files.outputs.ArchiveName }}) -ArchiveFileHash ${{ steps.get-archive-file-hash.ArchiveFileHash }}
+          cd /working
           choco pack ./environment-${{ inputs.release_prefix }}.nuspec --version=$latestReleaseVersion
           dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name environment --username ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
           echo "$(cat ./tools/chocolateyInstall.ps1)"
