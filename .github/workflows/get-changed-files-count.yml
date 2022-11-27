@@ -36,7 +36,7 @@ jobs:
 
       - name: Get Previous Release
         id: get-previous-release
-        uses: oprypin/find-latest-tag@e6d7a96b985a7dda6080e43e12771ad3a90fd389
+        uses: oprypin/find-latest-tag@v1.1.1
         with:
           repository: jasonmcboyd/Environment
           releases-only: true
