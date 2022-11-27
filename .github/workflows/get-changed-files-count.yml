@@ -48,3 +48,12 @@ jobs:
           '${{ steps.get-previous-release.outputs.tag }}' -match '${{ inputs.release_prefix }}-v(?<major>\d+)\.'
           echo "LatestReleaseMajorVersionNumber=$($Matches.major)" >> $env:GITHUB_OUTPUT
           echo "${{ steps.get-previous-release.outputs.LatestReleaseMajorVersionNumber }}"
+
+      - name: Get Chocolatey Version
+        run: echo "ChocolateyVersion=$((choco search environment-${{ inputs.release_prefix }} --limitoutput --exact).Split('|')[1])" >> $env:GITHUB_OUTPUT
+
+      - name: Write Stuff
+        run: |
+          echo "${{ steps.get-previous-release.outputs.tag }}"
+          echo "${{ steps.get-previous-release.outputs.LatestReleaseMajorVersionNumber }}"
+          echo "${{ steps.get-previous-release.outputs.ChocolateyVersion }}"
