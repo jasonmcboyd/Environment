@@ -100,9 +100,11 @@ jobs:
         id: chocolatey-version
         run: |
           choco sources add -n environment -u ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }} -s ${{ secrets.AZURE_DEVOPS_NUGET_FEED }}
+          $sources = choco sources
           $chocolateyVersion = (choco search environment-${{ inputs.release_prefix }} --source environment --limitoutput --exact).Split('|')[1]
           echo "ChocolateyVersion=$chocolateyVersion" >> $env:GITHUB_OUTPUT
           echo "Chocolatey Version: $chocolateyVersion"
+          echo "Sources: $sources"
 
       - name: Setup .NET Core
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
