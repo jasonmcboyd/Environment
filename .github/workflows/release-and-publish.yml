@@ -83,7 +83,7 @@ jobs:
         if: ${{ steps.changed-files-count.outputs.ChangedFilesCount != 0 }}
         run: |
           $nextVersion =$([int]${{ steps.latest-release.output.LatestReleaseMajorVersionNumber }} + 1).0.0"
-          $nextRelease = "${{ env.RELEASE_PREFIX }}-v$nextVersion"
+          $nextRelease = "${{ inputs.release_prefix }}-v$nextVersion"
           echo "NextVersion=$nextVersion" >> $env:GITHUB_OUTPUT
           echo "NextRelease=$nextRelease" >> $env:GITHUB_OUTPUT
           echo "Next Version: $nextVersion"
@@ -140,7 +140,7 @@ jobs:
           `$ErrorActionPreference = 'Stop'
 
           `$packageArgs = @{
-            packageName   = 'environment-${{ env.RELEASE_PREFIX }}'
+            packageName   = 'environment-${{ inputs.release_prefix }}'
             unzipLocation = `$env:USERPROFILE
             url           = 'https://github.com/jasonmcboyd/Environment/releases/download/${{ steps.get-next-release.outputs.NEXT_RELEASE }}/${{ steps.zip-files.outputs.ARCHIVE_NAME }}'
             checksum      = '${{ steps.get-archive-hash.outputs.HASH }}'
@@ -149,7 +149,7 @@ jobs:
 
           Install-ChocolateyZipPackage @packageArgs
           "@
-          choco pack ./environment-${{ env.RELEASE_PREFIX }}.nuspec --version=$latestReleaseVersion
+          choco pack ./environment-${{ inputs.release_prefix }}.nuspec --version=$latestReleaseVersion
           dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name environment --username ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
           echo "$(cat ./tools/chocolateyInstall.ps1)"
           echo "$(ls -recurse | select -expandproperty fullname)"
