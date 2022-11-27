@@ -73,26 +73,21 @@ jobs:
       - name: Get Archive Hash
         id: get-archive-hash
         if: ${{ steps.changed-files-count.outputs.ChangedFilesCount != 0 }}
-        run: echo "ArchiveFileHash=$($(Get-FileHash -Path ${{ steps.zip-files.outputs.ARCHIVE_NAME}} -Algorithm sha512).Hash)" >> $env:GITHUB_OUTPUT
+        run: |
+          $archiveFileHash = (Get-FileHash -Path '${{ steps.zip-files.outputs.ARCHIVE_NAME}}' -Algorithm sha512).Hash
+          echo "ArchiveFileHash=$archiveFileHash" >> $env:GITHUB_OUTPUT
+          echo "Archive File Hash: $archiveFileHash"
 
-      - name: Write Archive Hash
-        if: ${{ steps.changed-files-count.outputs.ChangedFilesCount != 0 }}
-        run: echo "${{ steps.get-archive-hash.outputs.ArchiveFileHash }}"
-
-      - name: Get Next Version
+      - name: Get Next Release Information
         id: get-next-version
         if: ${{ steps.changed-files-count.outputs.ChangedFilesCount != 0 }}
         run: |
-          echo "NextVersion=$([int]${{ steps.previous-release.output.LatestReleaseMajorVersionNumber }} + 1).0.0"
-
-      - name: Get Next Release
-        id: get-next-release
-        if: ${{ steps.changed-files-count.outputs.COUNT != 0 }}
-        run: echo "NextRelease=${{ env.RELEASE_PREFIX }}-v${{ steps.get-next-version.outputs.NextVersion }}" >> $env:GITHUB_OUTPUT
-
-      - name: Write Next Release
-        if: ${{ steps.changed-files-count.outputs.COUNT != 0 }}
-        run: echo "${{ steps.get-next-release.outputs.NextRelease }}"
+          $nextVersion =$([int]${{ steps.previous-release.output.LatestReleaseMajorVersionNumber }} + 1).0.0"
+          $nextRelease = "${{ env.RELEASE_PREFIX }}-v$nextVersion"
+          echo "NextVersion=$nextVersion" >> $env:GITHUB_OUTPUT
+          echo "NextRelease=$nextRelease" >> $env:GITHUB_OUTPUT
+          echo "Next Version: $nextVersion"
+          echo "Next Release: $nextRelease"
 
       - name: Release
         if: ${{ steps.changed-files-count.outputs.COUNT != 0 }}
@@ -105,13 +100,9 @@ jobs:
         id: chocolatey-version
         run: |
           choco sources add -n environment -u ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }} -s ${{ secrets.AZURE_DEVOPS_NUGET_FEED }}
-          echo "ChocolateyVersion=$((choco search environment-${{ inputs.release_prefix }} --source environment --limitoutput --exact).Split('|')[1])" >> $env:GITHUB_OUTPUT
-
-      - name: Write Stuff
-        run: |
-          echo "${{ steps.previous-release.outputs.PreviousRelease }}"
-          echo "${{ steps.previous-release.outputs.LatestReleaseMajorVersionNumber }}"
-          echo "${{ steps.chocolatey-version.outputs.ChocolateyVersion }}"
+          $chocolateyVersion = (choco search environment-${{ inputs.release_prefix }} --source environment --limitoutput --exact).Split('|')[1]
+          echo "ChocolateyVersion=$chocolateyVersion" >> $env:GITHUB_OUTPUT
+          echo "Chocolatey Version: $chocolateyVersion"
 
       - name: Setup .NET Core
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
@@ -119,6 +110,7 @@ jobs:
 
       - name: Get Latest Tag After Releasing
         id: get-latest-tag-after-release
+        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         uses: oprypin/find-latest-tag@v1.1.1
         with:
           repository: jasonmcboyd/Environment
@@ -127,7 +119,12 @@ jobs:
 
       - name: Get Previous Release Information After Releasing
         id: previous-release-after-release
+        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
         run: |
-          echo "PreviousRelease=${{ steps.get-latest-tag-after-release.outputs.tag }}" >> $env:GITHUB_OUTPUT
-          '${{ steps.get-latest-tag-after-release.outputs.tag }}' -match '${{ inputs.release_prefix }}-v(?<major>\d+)\.' | Out-Null
-          echo "LatestReleaseMajorVersionNumber=$($Matches.major)" >> $env:GITHUB_OUTPUT
+          $previousRelease = '${{ steps.get-latest-tag.outputs.tag }}'
+          '${{ steps.get-latest-tag.outputs.tag }}' -match '${{ inputs.release_prefix }}-v(?<major>\d+)\.' | Out-Null
+          $majorVersionNumber = $Matches.major
+          echo "PreviousRelease=$previousRelease" >> $env:GITHUB_OUTPUT
+          echo "LatestReleaseMajorVersionNumber=$majorVersionNumber" >> $env:GITHUB_OUTPUT
+          echo "Previous Release = $previousRelease"
+          echo "Latest Release Major Version Number = $majorVersionNumber"
