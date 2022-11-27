@@ -107,7 +107,7 @@ jobs:
           echo "Chocolatey Package: $chocolateyPackage"
           echo "Chocolatey Version: $chocolateyVersion"
           echo "Sources: $sources
-          echo "$([Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes(${{ secrets.AZURE_DEVOPS_NUGET_FEED }})))"
+          echo "$([Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes('${{ secrets.AZURE_DEVOPS_NUGET_FEED }}')))"
 
       - name: Setup .NET Core
         if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
