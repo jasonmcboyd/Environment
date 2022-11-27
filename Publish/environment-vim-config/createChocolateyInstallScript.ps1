@@ -4,10 +4,10 @@ param (
     $ReleaseVersion,
 
     [string]
-    $ArchiveFileName,
+    $ReleaseUrl,
 
     [string]
-    $ArchiveFileHash
+    $ReleaseFileHash
 )
 
 @"
@@ -17,8 +17,8 @@ Set-StrictMode -Version Latest
 `$packageArgs = @{
   packageName   = 'environment-vim-config'
   unzipLocation = `$env:USERPROFILE
-  url           = 'https://github.com/jasonmcboyd/Environment/releases/download/$ReleaseVersion/$ArchiveFileName'
-  checksum      = '$ArchiveFileHash'
+  url           = '$ReleaseUrl'
+  checksum      = '$ReleaseFileHash'
   checksumType  = 'sha512'
 }
 

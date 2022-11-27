@@ -58,10 +58,16 @@ jobs:
           $latestRelease = '${{ steps.get-latest-tag.outputs.tag }}'
           '${{ steps.get-latest-tag.outputs.tag }}' -match '${{ inputs.release_prefix }}-v(?<major>\d+)\.' | Out-Null
           $majorVersionNumber = $Matches.major
+          $versionNumber = "$majorVersionNumber.0.0"
+          $latestReleaseUrl = "https://github.com/jasonmcboyd/Environment/releases/download/$latestRelease/${{ inputs.release_prefix }}.zip'
           echo "LatestRelease=$latestRelease" >> $env:GITHUB_OUTPUT
           echo "LatestReleaseMajorVersionNumber=$majorVersionNumber" >> $env:GITHUB_OUTPUT
-          echo "Latest Release = $latestRelease"
-          echo "Latest Release Major Version Number = $majorVersionNumber"
+          echo "LatestReleaseVersionNumber=$versionNumber" >> $env:GITHUB_OUTPUT
+          echo "LatestReleaseUrl=$latestReleaseUrl" >> $env:GITHUB_OUTPUT
+          echo "Latest Release: $latestRelease"
+          echo "Latest Release Major Version Number: $majorVersionNumber"
+          echo "Latest Release Version Number: $versionNumber"
+          echo "Latest Release URL: $latestReleaseUrl"
 
       - name: Zip Files
         id: zip-files
@@ -69,14 +75,6 @@ jobs:
         run: |
           Compress-Archive ('${{ inputs.files_to_archive }}'.split('|') -join ' ') ./${{ inputs.release_prefix }}.zip
           echo "ArchiveName=${{ inputs.release_prefix }}.zip" >> $env:GITHUB_OUTPUT
-
-      - name: Get Archive Hash
-        id: get-archive-hash
-        if: ${{ steps.changed-files-count.outputs.ChangedFilesCount != 0 }}
-        run: |
-          $archiveFileHash = (Get-FileHash -Path '${{ steps.zip-files.outputs.ARCHIVE_NAME}}' -Algorithm sha512).Hash
-          echo "ArchiveFileHash=$archiveFileHash" >> $env:GITHUB_OUTPUT
-          echo "Archive File Hash: $archiveFileHash"
 
       - name: Get Next Release Information
         id: get-next-version
@@ -125,21 +123,30 @@ jobs:
           $latestRelease = '${{ steps.get-latest-tag.outputs.tag }}'
           '${{ steps.get-latest-tag.outputs.tag }}' -match '${{ inputs.release_prefix }}-v(?<major>\d+)\.' | Out-Null
           $majorVersionNumber = $Matches.major
+          $versionNumber = "$majorVersionNumber.0.0"
+          $latestReleaseUrl = "https://github.com/jasonmcboyd/Environment/releases/download/$latestRelease/${{ inputs.release_prefix }}.zip'
           echo "LatestRelease=$latestRelease" >> $env:GITHUB_OUTPUT
           echo "LatestReleaseMajorVersionNumber=$majorVersionNumber" >> $env:GITHUB_OUTPUT
-          echo "Latest Release = $latestRelease"
-          echo "Latest Release Major Version Number = $majorVersionNumber"
+          echo "LatestReleaseVersionNumber=$versionNumber" >> $env:GITHUB_OUTPUT
+          echo "LatestReleaseUrl=$latestReleaseUrl" >> $env:GITHUB_OUTPUT
+          echo "Latest Release: $latestRelease"
+          echo "Latest Release Major Version Number: $majorVersionNumber"
+          echo "Latest Release Version Number: $versionNumber"
+          echo "Latest Release URL: $latestReleaseUrl"
 
       - name: Push NuGet Package
         run: |
           cd ./Publish/environment-${{ inputs.release_prefix }}
-          $latestReleaseVersion = "${{ steps.latest-release-after-release.outputs.LatestReleaseMajorVersionNumber }}.0.0"
           echo "${{ steps.chocolatey-version.outputs.ChocolateyPackageVersion }} : $latestReleaseVersion"
           mkdir /working/tools
+          Invoke-WebRequest ${{ steps.latest-release-after-release.outputs.LatestReleaseUrl }} -OutFile /working/package.zip
+          $releaseFileHash = (Get-FileHash -Path /working/package.zip -Algorithm sha512).Hash
+          rm /working/package.zip
           Copy-Item ./*.nuspec /working
-          Set-Content -Path /working/tools/chocolateyInstall.ps1 -Value (./createChocolateyInstallScript.ps1 -ReleaseVersion $latestReleaseVersion -ArchiveFileName ${{ steps.zip-files.outputs.ArchiveName }}) -ArchiveFileHash ${{ steps.get-archive-file-hash.ArchiveFileHash }}
+          Set-Content -Path /working/tools/chocolateyInstall.ps1 -Value (./createChocolateyInstallScript.ps1 -ReleaseVersion $latestReleaseVersion -ReleaseUrl ${{ steps.latest-release-after-release.outputs.LatestReleaseUrl }} -ReleaseFileHash $releaseFileHash)
           cd /working
           choco pack ./environment-${{ inputs.release_prefix }}.nuspec --version=$latestReleaseVersion
           dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name environment --username ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
-          echo "$(cat ./tools/chocolateyInstall.ps1)"
-          echo "$(ls -recurse | select -expandproperty fullname)"
+          echo "`r`n$(cat ./tools/chocolateyInstall.ps1)"
+          echo "`r`n$(ls -recurse | select -expandproperty fullname)"
+          echo "`r`n$releaseFileHash"
