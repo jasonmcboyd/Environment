@@ -15,6 +15,7 @@ jobs:
     with:
       subdirectory: vim
       release_prefix: vim-config
+      file_to_archive: ./Vim/*
     secrets:
       AZURE_DEVOPS_NUGET_FEED: ${{ secrets.AZURE_DEVOPS_NUGET_FEED }}
       AZURE_DEVOPS_USERNAME: ${{ secrets.AZURE_DEVOPS_USERNAME }}
