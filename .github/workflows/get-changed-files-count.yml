@@ -42,14 +42,9 @@ jobs:
           releases-only: true
           prefix: "${{ inputs.release_prefix }}-v"
 
-      - name: Write Previous Release
-        run: echo "${{ steps.get-previous-release.outputs.tag }}"
-
-      - name: Test
-        id: test
-        uses: jasonmcboyd/Environment/.github/workflows/get-latest-release-and-version.yml@master
-        with:
-          release-prefix: ${{ inputs.release_prefix }}
-
-      - name: Write Something
-        run: echo "${{ steps.test.outputs.LatestReleaseVersionMajor }}"
+      - name: Write Previous Release And Major Version Number
+        run: |
+          echo "${{ steps.get-previous-release.outputs.tag }}"
+          '${{ steps.get-previous-release.outputs.tag }}' -match '${{ inputs.release_prefix }}-v(?<major>\d+)\.'
+          echo "LatestReleaseMajorVersionNumber=$($Matches.major)" >> $env:GITHUB_OUTPUT
+          echo "${{ steps.get-previous-release.outputs.LatestReleaseMajorVersionNumber }}"
