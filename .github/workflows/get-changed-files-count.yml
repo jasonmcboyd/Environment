@@ -56,20 +56,20 @@ jobs:
         id: previous-release
         run: |
           echo "PreviousRelease=${{ steps.get-latest-tag.outputs.tag }}" >> $env:GITHUB_OUTPUT
-          '${{ steps.get-latest-tag.outputs.tag }}' -match '${{ inputs.release_prefix }}-v(?<major>\d+)\.'
+          '${{ steps.get-latest-tag.outputs.tag }}' -match '${{ inputs.release_prefix }}-v(?<major>\d+)\.' | Out-Null
           echo "LatestReleaseMajorVersionNumber=$($Matches.major)" >> $env:GITHUB_OUTPUT
 
       - name: Zip Files
         id: zip-files
         if: ${{ steps.changed-files-count.outputs.ChangedFilesCount != 0 }}
         run: |
-          Compress-Archive (${{ inputs.files_to_archive }}.split('|') -join ' ') ./${{ inputs.release_prefix }}.zip
+          Compress-Archive ('${{ inputs.files_to_archive }}'.split('|') -join ' ') ./${{ inputs.release_prefix }}.zip
           echo "ArchiveName=${{ inputs.release_prefix }}.zip" >> $env:GITHUB_OUTPUT
 
       - name: Get Archive Hash
         id: get-archive-hash
         if: ${{ steps.changed-files-count.outputs.ChangedFilesCount != 0 }}
-        run: echo "ArchiveFileHash::$($(Get-FileHash -Path ${{ steps.zip-files.outputs.ARCHIVE_NAME}} -Algorithm sha512).Hash)" >> $env:GITHUB_OUTPUT
+        run: echo "ArchiveFileHash=$($(Get-FileHash -Path ${{ steps.zip-files.outputs.ARCHIVE_NAME}} -Algorithm sha512).Hash)" >> $env:GITHUB_OUTPUT
 
       - name: Write Archive Hash
         if: ${{ steps.changed-files-count.outputs.ChangedFilesCount != 0 }}
@@ -80,6 +80,22 @@ jobs:
         if: ${{ steps.changed-files-count.outputs.ChangedFilesCount != 0 }}
         run: |
           echo "NextVersion=$([int]${{ steps.previous-releasel.output.LatestReleaseMajorVersionNumber }} + 1).0.0"
+
+      - name: Get Next Release
+        id: get-next-release
+        if: ${{ steps.changed-files-count.outputs.COUNT != 0 }}
+        run: echo "NextRelease=${{ env.RELEASE_PREFIX }}-v${{ steps.get-next-version.outputs.NextVersion }}" >> $env:GITHUB_OUTPUT
+
+      - name: Write Next Release
+        if: ${{ steps.changed-files-count.outputs.COUNT != 0 }}
+        run: echo "${{ steps.get-next-release.outputs.NextRelease }}"
+
+      - name: Release
+        if: ${{ steps.changed-files-count.outputs.COUNT != 0 }}
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ steps.zip-files.outputs.ArchiveName }}
+          tag_name: ${{ steps.get-next-release.outputs.NextRelease }}
 
       - name: Get Chocolatey Version
         id: chocolatey-version
