@@ -55,7 +55,7 @@ jobs:
       - name: Get Previous Release Information
         id: previous-release
         run: |
-          $previousRelease = ${{ steps.get-latest-tag.outputs.tag }}
+          $previousRelease = '${{ steps.get-latest-tag.outputs.tag }}'
           '${{ steps.get-latest-tag.outputs.tag }}' -match '${{ inputs.release_prefix }}-v(?<major>\d+)\.' | Out-Null
           $majorVersionNumber = $Matches.major
           echo "PreviousRelease=$previousRelease" >> $env:GITHUB_OUTPUT
