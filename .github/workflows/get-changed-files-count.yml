@@ -81,7 +81,7 @@ jobs:
         id: get-next-version
         if: ${{ steps.changed-files-count.outputs.ChangedFilesCount != 0 }}
         run: |
-          echo "NextVersion=$([int]${{ steps.previous-releasel.output.LatestReleaseMajorVersionNumber }} + 1).0.0"
+          echo "NextVersion=$([int]${{ steps.previous-release.output.LatestReleaseMajorVersionNumber }} + 1).0.0"
 
       - name: Get Next Release
         id: get-next-release
