@@ -52,15 +52,15 @@ jobs:
           releases-only: true
           prefix: "${{ inputs.release_prefix }}-v"
 
-      - name: Get Previous Release Information
-        id: previous-release
+      - name: Get Latest Release Information
+        id: latest-release
         run: |
-          $previousRelease = '${{ steps.get-latest-tag.outputs.tag }}'
+          $latestRelease = '${{ steps.get-latest-tag.outputs.tag }}'
           '${{ steps.get-latest-tag.outputs.tag }}' -match '${{ inputs.release_prefix }}-v(?<major>\d+)\.' | Out-Null
           $majorVersionNumber = $Matches.major
-          echo "PreviousRelease=$previousRelease" >> $env:GITHUB_OUTPUT
+          echo "LatestRelease=$latestRelease" >> $env:GITHUB_OUTPUT
           echo "LatestReleaseMajorVersionNumber=$majorVersionNumber" >> $env:GITHUB_OUTPUT
-          echo "Previous Release = $previousRelease"
+          echo "Latest Release = $latestRelease"
           echo "Latest Release Major Version Number = $majorVersionNumber"
 
       - name: Zip Files
@@ -82,7 +82,7 @@ jobs:
         id: get-next-version
         if: ${{ steps.changed-files-count.outputs.ChangedFilesCount != 0 }}
         run: |
-          $nextVersion =$([int]${{ steps.previous-release.output.LatestReleaseMajorVersionNumber }} + 1).0.0"
+          $nextVersion =$([int]${{ steps.latest-release.output.LatestReleaseMajorVersionNumber }} + 1).0.0"
           $nextRelease = "${{ env.RELEASE_PREFIX }}-v$nextVersion"
           echo "NextVersion=$nextVersion" >> $env:GITHUB_OUTPUT
           echo "NextRelease=$nextRelease" >> $env:GITHUB_OUTPUT
@@ -119,17 +119,37 @@ jobs:
           releases-only: true
           prefix: "${{ inputs.release_prefix }}-v"
 
-      - name: Get Previous Release Information After Releasing
-        id: previous-release-after-release
+      - name: Get Latest Release Information After Releasing
+        id: latest-release-after-release
         run: |
-          $previousRelease = '${{ steps.get-latest-tag.outputs.tag }}'
+          $latestRelease = '${{ steps.get-latest-tag.outputs.tag }}'
           '${{ steps.get-latest-tag.outputs.tag }}' -match '${{ inputs.release_prefix }}-v(?<major>\d+)\.' | Out-Null
           $majorVersionNumber = $Matches.major
-          echo "PreviousRelease=$previousRelease" >> $env:GITHUB_OUTPUT
+          echo "LatestRelease=$latestRelease" >> $env:GITHUB_OUTPUT
           echo "LatestReleaseMajorVersionNumber=$majorVersionNumber" >> $env:GITHUB_OUTPUT
-          echo "Previous Release = $previousRelease"
+          echo "Latest Release = $latestRelease"
           echo "Latest Release Major Version Number = $majorVersionNumber"
 
       - name: Push NuGet Package
         run: |
-          echo "${{ steps.chocolatey-version.outputs.ChocolateyPackageVersion }} : ${{ steps.previous-release-after-release.outputs.LatestReleaseMajorVersionNumber }}"
+          $latestReleaseVersion = "${{ steps.latest-release-after-release.outputs.LatestReleaseMajorVersionNumber }}.0.0"
+          echo "${{ steps.chocolatey-version.outputs.ChocolateyPackageVersion }} : $latestReleaseVersion"
+          mkdir ./tools
+          Set-Content -Path ./tools/chocolateyInstall.ps1 -Value @"
+          Set-StrictMode -Version Latest
+          `$ErrorActionPreference = 'Stop'
+
+          `$packageArgs = @{
+            packageName   = 'environment-${{ env.RELEASE_PREFIX }}'
+            unzipLocation = `$env:USERPROFILE
+            url           = 'https://github.com/jasonmcboyd/Environment/releases/download/${{ steps.get-next-release.outputs.NEXT_RELEASE }}/${{ steps.zip-files.outputs.ARCHIVE_NAME }}'
+            checksum      = '${{ steps.get-archive-hash.outputs.HASH }}'
+            checksumType  = 'sha512'
+          }
+
+          Install-ChocolateyZipPackage @packageArgs
+          "@
+          choco pack ./environment-${{ env.RELEASE_PREFIX }}.nuspec --version=$latestReleaseVersion
+          dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name environment --username ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
+          echo "$(cat ./tools/chocolateyInstall.ps1)"
+          echo "$(ls -recurse | select -expandproperty fullname)"
