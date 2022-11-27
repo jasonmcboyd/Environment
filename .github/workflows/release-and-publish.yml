@@ -59,7 +59,7 @@ jobs:
           '${{ steps.get-latest-tag.outputs.tag }}' -match '${{ inputs.release_prefix }}-v(?<major>\d+)\.' | Out-Null
           $majorVersionNumber = $Matches.major
           $versionNumber = "$majorVersionNumber.0.0"
-          $latestReleaseUrl = "https://github.com/jasonmcboyd/Environment/releases/download/$latestRelease/${{ inputs.release_prefix }}.zip'
+          $latestReleaseUrl = "https://github.com/jasonmcboyd/Environment/releases/download/$latestRelease/${{ inputs.release_prefix }}.zip"
           echo "LatestRelease=$latestRelease" >> $env:GITHUB_OUTPUT
           echo "LatestReleaseMajorVersionNumber=$majorVersionNumber" >> $env:GITHUB_OUTPUT
           echo "LatestReleaseVersionNumber=$versionNumber" >> $env:GITHUB_OUTPUT
@@ -124,7 +124,7 @@ jobs:
           '${{ steps.get-latest-tag.outputs.tag }}' -match '${{ inputs.release_prefix }}-v(?<major>\d+)\.' | Out-Null
           $majorVersionNumber = $Matches.major
           $versionNumber = "$majorVersionNumber.0.0"
-          $latestReleaseUrl = "https://github.com/jasonmcboyd/Environment/releases/download/$latestRelease/${{ inputs.release_prefix }}.zip'
+          $latestReleaseUrl = "https://github.com/jasonmcboyd/Environment/releases/download/$latestRelease/${{ inputs.release_prefix }}.zip"
           echo "LatestRelease=$latestRelease" >> $env:GITHUB_OUTPUT
           echo "LatestReleaseMajorVersionNumber=$majorVersionNumber" >> $env:GITHUB_OUTPUT
           echo "LatestReleaseVersionNumber=$versionNumber" >> $env:GITHUB_OUTPUT
