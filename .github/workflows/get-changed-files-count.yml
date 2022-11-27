@@ -60,6 +60,8 @@ jobs:
           $majorVersionNumber = $Matches.major
           echo "PreviousRelease=$previousRelease" >> $env:GITHUB_OUTPUT
           echo "LatestReleaseMajorVersionNumber=$majorVersionNumber" >> $env:GITHUB_OUTPUT
+          echo "Previous Release = $previousRelease"
+          echo "Latest Release Major Version Number = $majorVersionNumber"
 
       - name: Zip Files
         id: zip-files
