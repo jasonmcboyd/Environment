@@ -1,0 +1,41 @@
+# This is a basic workflow to help you get started with Actions
+
+name: get-latest-release-and-version
+
+# Controls when the workflow will run
+on:
+  workflow_call:
+    inputs:
+      release_prefix:
+        required: true
+        type: string
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@main
+        with:
+          fetch-depth: 2
+
+      - name: Get Previous Release
+        id: get-previous-release
+        uses: oprypin/find-latest-tag@v1.1.1
+        with:
+          repository: jasonmcboyd/Environment
+          releases-only: true
+          prefix: "${{ inputs.release_prefix }}-v"
+
+      - name: Write Previous Release
+        run: echo "${{ steps.get-previous-release.outputs.tag }}"
+
+      - name: Write Previous Release Version Major Number
+        run: |
+          '${{ steps.get-previous-release.outputs.tag }}' -match '${{ inputs.release_prefix }}-v(?<major>\d+)\.'
+          echo "LatestReleaseVersionMajor=$($Matches.major)" >> $env:GITHUB_OUTPUT
