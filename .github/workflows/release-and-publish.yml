@@ -80,7 +80,7 @@ jobs:
         id: get-next-version
         if: ${{ steps.changed-files-count.outputs.ChangedFilesCount != 0 }}
         run: |
-          $nextVersion ="$([int]${{ steps.latest-release.output.LatestReleaseMajorVersionNumber }} + 1).0.0"
+          $nextVersion ="$([int]${{ steps.latest-release.outputs.LatestReleaseMajorVersionNumber }} + 1).0.0"
           $nextRelease = "${{ inputs.release_prefix }}-v$nextVersion"
           echo "NextVersion=$nextVersion" >> $env:GITHUB_OUTPUT
           echo "NextRelease=$nextRelease" >> $env:GITHUB_OUTPUT
