@@ -135,6 +135,7 @@ jobs:
           echo "Latest Release URL: $latestReleaseUrl"
 
       - name: Push NuGet Package
+        if: ${{ steps.chocolatey-version.outputs.ChocolateyPackageVersion != steps.latest-release-after-release.outputs.LatestReleaseVersionNumber }}
         run: |
           cd ./Publish/environment-${{ inputs.release_prefix }}
           mkdir /working/tools
