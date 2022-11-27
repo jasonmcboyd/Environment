@@ -114,7 +114,7 @@ jobs:
         uses: actions/setup-dotnet@v1
 
       - name: Get Latest Tag After Releasing
-        id: get-latest-tag
+        id: get-latest-tag-after-release
         uses: oprypin/find-latest-tag@v1.1.1
         with:
           repository: jasonmcboyd/Environment
@@ -124,6 +124,6 @@ jobs:
       - name: Get Previous Release Information After Releasing
         id: previous-release
         run: |
-          echo "PreviousRelease=${{ steps.get-latest-tag.outputs.tag }}" >> $env:GITHUB_OUTPUT
-          '${{ steps.get-latest-tag.outputs.tag }}' -match '${{ inputs.release_prefix }}-v(?<major>\d+)\.' | Out-Null
+          echo "PreviousRelease=${{ steps.get-latest-tag-after-release.outputs.tag }}" >> $env:GITHUB_OUTPUT
+          '${{ steps.get-latest-tag-after-release.outputs.tag }}' -match '${{ inputs.release_prefix }}-v(?<major>\d+)\.' | Out-Null
           echo "LatestReleaseMajorVersionNumber=$($Matches.major)" >> $env:GITHUB_OUTPUT
