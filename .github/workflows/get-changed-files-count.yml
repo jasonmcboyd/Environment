@@ -44,9 +44,6 @@ jobs:
           echo "ChangedFilesCount=$changedFilesCount" >> $env:GITHUB_OUTPUT
           echo "Changed Files: $changedFilesCount"
 
-      - name: Write Files Changed Count
-        run: echo "${{ steps.changed-files-count.outputs.ChangedFilesCount }}"
-
       - name: Get Latest Tag
         id: get-latest-tag
         uses: oprypin/find-latest-tag@v1.1.1
@@ -58,9 +55,11 @@ jobs:
       - name: Get Previous Release Information
         id: previous-release
         run: |
-          echo "PreviousRelease=${{ steps.get-latest-tag.outputs.tag }}" >> $env:GITHUB_OUTPUT
+          $previousRelease = ${{ steps.get-latest-tag.outputs.tag }}
           '${{ steps.get-latest-tag.outputs.tag }}' -match '${{ inputs.release_prefix }}-v(?<major>\d+)\.' | Out-Null
-          echo "LatestReleaseMajorVersionNumber=$($Matches.major)" >> $env:GITHUB_OUTPUT
+          $majorVersionNumber = $Matches.major
+          echo "PreviousRelease=$previousRelease" >> $env:GITHUB_OUTPUT
+          echo "LatestReleaseMajorVersionNumber=$majorVersionNumber" >> $env:GITHUB_OUTPUT
 
       - name: Zip Files
         id: zip-files
