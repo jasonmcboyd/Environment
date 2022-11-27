@@ -40,8 +40,9 @@ jobs:
       - name: Get Files Changed Count
         id: changed-files-count
         run: |
-          echo "ChangedFilesCount=$((git diff HEAD~ --name-only -- ./${{ inputs.subdirectory }} ./.github/workflows/${{ inputs.release_prefix }}.yml ./Nuspec/environment-${{ inputs.release_prefix }} | Measure-Object).Count)" >> $env:GITHUB_OUTPUT
-          echo "Changed Files: ${{ steps.changed-files-count.outputs.ChangedFilesCount }}"
+          $changedFilesCount = $((git diff HEAD~ --name-only -- ./${{ inputs.subdirectory }} ./.github/workflows/${{ inputs.release_prefix }}.yml ./Nuspec/environment-${{ inputs.release_prefix }} | Measure-Object).Count)
+          echo "ChangedFilesCount=$changedFilesCount" >> $env:GITHUB_OUTPUT
+          echo "Changed Files: $changedFilesCount"
 
       - name: Write Files Changed Count
         run: echo "${{ steps.changed-files-count.outputs.ChangedFilesCount }}"
