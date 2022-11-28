@@ -60,3 +60,4 @@ jobs:
           cd /working
           choco pack ./environment-${{ inputs.release-prefix }}.nuspec --version=${{ steps.latest-release.outputs.latest-release-version-number }}
           dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name environment --username ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
+          dotnet nuget push environment-${{ inputs.release_prefix }}.${{ steps.latest-release.outputs.latest-release-version-number }}.nupkg --source environment --api-key AzureDevOps
