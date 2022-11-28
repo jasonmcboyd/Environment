@@ -1,9 +1,6 @@
 [CmdletBinding()]
 param (
     [string]
-    $ReleaseVersion,
-
-    [string]
     $ReleaseUrl,
 
     [string]
