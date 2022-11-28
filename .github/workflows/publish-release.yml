@@ -46,7 +46,7 @@ jobs:
 
       - name: Get Latest Release Information
         id: latest-release
-        uses: ./.github/actions/get-latest-release-information
+        uses: ./.github/actions/get-latest-release-information.yml
         with:
           release-prefix: ${{ inputs.release-prefix }}
 
