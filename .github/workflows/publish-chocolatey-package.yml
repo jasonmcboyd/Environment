@@ -47,10 +47,6 @@ jobs:
         with:
           release-prefix: ${{ inputs.release-prefix }}
 
-      - name: Setup .NET Core
-        if: ${{ steps.chocolatey-version.outputs.chocolatey-package-version != steps.latest-release.outputs.LatestReleaseVersionNumber }}
-        uses: actions/setup-dotnet@v1
-
       - name: Push NuGet Package
         if: ${{ steps.chocolatey-version.outputs.chocolatey-package-version != steps.latest-release.outputs.LatestReleaseVersionNumber }}
         run: |
