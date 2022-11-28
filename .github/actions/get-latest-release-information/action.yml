@@ -1,4 +1,4 @@
-# This is a basic workflow to help you get started with Actions
+# Action to get the latest release information for a given environment configuration.
 
 name: get-latest-release-information
 description: Get the latest release information for this environment config.
@@ -28,7 +28,6 @@ runs:
   steps:
     - name: Get Latest Tag
       id: get-latest-tag
-      shell: powershell
       uses: oprypin/find-latest-tag@v1.1.1
       with:
         repository: jasonmcboyd/Environment
