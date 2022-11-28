@@ -15,12 +15,20 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
-    uses: jasonmcboyd/Environment/.github/workflows/release-and-publish.yml@master
+  publish-release:
+    uses: jasonmcboyd/Environment/.github/workflows/publish-release.yml@master
     with:
       subdirectory: Vim
-      release_prefix: vim-config
-      files_to_archive: ./Vim/*
+      release-prefix: vim-config
+      files-to-archive: ./Vim/*
+    secrets:
+      AZURE_DEVOPS_NUGET_FEED: ${{ secrets.AZURE_DEVOPS_NUGET_FEED }}
+      AZURE_DEVOPS_USERNAME: ${{ secrets.AZURE_DEVOPS_USERNAME }}
+      AZURE_DEVOPS_PAT: ${{ secrets.AZURE_DEVOPS_PAT }}
+  publish-chocolatey-package:
+    uses: jasonmcboyd/Environment/.github/workflows/publish-chocolatey-package.yml@master
+    with:
+      release-prefix: vim-config
     secrets:
       AZURE_DEVOPS_NUGET_FEED: ${{ secrets.AZURE_DEVOPS_NUGET_FEED }}
       AZURE_DEVOPS_USERNAME: ${{ secrets.AZURE_DEVOPS_USERNAME }}

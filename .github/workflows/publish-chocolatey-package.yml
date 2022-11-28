@@ -1,0 +1,61 @@
+# This is a basic workflow to help you get started with Actions
+
+name: publish-chocolatey-package
+
+# Controls when the workflow will run
+on:
+  workflow_call:
+    inputs:
+      release-prefix:
+        required: true
+        type: string
+    secrets:
+      AZURE_DEVOPS_NUGET_FEED:
+        required: true
+      AZURE_DEVOPS_USERNAME:
+        required: true
+      AZURE_DEVOPS_PAT:
+        required: true
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Get Chocolatey Version
+        id: chocolatey-version
+        run: |
+          $chocolateyNugetFeedUrl = "${{ secrets.AZURE_DEVOPS_NUGET_FEED }}".Replace('v3/index.json', 'v2')
+          choco sources add -n environment -u ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }} -s "$chocolateyNugetFeedUrl"
+          $chocolateyPackage = choco search environment-${{ inputs.release-prefix }} --source environment --limitoutput --exact
+          $chocolateyPackageVersion = $chocolateyPackage.Split('|')[1]
+          echo "chocolatey-package-version=$chocolateyPackageVersion" >> $env:GITHUB_OUTPUT
+          echo "Chocolatey Package: $chocolateyPackage"
+
+      - name: Setup .NET Core
+        if: ${{ steps.changed-files-count.outputs.changedFilesCount != 0 }}
+        uses: actions/setup-dotnet@v1
+
+      - name: Get Latest Release Information
+        id: latest-release
+        uses: actions/get-latest-release-information@master
+        with:
+          release-prefix: ${{ inputs.release-prefix }}
+
+      - name: Push NuGet Package
+        if: ${{ steps.chocolatey-version.outputs.chocolatey-package-version != steps.latest-release.outputs.LatestReleaseVersionNumber }}
+        run: |
+          cd ./Publish/environment-${{ inputs.release-prefix }}
+          mkdir /working/tools
+          Invoke-WebRequest ${{ steps.latest-release.outputs.LatestReleaseUrl }} -OutFile /working/package.zip
+          $releaseFileHash = (Get-FileHash -Path /working/package.zip -Algorithm sha512).Hash
+          rm /working/package.zip
+          Copy-Item ./*.nuspec /working
+          Set-Content -Path /working/tools/chocolateyInstall.ps1 -Value (./createChocolateyInstallScript.ps1 -ReleaseVersion $latestReleaseVersion -ReleaseUrl ${{ steps.latest-release.outputs.LatestReleaseUrl }} -ReleaseFileHash $releaseFileHash)
+          cd /working
+          choco pack ./environment-${{ inputs.release-prefix }}.nuspec --version=$latestReleaseVersion
+          dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name environment --username ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
