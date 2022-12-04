@@ -7,6 +7,8 @@ inputs:
   release-prefix:
     description: The prefix of the environment configuration.
     required: true
+  AZURE_DEVOPS_NUGET_FEED:
+    description: The Azure nuget feed
 outputs:
   chocolatey-package:
     description: The chocolatey package name and version
@@ -24,8 +26,8 @@ runs:
       id: get-chocolatey-package-and-version
       shell: powershell
       run: |
-        $chocolateyNugetFeedUrl = "${{ secrets.AZURE_DEVOPS_NUGET_FEED }}".Replace('v3/index.json', 'v2')
-        choco sources add -n environment -u ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }} -s "$chocolateyNugetFeedUrl"
+        $chocolateyNugetFeedUrl = "${{ inputs.AZURE_DEVOPS_NUGET_FEED }}".Replace('v3/index.json', 'v2')
+        choco sources add -n environment -u test -p test -s "$chocolateyNugetFeedUrl"
         $chocolateyPackage = choco search environment-${{ inputs.release-prefix }} --source environment --limitoutput --exact
         $chocolateyPackageVersion = $chocolateyPackage.Split('|')[1]
         echo "chocolatey-package=$chocolateyPackage" >> $env:GITHUB_OUTPUT

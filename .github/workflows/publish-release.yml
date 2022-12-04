@@ -30,7 +30,7 @@ jobs:
       - name: Get Files Changed Count
         id: changed-files-count
         run: |
-          $changedFilesCount = $((git diff HEAD~ --name-only -- ./${{ inputs.subdirectory }} ./.github/workflows/core ./.github/workflows/environment-config-jobs/${{ inputs.release-prefix }}.yml ./Publish/environment-${{ inputs.release-prefix }} | Measure-Object).Count)
+          $changedFilesCount = $((git diff HEAD~ --name-only -- ./${{ inputs.subdirectory }} ./workflows ./Publish/environment-${{ inputs.release-prefix }} | Measure-Object).Count)
           echo "changed-files-count=$changedFilesCount" >> $env:GITHUB_OUTPUT
           echo "Changed Files: $changedFilesCount"
 
