@@ -37,10 +37,10 @@ jobs:
         id: zip-files
         run: |
           Compress-Archive ./${{ inputs.subdirectory }}/* ./${{ inputs.release-prefix }}.zip
-          $fileHash = (Get-FileHash -Path ./${{ inputs.release-prefix }}.zip -Algorithm sha512).Hash
+          $directoryHash = (Get-FileHash -InputStream ([System.IO.MemoryStream]::new([char[]]((Get-ChildItem -Path ./${{ inputs.subdirectory }} -File | % { (Get-FileHash $_).Hash }) -join '')))).Hash
           echo "archive-name=${{ inputs.release-prefix }}.zip" >> $env:GITHUB_OUTPUT
-          echo "archive-file-hash=$fileHash" >> $env:GITHUB_OUTPUT
-          echo "Archive File Hash: $fileHash"
+          echo "directory-hash=$directoryHash" >> $env:GITHUB_OUTPUT
+          echo "Directory Hash: $directoryHash"
 
       - name: Get Next Release Information
         id: get-next-release
@@ -51,7 +51,7 @@ jobs:
           echo "Next Release: $nextRelease"
 
       - name: Release
-        if: ${{ steps.latest-release.outputs.latest-release-hash != steps.zip-files.outputs.archive-file-hash }}
+        if: ${{ steps.latest-release.outputs.latest-release-directory-hash != steps.zip-files.outputs.directory-hash }}
         uses: softprops/action-gh-release@v1
         with:
           files: ${{ steps.zip-files.outputs.archive-name }}
