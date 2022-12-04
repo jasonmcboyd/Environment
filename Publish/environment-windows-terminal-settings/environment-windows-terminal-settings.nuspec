@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>environment-windows-terminal-settings</id>
-    <version></version>
+    <version>0.0.0</version>
     <title>Windows Terminal Settings</title>
     <authors>Jason Boyd</authors>
     <owners>Jason Boyd</owners>

@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Starship Config CI
+name: Starship Config
 
 # Controls when the workflow will run
 on:
@@ -16,119 +16,21 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: windows-latest
-
-    env:
-      RELEASE_PREFIX: 'starship-config'
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
-
-      - name: Get Files Changed Count
-        id: files-changed-count
-        run: echo "::set-output name=COUNT::$((git diff HEAD~ --name-only -- ./Starship ./.github/workflows/${{ env.RELEASE_PREFIX }}.yml ./Nuspec/environment-${{ env.RELEASE_PREFIX }} | Measure-Object).Count)"
-
-      - name: Write Files Changed Count
-        run: echo "${{ steps.files-changed-count.outputs.COUNT }}"
-
-      - name: Zip Files
-        id: zip-files
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        run: |
-          Compress-Archive ./Starship/* ./${{ env.RELEASE_PREFIX }}.zip
-          echo "::set-output name=ARCHIVE_NAME::${{ env.RELEASE_PREFIX }}.zip"
-
-      - name: Get Archive Hash
-        id: get-archive-hash
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        run: echo "::set-output name=HASH::$($(Get-FileHash -Path ${{ steps.zip-files.outputs.ARCHIVE_NAME}} -Algorithm sha512).Hash)"
-
-      - name: Write Archive Hash
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        run: echo "${{ steps.get-archive-hash.outputs.HASH }}"
-
-      - name: Get Previous Release
-        id: get-previous-release
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        uses: oprypin/find-latest-tag@e6d7a96b985a7dda6080e43e12771ad3a90fd389
-        with:
-          repository: jasonmcboyd/Environment
-          releases-only: true
-          prefix: "${{ env.RELEASE_PREFIX }}-v"
-
-      - name: Write Previous Release
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        run: echo "${{ steps.get-previous-release.outputs.tag }}"
-
-      - name: Get Next Version
-        id: get-next-version
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        run: |
-          '${{ steps.get-previous-release.outputs.tag }}' -match '${{ env.RELEASE_PREFIX }}-v(?<major>\d+)\.'
-          echo "::set-output name=VERSION::$([int]$Matches.major + 1).0.0"
-
-      - name: Write Next Version
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        run: echo "${{ steps.get-next-version.outputs.VERSION }}"
-
-      - name: Get Next Release
-        id: get-next-release
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        run: echo "::set-output name=NEXT_RELEASE::${{ env.RELEASE_PREFIX }}-v${{ steps.get-next-version.outputs.VERSION }}"
-
-      - name: Write Next Release
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        run: echo "${{ steps.get-next-release.outputs.NEXT_RELEASE }}"
-
-      - name: Release
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        uses: softprops/action-gh-release@v1
-        with:
-          files: ${{ steps.zip-files.outputs.ARCHIVE_NAME }}
-          tag_name: ${{ steps.get-next-release.outputs.NEXT_RELEASE }}
-
-      - name: Setup .NET Core
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        uses: actions/setup-dotnet@v1
-
-      - name: Push NuGet Package
-        if: ${{ steps.files-changed-count.outputs.COUNT != 0 }}
-        run: |
-          cd ./Nuspec/environment-${{ env.RELEASE_PREFIX }}
-          $xml = [xml](Get-Content ./environment-${{ env.RELEASE_PREFIX }}.nuspec -Raw)
-          $xml.package.metadata.version = "${{ steps.get-next-version.outputs.VERSION }}"
-          Set-Content -Path ./environment-${{ env.RELEASE_PREFIX }}.nuspec -Value $xml.OuterXml
-          mkdir ./tools
-          Set-Content -Path ./tools/chocolateyInstall.ps1 -Value @"
-          Set-StrictMode -Version Latest
-          `$ErrorActionPreference = 'Stop'
-
-          Install-ChocolateyEnvironmentVariable -VariableName 'STARSHIP_CONFIG' -VariableValue "`$HOME\.starship\config.toml" -VariableType 'User'
-
-          Install-ChocolateyEnvironmentVariable -VariableName 'STARSHIP_CACHE' -VariableValue "`$HOME\.starship\cache" -VariableType 'User'
-
-          `$destination = Split-Path `$ENV:STARSHIP_CONFIG
-
-          if (!(Test-Path `$destination)) {
-            mkdir `$destination
-          }
-
-          `$packageArgs = @{
-            packageName   = 'environment-${{ env.RELEASE_PREFIX }}'
-            unzipLocation = `$destination
-            url           = 'https://github.com/jasonmcboyd/Environment/releases/download/${{ steps.get-next-release.outputs.NEXT_RELEASE }}/${{ steps.zip-files.outputs.ARCHIVE_NAME }}'
-            checksum      = '${{ steps.get-archive-hash.outputs.HASH }}'
-            checksumType  = 'sha512'
-          }
-
-          Install-ChocolateyZipPackage @packageArgs
-          "@
-          choco pack ./environment-${{ env.RELEASE_PREFIX }}.nuspec
-          dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name environment --username ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
-          dotnet nuget push environment-${{ env.RELEASE_PREFIX }}.${{ steps.get-next-version.outputs.VERSION }}.nupkg --source environment --api-key AzureDevOps
+  publish-release:
+    uses: jasonmcboyd/Environment/.github/workflows/publish-release.yml@master
+    with:
+      subdirectory: Starship
+      release-prefix: starship-config
+      files-to-archive: ./Starship/*
+    secrets:
+      AZURE_DEVOPS_NUGET_FEED: ${{ secrets.AZURE_DEVOPS_NUGET_FEED }}
+      AZURE_DEVOPS_USERNAME: ${{ secrets.AZURE_DEVOPS_USERNAME }}
+      AZURE_DEVOPS_PAT: ${{ secrets.AZURE_DEVOPS_PAT }}
+  publish-chocolatey-package:
+    uses: jasonmcboyd/Environment/.github/workflows/publish-chocolatey-package.yml@master
+    with:
+      release-prefix: vim-config
+    secrets:
+      AZURE_DEVOPS_NUGET_FEED: ${{ secrets.AZURE_DEVOPS_NUGET_FEED }}
+      AZURE_DEVOPS_USERNAME: ${{ secrets.AZURE_DEVOPS_USERNAME }}
+      AZURE_DEVOPS_PAT: ${{ secrets.AZURE_DEVOPS_PAT }}

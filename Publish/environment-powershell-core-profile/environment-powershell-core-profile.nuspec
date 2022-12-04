@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <id>environment-all</id>
-    <version>1.0.2</version>
-    <title>All Environment Packages</title>
+    <id>environment-powershell-core-profile</id>
+    <version>0.0.0</version>
+    <title>PowerShell Core Profile</title>
     <authors>Jason Boyd</authors>
     <owners>Jason Boyd</owners>
     <licenseUrl>https://raw.githubusercontent.com/jasonmcboyd/Environment/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/jasonmcboyd/Environment</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>All Environment Packages</description>
+    <description>PowerShell Core Profile</description>
     <summary></summary>
     <releaseNotes></releaseNotes>
     <tags></tags>
@@ -17,15 +17,7 @@
     <packageSourceUrl>https://github.com/jasonmcboyd/Environment</packageSourceUrl>
     <bugTrackerUrl>https://github.com/jasonmcboyd/Environment/issues</bugTrackerUrl>
     <dependencies>
-      <dependency
-          id="environment-powershell-core-profile"
-          version="(1.0,)" />
-      <dependency
-          id="environment-vim-config"
-          version="(1.0,)" />
-      <dependency
-          id="environment-windows-terminal-settings"
-          version="(1.0,)" />
+      <dependency id="powershell-core" />
     </dependencies>
   </metadata>
 </package>
