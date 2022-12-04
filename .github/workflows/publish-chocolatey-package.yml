@@ -29,6 +29,7 @@ jobs:
         uses: ./.github/actions/get-chocolatey-package-and-version
         with:
           release-prefix: ${{ inputs.release-prefix }}
+          AZURE_DEVOPS_NUGET_FEED: ${{ secrets.AZURE_DEVOPS_NUGET_FEED }}
 
       - name: Get Latest Release Information
         id: latest-release
