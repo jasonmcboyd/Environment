@@ -48,7 +48,9 @@ runs:
         $latestReleaseUrl = "https://github.com/jasonmcboyd/Environment/releases/download/$latestRelease/${{ inputs.release-prefix }}.zip"
         Invoke-WebRequest -Uri $latestReleaseUrl -OutFile release-package.zip
         Expand-Archive -Path release-package.zip -DestinationPath release-package
-        $latestReleaseDirectoryHash = (Get-FileHash -InputStream ([System.IO.MemoryStream]::new([char[]]((Get-ChildItem -Path ./release-package -File | % { (Get-FileHash $_).Hash }) -join '')))).Hash
+        $combinedFileHashes = (Get-ChildItem -Path ./release-package -File -Recurse | % { (Get-FileHash $_).Hash }) -join ''
+        echo "Combined File Hashes: $combinedFileHashes"
+        $latestReleaseDirectoryHash = (Get-FileHash -InputStream ([System.IO.MemoryStream]::new([char[]]($combinedFileHashes)))).Hash
         rm ./release-package.zip
         rm ./release-package -Recurse -Force
         echo "latest-release=$latestRelease" >> $env:GITHUB_OUTPUT
