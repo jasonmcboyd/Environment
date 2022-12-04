@@ -42,11 +42,8 @@ jobs:
         run: |
           cd ./Publish/environment-${{ inputs.release-prefix }}
           mkdir /working/tools
-          Invoke-WebRequest ${{ steps.latest-release.outputs.latest-release-url }} -OutFile /working/package.zip
-          $releaseFileHash = (Get-FileHash -Path /working/package.zip -Algorithm sha512).Hash
-          rm /working/package.zip
           Copy-Item ./*.nuspec /working
-          Set-Content -Path /working/tools/chocolateyInstall.ps1 -Value (./createChocolateyInstallScript.ps1 -ReleaseUrl ${{ steps.latest-release.outputs.latest-release-url }} -ReleaseFileHash $releaseFileHash)
+          Set-Content -Path /working/tools/chocolateyInstall.ps1 -Value (./createChocolateyInstallScript.ps1 -ReleaseUrl ${{ steps.latest-release.outputs.latest-release-url }} -ReleaseFileHash ${{ steps.latest-release.outputs.latest-release-hash }})
           cd /working
           choco pack ./environment-${{ inputs.release-prefix }}.nuspec --version=${{ steps.latest-release.outputs.latest-release-version-number }}
           dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name environment --username ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}

@@ -20,6 +20,9 @@ outputs:
   latest-release-url:
     description: The download URL of the latest release.
     value: ${{ steps.latest-release.outputs.latest-release-url }}
+  latest-release-hash:
+    description: The SHA 512 hash of the latest release version.
+    value: ${{ steps.latest-release.outputs.latest-release-hash }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 runs:
@@ -43,11 +46,16 @@ runs:
         $majorVersionNumber = $Matches.major
         $versionNumber = "$majorVersionNumber.0.0"
         $latestReleaseUrl = "https://github.com/jasonmcboyd/Environment/releases/download/$latestRelease/${{ inputs.release-prefix }}.zip"
+        Invoke-WebRequest -Uri $latestReleaseUrl -OutFile release-package.zip
+        $latestReleaseHash = (Get-FileHash -Path ./release-package.zip -Algorithm sha512).Hash
+        rm ./release-package.zip
         echo "latest-release=$latestRelease" >> $env:GITHUB_OUTPUT
         echo "latest-release-major-version-number=$majorVersionNumber" >> $env:GITHUB_OUTPUT
         echo "latest-release-version-number=$versionNumber" >> $env:GITHUB_OUTPUT
         echo "latest-release-url=$latestReleaseUrl" >> $env:GITHUB_OUTPUT
+        echo "latest-release-hash=$latestReleaseHash" >> $env:GITHUB_OUTPUT
         echo "Latest Release: $latestRelease"
         echo "Latest Release Major Version Number: $majorVersionNumber"
         echo "Latest Release Version Number: $versionNumber"
         echo "Latest Release URL: $latestReleaseUrl"
+        echo "Latest Release Hash: $latestReleaseHash"

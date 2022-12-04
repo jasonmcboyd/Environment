@@ -27,13 +27,6 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Get Files Changed Count
-        id: changed-files-count
-        run: |
-          $changedFilesCount = $((git diff HEAD~ --name-only -- ./${{ inputs.subdirectory }} ./workflows ./Publish/environment-${{ inputs.release-prefix }} | Measure-Object).Count)
-          echo "changed-files-count=$changedFilesCount" >> $env:GITHUB_OUTPUT
-          echo "Changed Files: $changedFilesCount"
-
       - name: Get Latest Release Information
         id: latest-release
         uses: ./.github/actions/get-latest-release-information
@@ -42,14 +35,15 @@ jobs:
 
       - name: Zip Files
         id: zip-files
-        if: ${{ steps.changed-files-count.outputs.changed-files-count != 0 }}
         run: |
           Compress-Archive ./${{ inputs.subdirectory }}/* ./${{ inputs.release-prefix }}.zip
+          $fileHash = (Get-FileHash -Path ./${{ inputs.release-prefix }}.zip -Algorithm sha512).Hash
           echo "archive-name=${{ inputs.release-prefix }}.zip" >> $env:GITHUB_OUTPUT
+          echo "archive-file-hash=$fileHash" >> $env:GITHUB_OUTPUT
+          echo "Archive File Hash: $fileHash"
 
       - name: Get Next Release Information
         id: get-next-release
-        if: ${{ steps.changed-files-count.outputs.changed-files-count != 0 }}
         run: |
           $nextVersion ="$([int]${{ steps.latest-release.outputs.latest-release-major-version-number }} + 1).0.0"
           $nextRelease = "${{ inputs.release-prefix }}-v$nextVersion"
@@ -57,7 +51,7 @@ jobs:
           echo "Next Release: $nextRelease"
 
       - name: Release
-        if: ${{ steps.changed-files-count.outputs.changed-files-count != 0 }}
+        if: ${{ steps.latest-release.outputs.latest-release-hash != steps.zip-files.outputs.archive-file-hash }}
         uses: softprops/action-gh-release@v1
         with:
           files: ${{ steps.zip-files.outputs.archive-name }}
