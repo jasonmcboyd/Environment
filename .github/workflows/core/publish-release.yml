@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: publish-release
+name: Publish Release
 
 # Controls when the workflow will run
 on:
@@ -15,13 +15,6 @@ on:
       files-to-archive:
         required: true
         type: string
-    secrets:
-      AZURE_DEVOPS_NUGET_FEED:
-        required: true
-      AZURE_DEVOPS_USERNAME:
-        required: true
-      AZURE_DEVOPS_PAT:
-        required: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -40,7 +33,7 @@ jobs:
       - name: Get Files Changed Count
         id: changed-files-count
         run: |
-          $changedFilesCount = $((git diff HEAD~ --name-only -- ./${{ inputs.subdirectory }} ./.github/workflows/publish-release.yml ./.github/workflows/publish-chocolatey-package.yml ./.github/workflows/${{ inputs.release-prefix }}.yml ./Publish/environment-${{ inputs.release-prefix }} | Measure-Object).Count)
+          $changedFilesCount = $((git diff HEAD~ --name-only -- ./${{ inputs.subdirectory }} ./.github/workflows/core ./.github/workflows/environment-config-jobs/${{ inputs.release-prefix }}.yml ./Publish/environment-${{ inputs.release-prefix }} | Measure-Object).Count)
           echo "changed-files-count=$changedFilesCount" >> $env:GITHUB_OUTPUT
           echo "Changed Files: $changedFilesCount"
 
