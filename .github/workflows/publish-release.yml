@@ -12,9 +12,6 @@ on:
       release-prefix:
         required: true
         type: string
-      files-to-archive:
-        required: true
-        type: string
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -47,7 +44,7 @@ jobs:
         id: zip-files
         if: ${{ steps.changed-files-count.outputs.changed-files-count != 0 }}
         run: |
-          Compress-Archive ('${{ inputs.files-to-archive }}'.split('|') -join ' ') ./${{ inputs.release-prefix }}.zip
+          Compress-Archive ./${{ inputs.subdirectory }}/* ./${{ inputs.release-prefix }}.zip
           echo "archive-name=${{ inputs.release-prefix }}.zip" >> $env:GITHUB_OUTPUT
 
       - name: Get Next Release Information

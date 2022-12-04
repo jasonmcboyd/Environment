@@ -12,9 +12,6 @@ on:
       release-prefix:
         required: true
         type: string
-      files-to-archive:
-        required: true
-        type: string
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -27,7 +24,6 @@ jobs:
     with:
       subdirectory: ${{ inputs.subdirectory }}
       release-prefix: ${{ inputs.release-prefix }}
-      files-to-archive: ${{ inputs.files-to-archive }}
     secrets: inherit
   publish-chocolatey-package:
     needs: publish-release
