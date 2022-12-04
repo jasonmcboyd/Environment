@@ -1,0 +1,34 @@
+# Action to get the latest release information for a given environment configuration.
+
+name: get-chocolatey-package-and-version
+description: Get the Chocolatey package name and version.
+
+inputs:
+  release-prefix:
+    description: The prefix of the environment configuration.
+    required: true
+outputs:
+  chocolatey-package:
+    description: The chocolatey package name and version
+    value: ${{ steps.get-chocolatey-package-and-version.outputs.chocolatey-package }}
+  chocolatey-package-version:
+    description: The chocolatey package version.
+    value: ${{ steps.get-chocolatey-package-and-version.outputs.chocolatey-package-version }}
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+runs:
+  using: composite
+  # Steps represent a sequence of tasks that will be executed as part of the job
+  steps:
+    - name: Get Chocolatey Package And Version
+      id: get-chocolatey-package-and-version
+      shell: powershell
+      run: |
+        $chocolateyNugetFeedUrl = "${{ secrets.AZURE_DEVOPS_NUGET_FEED }}".Replace('v3/index.json', 'v2')
+        choco sources add -n environment -u ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }} -s "$chocolateyNugetFeedUrl"
+        $chocolateyPackage = choco search environment-${{ inputs.release-prefix }} --source environment --limitoutput --exact
+        $chocolateyPackageVersion = $chocolateyPackage.Split('|')[1]
+        echo "chocolatey-package=$chocolateyPackage" >> $env:GITHUB_OUTPUT
+        echo "chocolatey-package-version=$chocolateyPackageVersion" >> $env:GITHUB_OUTPUT
+        echo "Chocolatey Package: $chocolateyPackage"
+        echo "Chocolatey Package Version: $chocolateyPackageVersion"

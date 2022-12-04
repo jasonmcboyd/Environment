@@ -16,8 +16,5 @@
     <projectSourceUrl>https://github.com/jasonmcboyd/Environment</projectSourceUrl>
     <packageSourceUrl>https://github.com/jasonmcboyd/Environment</packageSourceUrl>
     <bugTrackerUrl>https://github.com/jasonmcboyd/Environment/issues</bugTrackerUrl>
-    <dependencies>
-      <dependency id="powershell-core" />
-    </dependencies>
   </metadata>
 </package>

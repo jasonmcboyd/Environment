@@ -26,14 +26,9 @@ jobs:
 
       - name: Get Chocolatey Version
         id: chocolatey-version
-        run: |
-          $chocolateyNugetFeedUrl = "${{ secrets.AZURE_DEVOPS_NUGET_FEED }}".Replace('v3/index.json', 'v2')
-          choco sources add -n environment -u ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }} -s "$chocolateyNugetFeedUrl"
-          $chocolateyPackage = choco search environment-${{ inputs.release-prefix }} --source environment --limitoutput --exact
-          $chocolateyPackageVersion = $chocolateyPackage.Split('|')[1]
-          echo "chocolatey-package-version=$chocolateyPackageVersion" >> $env:GITHUB_OUTPUT
-          echo "Chocolatey Package: $chocolateyPackage"
-          echo "Chocolatey Package Version: $chocolateyPackageVersion"
+        uses: ./.github/actions/get-chocolatey-package-and-version
+        with:
+          release-prefix: ${{ inputs.release-prefix }}
 
       - name: Get Latest Release Information
         id: latest-release
