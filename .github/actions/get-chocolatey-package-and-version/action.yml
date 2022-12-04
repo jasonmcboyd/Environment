@@ -9,6 +9,10 @@ inputs:
     required: true
   AZURE_DEVOPS_NUGET_FEED:
     description: The Azure nuget feed
+  AZURE_DEVOPS_USERNAME:
+    description: The Azure DevOps user
+  AZURE_DEVOPS_PAT:
+    description: The Azure DevOps PAT with package read permissions
 outputs:
   chocolatey-package:
     description: The chocolatey package name and version
@@ -29,6 +33,7 @@ runs:
         $chocolateyNugetFeedUrl = "${{ inputs.AZURE_DEVOPS_NUGET_FEED }}".Replace('v3/index.json', 'v2')
         choco sources add -n environment -u test -p test -s "$chocolateyNugetFeedUrl"
         $chocolateyPackage = choco search environment-${{ inputs.release-prefix }} --source environment --limitoutput --exact
+        if (-not ($chocolateyPackage.Count -eq 1 -and $chocolateyPackage -match '[a-zA-Z\-]+|\d+\.\d+\.\d+')) { throw 'Did not get the expected response from the package source.' }
         $chocolateyPackageVersion = $chocolateyPackage.Split('|')[1]
         echo "chocolatey-package=$chocolateyPackage" >> $env:GITHUB_OUTPUT
         echo "chocolatey-package-version=$chocolateyPackageVersion" >> $env:GITHUB_OUTPUT
