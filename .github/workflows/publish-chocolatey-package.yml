@@ -40,6 +40,7 @@ jobs:
           $chocolateyPackageVersion = $chocolateyPackage.Split('|')[1]
           echo "chocolatey-package-version=$chocolateyPackageVersion" >> $env:GITHUB_OUTPUT
           echo "Chocolatey Package: $chocolateyPackage"
+          echo "Chocolatey Package Version: $chocolateyPackageVersion"
 
       - name: Get Latest Release Information
         id: latest-release
@@ -48,7 +49,7 @@ jobs:
           release-prefix: ${{ inputs.release-prefix }}
 
       - name: Push NuGet Package
-        if: ${{ steps.chocolatey-version.outputs.chocolatey-package-version != steps.latest-release.outputs.LatestReleaseVersionNumber }}
+        if: ${{ steps.chocolatey-version.outputs.chocolatey-package-version != steps.latest-release.outputs.latest-release-version-number }}
         run: |
           cd ./Publish/environment-${{ inputs.release-prefix }}
           mkdir /working/tools
