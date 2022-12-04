@@ -17,28 +17,28 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   powershell-core-profile:
-    uses: jasonmcboyd/Environment/.github/workflows/Core/publish-release-and-chocolatey-package.yml@master
+    uses: jasonmcboyd/Environment/.github/workflows/publish-release-and-chocolatey-package.yml@master
     with:
       subdirectory: PowerShellProfile
       release-prefix: powershell-core-profile
       files-to-archive: ./PowerShellProfile/CurrentUserAllHosts/*
     secrets: inherit
   starship-config:
-    uses: jasonmcboyd/Environment/.github/workflows/Core/publish-release-and-chocolatey-package.yml@master
+    uses: jasonmcboyd/Environment/.github/workflows/publish-release-and-chocolatey-package.yml@master
     with:
       subdirectory: Starship
       release-prefix: starship-config
       files-to-archive: ./Starship/*
     secrets: inherit
   vim-config:
-    uses: jasonmcboyd/Environment/.github/workflows/Core/publish-release-and-chocolatey-package.yml@master
+    uses: jasonmcboyd/Environment/.github/workflows/publish-release-and-chocolatey-package.yml@master
     with:
       subdirectory: Vim
       release-prefix: vim-config
       files-to-archive: ./Vim/*
     secrets: inherit
   windows-terminal-settings:
-    uses: jasonmcboyd/Environment/.github/workflows/Core/publish-release-and-chocolatey-package.yml@master
+    uses: jasonmcboyd/Environment/.github/workflows/publish-release-and-chocolatey-package.yml@master
     with:
       subdirectory: WindowsTerminal
       release-prefix: windows-terminal-settings
