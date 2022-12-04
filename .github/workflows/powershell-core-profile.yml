@@ -27,6 +27,7 @@ jobs:
       AZURE_DEVOPS_USERNAME: ${{ secrets.AZURE_DEVOPS_USERNAME }}
       AZURE_DEVOPS_PAT: ${{ secrets.AZURE_DEVOPS_PAT }}
   publish-chocolatey-package:
+    needs: publish-release
     uses: jasonmcboyd/Environment/.github/workflows/publish-chocolatey-package.yml@master
     with:
       release-prefix: vim-config
