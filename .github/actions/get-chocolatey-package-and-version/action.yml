@@ -31,7 +31,7 @@ runs:
       shell: powershell
       run: |
         $chocolateyNugetFeedUrl = "${{ inputs.AZURE_DEVOPS_NUGET_FEED }}".Replace('v3/index.json', 'v2')
-        choco sources add -n environment -u test -p test -s "$chocolateyNugetFeedUrl"
+        choco sources add -n environment -u ${{ inputs.AZURE_DEVOPS_USERNAME }} -p ${{ inputs.AZURE_DEVOPS_PAT }} -s "$chocolateyNugetFeedUrl"
         $chocolateyPackage = choco search environment-${{ inputs.release-prefix }} --source environment --limitoutput --exact
         if (-not ($chocolateyPackage.Count -eq 1 -and $chocolateyPackage -match '[a-zA-Z\-]+|\d+\.\d+\.\d+')) { throw 'Did not get the expected response from the package source.' }
         $chocolateyPackageVersion = $chocolateyPackage.Split('|')[1]
