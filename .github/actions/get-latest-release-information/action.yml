@@ -50,7 +50,7 @@ runs:
         Expand-Archive -Path release-package.zip -DestinationPath release-package
         $combinedFileHashes = (Get-ChildItem -Path ./release-package -File -Recurse | ForEach-Object { (Get-FileHash $_.FullName).Hash }) -join ''
         echo "Combined File Hashes: $combinedFileHashes"
-        $latestReleaseDirectoryHash = (Get-FileHash -InputStream ([System.IO.MemoryStream]::new([char[]]($combinedFileHashes)))).Hash
+        $latestReleaseDirectoryHash = (Get-FileHash -InputStream ([System.IO.MemoryStream]::new([char[]]$combinedFileHashes))).Hash
         rm ./release-package.zip
         rm ./release-package -Recurse -Force
         echo "latest-release=$latestRelease" >> $env:GITHUB_OUTPUT

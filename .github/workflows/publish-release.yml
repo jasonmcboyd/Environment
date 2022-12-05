@@ -37,7 +37,8 @@ jobs:
         id: zip-files
         run: |
           Compress-Archive ./${{ inputs.subdirectory }}/* ./${{ inputs.release-prefix }}.zip
-          $directoryHash = (Get-FileHash -InputStream ([System.IO.MemoryStream]::new([char[]]((Get-ChildItem -Path ./${{ inputs.subdirectory }} -File | % { (Get-FileHash $_).Hash }) -join '')))).Hash
+          $combinedFileHashes = (Get-ChildItem -Path ./${{ inputs.subdirectory }} -File -Recurse | ForEach-Object { (Get-FileHash $_.FullName).Hash }) -join ''
+          $directoryHash = (Get-FileHash -InputStream ([System.IO.MemoryStream]::new([char[]]$combinedFileHash))).Hash
           echo "archive-name=${{ inputs.release-prefix }}.zip" >> $env:GITHUB_OUTPUT
           echo "directory-hash=$directoryHash" >> $env:GITHUB_OUTPUT
           echo "Directory Hash: $directoryHash"
