@@ -30,6 +30,8 @@ jobs:
         with:
           release-prefix: ${{ inputs.release-prefix }}
           AZURE_DEVOPS_NUGET_FEED: ${{ secrets.AZURE_DEVOPS_NUGET_FEED }}
+          AZURE_DEVOPS_USERNAME: ${{ secrets.AZURE_DEVOPS_USERNAME }}
+          AZURE_DEVOPS_PAT: ${{ secrets.AZURE_dEVOPS_PAT }}
 
       - name: Get Latest Release Information
         id: latest-release
