@@ -33,6 +33,7 @@ As far as I can tell there is no way to simply update the password for the sourc
 - git
 - googlechrome
 - gsudo
+- kubernetes-cli
 - linqpad5
 - linqpad6
 - microsoft-windows-terminal
