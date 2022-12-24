@@ -45,6 +45,8 @@ jobs:
           cd ./Publish/environment-${{ inputs.release-prefix }}
           mkdir /working/tools
           Copy-Item ./*.nuspec /working
+          ls env:
+          ls (Split-Path $env:GITHUB_OUTPUT) -Recurse
           Set-Content -Path /working/tools/chocolateyInstall.ps1 -Value (./createChocolateyInstallScript.ps1 -ReleaseUrl ${{ steps.latest-release.outputs.latest-release-url }} -ReleaseFileHash ${{ steps.latest-release.outputs.latest-release-hash }})
           cd /working
           choco pack ./environment-${{ inputs.release-prefix }}.nuspec --version=${{ steps.latest-release.outputs.latest-release-version-number }}
