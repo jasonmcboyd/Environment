@@ -50,7 +50,8 @@ jobs:
           $outputs | % { cat $_ }
           $latestReleaseFileHash = '${{ steps.latest-release.outputs.latest-release-file-hash }}'
           echo "Latest Release File Hash: $latestReleaseFileHash"
-          Set-Content -Path /working/tools/chocolateyInstall.ps1 -Value (./createChocolateyInstallScript.ps1 -ReleaseUrl ${{ steps.latest-release.outputs.latest-release-url }} -ReleaseFileHash ${{ steps.latest-release.outputs.latest-release-file-hash }})
+          $installScript = ./createChocolateyInstallScript.ps1 -ReleaseUrl ${{ steps.latest-release.outputs.latest-release-url }} -ReleaseFileHash ${{ steps.latest-release.outputs.latest-release-file-hash }}
+          Set-Content -Path /working/tools/chocolateyInstall.ps1 -Value $installScript
           cd /working
           choco pack ./environment-${{ inputs.release-prefix }}.nuspec --version=${{ steps.latest-release.outputs.latest-release-version-number }}
           dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name environment --username ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
