@@ -37,9 +37,9 @@ runs:
         releases-only: true
         prefix: "${{ inputs.release-prefix }}-v"
 
-  # I have to jump through a lot of hoops here to verify the hash. For some reason the hash changes after a zip has been
-  # uploaded to GitHub. I think during the upload the decompress and then recompress with their algorithm of choice which
-  # is different from Compress-Archive.
+    # I have to jump through a lot of hoops here to verify the hash. For some reason the hash changes after a zip has been
+    # uploaded to GitHub. I think during the upload they decompress and then recompress with their algorithm of choice which
+    # is different from Compress-Archive. The different algorithm results in a different zip file with a different file hash.
     - name: Get Latest Release Information
       id: latest-release
       shell: powershell
@@ -53,7 +53,7 @@ runs:
         Expand-Archive -Path release-package.zip -DestinationPath release-package
         $combinedFileHashes = (Get-ChildItem -Path ./release-package -File -Recurse | ForEach-Object { (Get-FileHash $_.FullName).Hash }) -join ''
         echo "Combined File Hashes: $combinedFileHashes"
-        $latestReleaseHash = Get-FileHash release-package.zip
+        $latestReleaseHash = (Get-FileHash release-package.zip).Hash
         $latestReleaseDirectoryHash = (Get-FileHash -InputStream ([System.IO.MemoryStream]::new([char[]]($combinedFileHashes)))).Hash
         rm ./release-package.zip
         rm ./release-package -Recurse -Force
