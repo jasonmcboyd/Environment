@@ -57,12 +57,14 @@ runs:
         $latestReleaseDirectoryHash = (Get-FileHash -InputStream ([System.IO.MemoryStream]::new([char[]]($combinedFileHashes)))).Hash
         rm ./release-package.zip
         rm ./release-package -Recurse -Force
+
         echo "latest-release=$latestRelease" >> $env:GITHUB_OUTPUT
         echo "latest-release-major-version-number=$majorVersionNumber" >> $env:GITHUB_OUTPUT
         echo "latest-release-version-number=$versionNumber" >> $env:GITHUB_OUTPUT
         echo "latest-release-url=$latestReleaseUrl" >> $env:GITHUB_OUTPUT
         echo "latest-release-file-hash=$latestReleaseFileHash" >> $env:GITHUB_OUTPUT
         echo "latest-release-directory-hash=$latestReleaseDirectoryHash" >> $env:GITHUB_OUTPUT
+
         echo "Latest Release: $latestRelease"
         echo "Latest Release Major Version Number: $majorVersionNumber"
         echo "Latest Release Version Number: $versionNumber"
