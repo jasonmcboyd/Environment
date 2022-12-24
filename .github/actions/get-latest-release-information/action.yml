@@ -37,6 +37,9 @@ runs:
         releases-only: true
         prefix: "${{ inputs.release-prefix }}-v"
 
+  # I have to jump through a lot of hoops here to verify the hash. For some reason the hash changes after a zip has been
+  # uploaded to GitHub. I think during the upload the decompress and then recompress with their algorithm of choice which
+  # is different from Compress-Archive.
     - name: Get Latest Release Information
       id: latest-release
       shell: powershell
@@ -50,6 +53,7 @@ runs:
         Expand-Archive -Path release-package.zip -DestinationPath release-package
         $combinedFileHashes = (Get-ChildItem -Path ./release-package -File -Recurse | ForEach-Object { (Get-FileHash $_.FullName).Hash }) -join ''
         echo "Combined File Hashes: $combinedFileHashes"
+        $latestReleaseHash = Get-FileHash release-package.zip
         $latestReleaseDirectoryHash = (Get-FileHash -InputStream ([System.IO.MemoryStream]::new([char[]]($combinedFileHashes)))).Hash
         rm ./release-package.zip
         rm ./release-package -Recurse -Force
@@ -58,8 +62,10 @@ runs:
         echo "latest-release-version-number=$versionNumber" >> $env:GITHUB_OUTPUT
         echo "latest-release-url=$latestReleaseUrl" >> $env:GITHUB_OUTPUT
         echo "latest-release-directory-hash=$latestReleaseDirectoryHash" >> $env:GITHUB_OUTPUT
+        echo "latest-release-hash=$latestReleaseHash" >> $env:GITHUB_OUTPUT
         echo "Latest Release: $latestRelease"
         echo "Latest Release Major Version Number: $majorVersionNumber"
         echo "Latest Release Version Number: $versionNumber"
         echo "Latest Release URL: $latestReleaseUrl"
+        echo "Latest Release Hash: $latestReleaseHash"
         echo "Latest Release Directory Hash: $latestReleaseDirectoryHash"
