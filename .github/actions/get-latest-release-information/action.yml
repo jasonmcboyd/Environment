@@ -70,3 +70,4 @@ runs:
         echo "Latest Release Hash: $latestReleaseHash"
         echo "Latest Release Directory Hash: $latestReleaseDirectoryHash"
         ls env:
+        cat ($env:GITHUB_OUTPUT)
