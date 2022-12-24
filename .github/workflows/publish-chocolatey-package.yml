@@ -45,11 +45,6 @@ jobs:
           cd ./Publish/environment-${{ inputs.release-prefix }}
           mkdir /working/tools
           Copy-Item ./*.nuspec /working
-          $outputs = ls (Split-Path $env:GITHUB_OUTPUT) -Recurse | select -ExpandProperty FullName | ? { $_ -like '*output*' }
-          $outputs
-          $outputs | % { cat $_ }
-          $latestReleaseFileHash = '${{ steps.latest-release.outputs.latest-release-file-hash }}'
-          echo "Latest Release File Hash: $latestReleaseFileHash"
           $installScript = ./createChocolateyInstallScript.ps1 -ReleaseUrl ${{ steps.latest-release.outputs.latest-release-url }} -ReleaseFileHash ${{ steps.latest-release.outputs.latest-release-file-hash }}
           Set-Content -Path /working/tools/chocolateyInstall.ps1 -Value $installScript
           cd /working

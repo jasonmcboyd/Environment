@@ -20,8 +20,11 @@ outputs:
   latest-release-url:
     description: The download URL of the latest release.
     value: ${{ steps.latest-release.outputs.latest-release-url }}
-  latest-release-directory-hash:
+  latest-release-file-hash:
     description: The SHA 512 hash of the latest release version.
+    value: ${{ steps.latest-release.outputs.latest-release-file-hash }}
+  latest-release-directory-hash:
+    description: The SHA 512 hash of all files of the latest release version.
     value: ${{ steps.latest-release.outputs.latest-release-directory-hash }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
