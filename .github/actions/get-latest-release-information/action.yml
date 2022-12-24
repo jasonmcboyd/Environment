@@ -53,7 +53,7 @@ runs:
         Expand-Archive -Path release-package.zip -DestinationPath release-package
         $combinedFileHashes = (Get-ChildItem -Path ./release-package -File -Recurse | ForEach-Object { (Get-FileHash $_.FullName).Hash }) -join ''
         echo "Combined File Hashes: $combinedFileHashes"
-        $latestReleaseHash = (Get-FileHash release-package.zip).Hash
+        $latestReleaseFileHash = (Get-FileHash release-package.zip).Hash
         $latestReleaseDirectoryHash = (Get-FileHash -InputStream ([System.IO.MemoryStream]::new([char[]]($combinedFileHashes)))).Hash
         rm ./release-package.zip
         rm ./release-package -Recurse -Force
@@ -61,11 +61,11 @@ runs:
         echo "latest-release-major-version-number=$majorVersionNumber" >> $env:GITHUB_OUTPUT
         echo "latest-release-version-number=$versionNumber" >> $env:GITHUB_OUTPUT
         echo "latest-release-url=$latestReleaseUrl" >> $env:GITHUB_OUTPUT
-        echo "latest-release-hash=$latestReleaseHash" >> $env:GITHUB_OUTPUT
+        echo "latest-release-file-hash=$latestReleaseFileHash" >> $env:GITHUB_OUTPUT
         echo "latest-release-directory-hash=$latestReleaseDirectoryHash" >> $env:GITHUB_OUTPUT
         echo "Latest Release: $latestRelease"
         echo "Latest Release Major Version Number: $majorVersionNumber"
         echo "Latest Release Version Number: $versionNumber"
         echo "Latest Release URL: $latestReleaseUrl"
-        echo "Latest Release Hash: $latestReleaseHash"
+        echo "Latest Release File Hash: $latestReleaseFileHash"
         echo "Latest Release Directory Hash: $latestReleaseDirectoryHash"

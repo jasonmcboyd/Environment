@@ -45,14 +45,13 @@ jobs:
           cd ./Publish/environment-${{ inputs.release-prefix }}
           mkdir /working/tools
           Copy-Item ./*.nuspec /working
-          ls env: | Select Name, Value | ft -auto
           $outputs = ls (Split-Path $env:GITHUB_OUTPUT) -Recurse | select -ExpandProperty FullName | ? { $_ -like '*output*' }
           $outputs
           $outputs | % { cat $_ }
-          Set-Content -Path /working/tools/chocolateyInstall.ps1 -Value (./createChocolateyInstallScript.ps1 -ReleaseUrl ${{ steps.latest-release.outputs.latest-release-url }} -ReleaseFileHash ${{ steps.latest-release.outputs.latest-release-hash }})
+          $latestReleaseFileHash = '${{ steps.latest-release.outputs.latest-release-file-hash }}'
+          echo "Latest Release File Hash: $latestReleaseFileHash"
+          Set-Content -Path /working/tools/chocolateyInstall.ps1 -Value (./createChocolateyInstallScript.ps1 -ReleaseUrl ${{ steps.latest-release.outputs.latest-release-url }} -ReleaseFileHash ${{ steps.latest-release.outputs.latest-release-file-hash }})
           cd /working
-          $latestReleaseHash = '${{ steps.latest-release.outputs.latest-release-hash }}'
-          echo "Latest Release Hash: $latestReleaseHash"
           choco pack ./environment-${{ inputs.release-prefix }}.nuspec --version=${{ steps.latest-release.outputs.latest-release-version-number }}
           dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name environment --username ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
           dotnet nuget push environment-${{ inputs.release-prefix }}.${{ steps.latest-release.outputs.latest-release-version-number }}.nupkg --source environment --api-key AzureDevOps
