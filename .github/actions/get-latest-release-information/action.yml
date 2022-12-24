@@ -56,7 +56,7 @@ runs:
         Expand-Archive -Path release-package.zip -DestinationPath release-package
         $combinedFileHashes = (Get-ChildItem -Path ./release-package -File -Recurse | ForEach-Object { (Get-FileHash $_.FullName).Hash }) -join ''
         echo "Combined File Hashes: $combinedFileHashes"
-        $latestReleaseFileHash = (Get-FileHash release-package.zip).Hash
+        $latestReleaseFileHash = (Get-FileHash release-package.zip -Algorithm SHA512).Hash
         $latestReleaseDirectoryHash = (Get-FileHash -InputStream ([System.IO.MemoryStream]::new([char[]]($combinedFileHashes)))).Hash
         rm ./release-package.zip
         rm ./release-package -Recurse -Force
