@@ -61,8 +61,8 @@ runs:
         echo "latest-release-major-version-number=$majorVersionNumber" >> $env:GITHUB_OUTPUT
         echo "latest-release-version-number=$versionNumber" >> $env:GITHUB_OUTPUT
         echo "latest-release-url=$latestReleaseUrl" >> $env:GITHUB_OUTPUT
-        echo "latest-release-directory-hash=$latestReleaseDirectoryHash" >> $env:GITHUB_OUTPUT
         echo "latest-release-hash=$latestReleaseHash" >> $env:GITHUB_OUTPUT
+        echo "latest-release-directory-hash=$latestReleaseDirectoryHash" >> $env:GITHUB_OUTPUT
         echo "Latest Release: $latestRelease"
         echo "Latest Release Major Version Number: $majorVersionNumber"
         echo "Latest Release Version Number: $versionNumber"
