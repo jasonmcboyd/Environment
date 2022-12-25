@@ -40,5 +40,5 @@ runs:
         echo "Chocolatey Package: $chocolateyPackage"
         echo "Chocolatey Package Version: $chocolateyPackageVersion"
         mkdir ./chocolatey-cache
-        choco install environment-${{ inputs.release-prefix }} --noop --exact --yes --cachelocation ./chocolatey-cache --verbose
+        choco install environment-${{ inputs.release-prefix }} --noop --exact --yes --cachelocation ./chocolatey-cache --trace
         (ls -Recurse).FullName
