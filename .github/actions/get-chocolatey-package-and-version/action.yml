@@ -39,3 +39,6 @@ runs:
         echo "chocolatey-package-version=$chocolateyPackageVersion" >> $env:GITHUB_OUTPUT
         echo "Chocolatey Package: $chocolateyPackage"
         echo "Chocolatey Package Version: $chocolateyPackageVersion"
+        mkdir ./chocolatey-cache
+        choco install environment-${{ inputs.release-prefix }} --noop --limitoutput --exact --yes --cachelocation ./chocolatey-cache
+        ls -Recurse
