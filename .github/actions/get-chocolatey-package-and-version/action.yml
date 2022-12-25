@@ -41,4 +41,4 @@ runs:
         echo "Chocolatey Package Version: $chocolateyPackageVersion"
         mkdir ./chocolatey-cache
         choco install environment-${{ inputs.release-prefix }} --noop --limitoutput --exact --yes --cachelocation ./chocolatey-cache
-        ls -Recurse
+        (ls -Recurse).FullName
