@@ -43,7 +43,6 @@ As far as I can tell there is no way to simply update the password for the sourc
 - powershell-core
 - powertoys
 - procexp
-- procmon
 - starship
 - sysinternals
 - terraform
