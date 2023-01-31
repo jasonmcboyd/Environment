@@ -17,6 +17,8 @@ As far as I can tell there is no way to simply update the password for the sourc
 
 # Packages
 
+Install sysinternals apps individually rather than using the `sysinternals` Chocolatey package so that the app shims are generated and added to Chocolatey bin folder which is included in the `path` environment variable.
+
 - azure-cli
 - beyondcompare
 - brave
@@ -43,8 +45,8 @@ As far as I can tell there is no way to simply update the password for the sourc
 - powershell-core
 - powertoys
 - procexp
+- procmon
 - starship
-- sysinternals
 - terraform
 - visualstudio2019community
 - visualstudio2022community
