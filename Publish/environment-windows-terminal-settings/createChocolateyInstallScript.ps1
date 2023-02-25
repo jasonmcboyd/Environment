@@ -22,7 +22,7 @@ if ((`$null -eq `$destination) -or !(Test-Path `$destination)) {
 `$packageArgs = @{
   packageName   = 'environment-windows-terminal-settings'
   unzipLocation = `$destination
-  url           = '$RealeaseUrl'
+  url           = '$ReleaseUrl'
   checksum      = '$ReleaseFileHash'
   checksumType  = 'sha512'
 }
