@@ -11,14 +11,14 @@ param (
 Set-StrictMode -Version Latest
 `$ErrorActionPreference = 'Stop'
 
-Install-ChocolateyEnvironmentVariable `
-  -VariableName 'STARSHIP_CONFIG' `
-  -VariableValue "`$HOME\.starship\config.toml" `
+Install-ChocolateyEnvironmentVariable ``
+  -VariableName 'STARSHIP_CONFIG' ``
+  -VariableValue "`$HOME\.starship\config.toml" ``
   -VariableType 'User'
 
-Install-ChocolateyEnvironmentVariable `
-  -VariableName 'STARSHIP_CACHE' `
-  -VariableValue "`$HOME\.starship\cache" `
+Install-ChocolateyEnvironmentVariable ``
+  -VariableName 'STARSHIP_CACHE' ``
+  -VariableValue "`$HOME\.starship\cache" ``
   -VariableType 'User'
 
 `$destination = Split-Path `$ENV:STARSHIP_CONFIG
