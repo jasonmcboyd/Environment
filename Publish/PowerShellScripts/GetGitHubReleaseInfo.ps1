@@ -31,6 +31,10 @@ try {
   $folderHash = & $PSScriptRoot/GetFolderHash.ps1 -Path $packageName
 }
 finally {
+  if (Test-Path $filePath) {
+    Remove-Item $filePath
+  }
+
   if (Test-Path $packageName) {
     Remove-Item $packageName -Recurse
   }
@@ -39,7 +43,6 @@ finally {
 @{
   PackageName  = $PackageName
   ReleaseUrl   = $releaseUrl
-  FilePath     =
   Version      = $versionString
   MajorVersion = $version.Major
   MinorVersion = $version.Minor
