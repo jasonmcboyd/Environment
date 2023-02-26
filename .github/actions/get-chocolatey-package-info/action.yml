@@ -1,0 +1,66 @@
+# Action to get the latest release information for a given environment configuration.
+
+name: get-chocolatey-package-and-version
+description: Get the Chocolatey package name and version.
+
+inputs:
+  release-prefix:
+    description: The prefix of the environment configuration.
+    required: true
+  AZURE_DEVOPS_NUGET_URL_V3:
+    description: The Azure nuget feed
+  AZURE_DEVOPS_USERNAME:
+    description: The Azure DevOps user
+  AZURE_DEVOPS_PAT:
+    description: The Azure DevOps PAT with package read permissions
+outputs:
+  package-name:
+    description: The chocolatey package name and version
+    value: ${{ steps.get-chocolatey-package-and-version.outputs.chocolatey-package }}
+  version-number:
+    description: The chocolatey package version.
+    value: ${{ steps.get-chocolatey-package-and-version.outputs.chocolatey-package-version }}
+  major-version-number:
+    description: The chocolatey package major version.
+    value: ${{ steps.get-chocolatey-package-and-version.outputs.chocolatey-package-major-version }}
+  minor-version-number:
+    description: The chocolatey package minor version.
+    value: ${{ steps.get-chocolatey-package-and-version.outputs.chocolatey-package-minor-version }}
+  build-version-number:
+    description: The chocolatey package build version.
+    value: ${{ steps.get-chocolatey-package-and-version.outputs.chocolatey-package-build-version }}
+  file-hash:
+    description: The chocolatey package file hash.
+    value: ${{ steps.get-chocolatey-package-and-version.outputs.chocolatey-package-file-hash }}
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+runs:
+  using: composite
+  # Steps represent a sequence of tasks that will be executed as part of the job
+  steps:
+    - name: Get Chocolatey Package And Version
+      id: get-chocolatey-package-and-version
+      shell: powershell
+      run: |
+        $packageName = "environment-${{ inputs.release-prefix }}"
+
+        $packageInfo =
+          ./Publish/PowerShellScripts/GetChocolateyPackageInfo.ps1 `
+            -PackageName $packageName `
+            -NuGetUrl ${{ inputs.AZURE_DEVOPS_NUGET_URL_V3 }} `
+            -AzureDevOpsUserName ${{ inputs.AZURE_DEVOPS_USERNAME }} `
+            -AzureDevOpsPersonalAccessToken ${{ inputs.AZURE_DEVOPS_PAT }}
+
+        echo "package-name=$packageName"                         >> $env:GITHUB_OUTPUT
+        echo "version-number=$($packageInfo.Version)"            >> $env:GITHUB_OUTPUT
+        echo "major-version-number=$($packageInfo.MajorVersion)" >> $env:GITHUB_OUTPUT
+        echo "minor-version-number=$($packageInfo.MinorVersion)" >> $env:GITHUB_OUTPUT
+        echo "build-version-number=$($packageInfo.BuildVersion)" >> $env:GITHUB_OUTPUT
+        echo "file-hash=$($packageInfo.FileHash)"                >> $env:GITHUB_OUTPUT
+
+        echo "Package Name: $packageName"
+        echo "Version Number: $($packageInfo.Version)"
+        echo "Major Version Number: $($packageInfo.MajorVersion)"
+        echo "Minor Version Number: $($packageInfo.MinorVersion)"
+        echo "Build Version Number: $($packageInfo.BuildVersion)"
+        echo "File Hash: $($packageInfo.FileHash)"

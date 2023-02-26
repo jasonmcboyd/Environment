@@ -24,30 +24,38 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Get Chocolatey Version
-        id: chocolatey-version
-        uses: ./.github/actions/get-chocolatey-package-and-version
+      - name: Get Chocolatey Package Info
+        id: chocolatey-package-info
+        uses: ./.github/actions/get-chocolatey-package-info
         with:
           release-prefix: ${{ inputs.release-prefix }}
-          AZURE_DEVOPS_NUGET_FEED: ${{ secrets.AZURE_DEVOPS_NUGET_FEED }}
-          AZURE_DEVOPS_USERNAME: ${{ secrets.AZURE_DEVOPS_USERNAME }}
+          AZURE_DEVOPS_NUGET_URL_V3: ${{ env.AZURE_DEVOPS_NUGET_URL_V3 }}
+          AZURE_DEVOPS_USERNAME: ${{ env.AZURE_DEVOPS_USERNAME }}
           AZURE_DEVOPS_PAT: ${{ secrets.AZURE_dEVOPS_PAT }}
 
       - name: Get Latest Release Information
-        id: latest-release
+        id: latest-release-info
         uses: ./.github/actions/get-latest-release-information
         with:
           release-prefix: ${{ inputs.release-prefix }}
 
-      - name: Push NuGet Package
-        if: ${{ steps.chocolatey-version.outputs.chocolatey-package-version != steps.latest-release.outputs.latest-release-version-number }}
+      - name: Create NuGet Package
+        id: create-nuget-package
         run: |
-          cd ./Publish/environment-${{ inputs.release-prefix }}
-          mkdir /working/tools
-          Copy-Item ./*.nuspec /working
-          $installScript = ./createChocolateyInstallScript.ps1 -ReleaseUrl ${{ steps.latest-release.outputs.latest-release-url }} -ReleaseFileHash ${{ steps.latest-release.outputs.latest-release-file-hash }}
-          Set-Content -Path /working/tools/chocolateyInstall.ps1 -Value $installScript
-          cd /working
-          choco pack ./environment-${{ inputs.release-prefix }}.nuspec --version=${{ steps.latest-release.outputs.latest-release-version-number }}
-          dotnet nuget add source '${{ secrets.AZURE_DEVOPS_NUGET_FEED }}' --name environment --username ${{ secrets.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
-          dotnet nuget push environment-${{ inputs.release-prefix }}.${{ steps.latest-release.outputs.latest-release-version-number }}.nupkg --source environment --api-key AzureDevOps
+          $packageInfo =
+            ./Publish/PowerShellScripts/CreateNuGetPackage `
+              -ReleasePrefix ${{ inputs.release-prefix }} `
+              -ReleaseDownloadUrl ${{ steps.latest-release-info.download-url }} `
+              -ReleaseVersion [Version]::new("${{ steps.latest-release-info.version-number }}") `
+              -ReleaseFileHash ${{ steps.latest-release-info.file-hash }} `
+              -PackageVersion [Version]::new("${{ steps.chocolatey-package-info.version-number }}") `
+              -PackageFieHash ${{ steps.chocolatey-package-info.file-hash }}
+
+          echo "package-path=$($packageInfo.PackagePath)"  >> $env:GITHUB_OUTPUT
+          echo "file-hash=$($packageInfo.PackageFileHash)" >> $env:GITHUB_OUTPUT
+
+      - name: Push NuGet Package
+        if: ${{ steps.chocolatey-package-info.file-hash != steps.create-nuget-package.file-hash }}
+        run: |
+          dotnet nuget add source '${{ env.AZURE_DEVOPS_NUGET_URL_V2 }}' --name environment --username ${{ env.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
+          dotnet nuget push ${{ steps.create-nuget-package.outputs.package-path }} --source environment --api-key AzureDevOps

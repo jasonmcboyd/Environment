@@ -7,25 +7,34 @@ inputs:
   release-prefix:
     description: The prefix of the environment configuration.
     required: true
+  github-releases-url:
+    description: The GitHub releases URL.
+    required: true
 outputs:
-  latest-release:
+  release-name:
     description: The Git tag of the latest release.
     value: ${{ steps.latest-release.outputs.latest-release }}
-  latest-release-version-number:
+  version-number:
     description: The version of the latest release.
     value: ${{ steps.latest-release.outputs.latest-release-version-number }}
-  latest-release-major-version-number:
+  major-version-number:
     description: The major version number of the latest release.
     value: ${{ steps.latest-release.outputs.latest-release-major-version-number }}
-  latest-release-url:
+  minor-version-number:
+    description: The minor version number of the latest release.
+    value: ${{ steps.latest-release.outputs.latest-release-minor-version-number }}
+  build-version-number:
+    description: The build version number of the latest release.
+    value: ${{ steps.latest-release.outputs.latest-release-build-version-number }}
+  download-url:
     description: The download URL of the latest release.
     value: ${{ steps.latest-release.outputs.latest-release-url }}
-  latest-release-file-hash:
+  file-hash:
     description: The SHA 512 hash of the latest release version.
     value: ${{ steps.latest-release.outputs.latest-release-file-hash }}
-  latest-release-directory-hash:
+  folder-hash:
     description: The SHA 512 hash of all files of the latest release version.
-    value: ${{ steps.latest-release.outputs.latest-release-directory-hash }}
+    value: ${{ steps.latest-release.outputs.latest-release-folder-hash }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 runs:
@@ -48,29 +57,22 @@ runs:
       shell: powershell
       run: |
         $latestRelease = '${{ steps.get-latest-tag.outputs.tag }}'
-        $latestRelease -match '${{ inputs.release-prefix }}-v(?<major>\d+)\.' | Out-Null
-        $majorVersionNumber = $Matches.major
-        $versionNumber = "$majorVersionNumber.0.0"
-        $latestReleaseUrl = "https://github.com/jasonmcboyd/Environment/releases/download/$latestRelease/${{ inputs.release-prefix }}.zip"
-        Invoke-WebRequest -Uri $latestReleaseUrl -OutFile release-package.zip
-        Expand-Archive -Path release-package.zip -DestinationPath release-package
-        $combinedFileHashes = (Get-ChildItem -Path ./release-package -File -Recurse | ForEach-Object { (Get-FileHash $_.FullName).Hash }) -join ''
-        echo "Combined File Hashes: $combinedFileHashes"
-        $latestReleaseFileHash = (Get-FileHash release-package.zip -Algorithm SHA512).Hash
-        $latestReleaseDirectoryHash = (Get-FileHash -InputStream ([System.IO.MemoryStream]::new([char[]]($combinedFileHashes)))).Hash
-        rm ./release-package.zip
-        rm ./release-package -Recurse -Force
+        $releaseInfo = ./Publish/PowerShellScripts/GetGitHubReleaseInfo.ps1 -ReleaseTag $latestRelease -GitHubReleasesUrl ${{ inputs.github-releases-url }}
 
-        echo "latest-release=$latestRelease" >> $env:GITHUB_OUTPUT
-        echo "latest-release-major-version-number=$majorVersionNumber" >> $env:GITHUB_OUTPUT
-        echo "latest-release-version-number=$versionNumber" >> $env:GITHUB_OUTPUT
-        echo "latest-release-url=$latestReleaseUrl" >> $env:GITHUB_OUTPUT
-        echo "latest-release-file-hash=$latestReleaseFileHash" >> $env:GITHUB_OUTPUT
-        echo "latest-release-directory-hash=$latestReleaseDirectoryHash" >> $env:GITHUB_OUTPUT
+        echo "release-name=$latestRelease"                       >> $env:GITHUB_OUTPUT
+        echo "version-number=$($releaseInfo.Version)"            >> $env:GITHUB_OUTPUT
+        echo "major-version-number=$($releaseInfo.MajorVersion)" >> $env:GITHUB_OUTPUT
+        echo "minor-version-number=$($releaseInfo.MinorVersion)" >> $env:GITHUB_OUTPUT
+        echo "build-version-number=$($releaseInfo.BuildVersion)" >> $env:GITHUB_OUTPUT
+        echo "download-url=$($releaseInfo.ReleaseUrl)"           >> $env:GITHUB_OUTPUT
+        echo "file-hash=$($releaseInfo.FileHash)"                >> $env:GITHUB_OUTPUT
+        echo "folder-hash=$($releaseInfo.FolderHash)"            >> $env:GITHUB_OUTPUT
 
-        echo "Latest Release: $latestRelease"
-        echo "Latest Release Major Version Number: $majorVersionNumber"
-        echo "Latest Release Version Number: $versionNumber"
-        echo "Latest Release URL: $latestReleaseUrl"
-        echo "Latest Release File Hash: $latestReleaseFileHash"
-        echo "Latest Release Directory Hash: $latestReleaseDirectoryHash"
+        echo "Release Name: $latestRelease"
+        echo "Version Number: $($releaseInfo.Version)"
+        echo "Major Version Number: $($releaseInfo.MajorVersion)"
+        echo "Minor Version Number: $($releaseInfo.MinorVersion)"
+        echo "Build Version Number: $($releaseInfo.BuildVersion)"
+        echo "Download URL: $($releaseInfo.ReleaseUrl)"
+        echo "File Hash: $($releaseInfo.FileHash)"
+        echo "Folder Hash: $($releaseInfo.FolderHash)"

@@ -7,6 +7,9 @@ param (
     $ReleaseFileHash
 )
 
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
 @"
 Set-StrictMode -Version Latest
 `$ErrorActionPreference = 'Stop'

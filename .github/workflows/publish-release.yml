@@ -37,23 +37,26 @@ jobs:
         id: zip-files
         run: |
           Compress-Archive ./${{ inputs.subdirectory }}/* ./${{ inputs.release-prefix }}.zip
-          $combinedFileHashes = (Get-ChildItem -Path ./${{ inputs.subdirectory }} -File -Recurse | ForEach-Object { (Get-FileHash $_.FullName).Hash }) -join ''
-          echo "Combined File Hashes: $combinedFileHashes"
-          $directoryHash = (Get-FileHash -InputStream ([System.IO.MemoryStream]::new([char[]]($combinedFileHashes)))).Hash
+
+          $folderHash = ./Publish/PowerShellScripts/GetFolderHash.ps1
+
           echo "archive-name=${{ inputs.release-prefix }}.zip" >> $env:GITHUB_OUTPUT
-          echo "directory-hash=$directoryHash" >> $env:GITHUB_OUTPUT
-          echo "Directory Hash: $directoryHash"
+          echo "folder-hash=$folderHash" >> $env:GITHUB_OUTPUT
+
+          echo "Folder Hash: $folderHash"
 
       - name: Get Next Release Information
         id: get-next-release
         run: |
           $nextVersion ="$([int]${{ steps.latest-release.outputs.latest-release-major-version-number }} + 1).0.0"
           $nextRelease = "${{ inputs.release-prefix }}-v$nextVersion"
+
           echo "next-release=$nextRelease" >> $env:GITHUB_OUTPUT
+
           echo "Next Release: $nextRelease"
 
       - name: Release
-        if: ${{ steps.latest-release.outputs.latest-release-directory-hash != steps.zip-files.outputs.directory-hash }}
+        if: ${{ steps.latest-release.outputs.latest-release-folder-hash != steps.zip-files.outputs.folder-hash }}
         uses: softprops/action-gh-release@v1
         with:
           files: ${{ steps.zip-files.outputs.archive-name }}
