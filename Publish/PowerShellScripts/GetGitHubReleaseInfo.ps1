@@ -1,12 +1,12 @@
 [CmdletBinding()]
 param (
   [string]
-  # [Parameter(Mandatory = $true)]
-  $ReleaseTag = 'vim-config-v18.0.0',
+  [Parameter(Mandatory = $true)]
+  $ReleaseTag,
 
   [string]
-  # [Parameter(Mandatory = $true)]
-  $GitHubReleasesUrl = 'https://github.com/jasonmcboyd/Environment/releases'
+  [Parameter(Mandatory = $true)]
+  $GitHubReleasesUrl
 )
 
 Set-StrictMode -Version Latest

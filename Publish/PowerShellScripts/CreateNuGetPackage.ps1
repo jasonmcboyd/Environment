@@ -73,7 +73,7 @@ try {
     throw "The release major version should never be less than the package major version. Something has gone terribly wrong."
   }
 
-  $packagePath = "$HOME/$packageName.nupkg"
+  $packagePath = "$HOME/$packageName.$version.nupkg"
   Move-Item "./$packageName.nupkg" $packagePath
   $fileHash = (Get-FileHash -Path $packagePath).Hash
 

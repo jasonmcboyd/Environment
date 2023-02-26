@@ -32,6 +32,7 @@ jobs:
         uses: ./.github/actions/get-latest-release-information
         with:
           release-prefix: ${{ inputs.release-prefix }}
+          github-releases-url: ${{ env.RELEASES_URL }}
 
       - name: Zip Files
         id: zip-files
