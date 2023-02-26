@@ -6,10 +6,13 @@ name: Publish Release
 on:
   workflow_call:
     inputs:
-      subdirectory:
+      github-releases-url:
         required: true
         type: string
       release-prefix:
+        required: true
+        type: string
+      subdirectory:
         required: true
         type: string
 
@@ -32,7 +35,7 @@ jobs:
         uses: ./.github/actions/get-latest-release-information
         with:
           release-prefix: ${{ inputs.release-prefix }}
-          github-releases-url: ${{ env.RELEASES_URL }}
+          github-releases-url: ${{ inputs.github-releases-url }}
 
       - name: Zip Files
         id: zip-files

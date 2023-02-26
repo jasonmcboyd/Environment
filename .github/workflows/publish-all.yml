@@ -19,24 +19,28 @@ jobs:
   powershell-core-profile:
     uses: jasonmcboyd/Environment/.github/workflows/publish-release-and-chocolatey-package.yml@master
     with:
-      subdirectory: PowerShellProfiles/CurrentUserAllHosts
+      github-releases-url: ${{ env.RELEASES_URL }}
       release-prefix: powershell-core-profile
+      subdirectory: PowerShellProfiles/CurrentUserAllHosts
     secrets: inherit
   starship-config:
     uses: jasonmcboyd/Environment/.github/workflows/publish-release-and-chocolatey-package.yml@master
     with:
-      subdirectory: Starship
+      github-releases-url: ${{ env.RELEASES_URL }}
       release-prefix: starship-config
+      subdirectory: Starship
     secrets: inherit
   vim-config:
     uses: jasonmcboyd/Environment/.github/workflows/publish-release-and-chocolatey-package.yml@master
     with:
-      subdirectory: Vim
+      github-releases-url: ${{ env.RELEASES_URL }}
       release-prefix: vim-config
+      subdirectory: Vim
     secrets: inherit
   windows-terminal-settings:
     uses: jasonmcboyd/Environment/.github/workflows/publish-release-and-chocolatey-package.yml@master
     with:
-      subdirectory: WindowsTerminal
+      github-releases-url: ${{ env.RELEASES_URL }}
       release-prefix: windows-terminal-settings
+      subdirectory: WindowsTerminal
     secrets: inherit

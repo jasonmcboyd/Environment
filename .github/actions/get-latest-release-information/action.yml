@@ -56,9 +56,6 @@ runs:
       id: latest-release
       shell: powershell
       run: |
-        # TODO: Remove this
-        ls env:
-
         $latestRelease = '${{ steps.get-latest-tag.outputs.tag }}'
         $releaseInfo = ./Publish/PowerShellScripts/GetGitHubReleaseInfo.ps1 -ReleaseTag $latestRelease -GitHubReleasesUrl ${{ inputs.github-releases-url }}
 
