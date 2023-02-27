@@ -1,4 +1,5 @@
 [CmdletBinding()]
+[OutputType([Hashtable])]
 param (
   [string]
   [Parameter(Mandatory = $true)]
@@ -82,8 +83,8 @@ try {
   }
 }
 finally {
-  Pop-Location
+  Pop-Location | Out-Null
   if (Test-Path /working) {
-    Remove-Item /working -Recurse
+    Remove-Item /working -Recurse | Out-Null
   }
 }

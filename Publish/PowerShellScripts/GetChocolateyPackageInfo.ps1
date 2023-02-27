@@ -1,4 +1,5 @@
 [CmdletBinding()]
+[OutputType([Hashtable])]
 param (
   [string]
   [Parameter(Mandatory = $true)]

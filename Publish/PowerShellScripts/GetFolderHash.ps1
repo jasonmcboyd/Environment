@@ -1,4 +1,5 @@
 [CmdletBinding()]
+[OutputType([string])]
 param (
   [string]
   [Parameter(Mandatory = $true)]
