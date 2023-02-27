@@ -35,7 +35,7 @@ Push-Location -Path "./Publish/NuGet/$packageName"
 try {
   mkdir /working/tools
 
-  Copy-Item ./*.nuspec /working
+  Copy-Item ./*.nuspec /working | Out-Null
 
   $installScript =
     ./createChocolateyInstallScript.ps1 `
@@ -50,7 +50,7 @@ try {
   # package automatically.
   if ($ReleaseVersion.Major -gt $PackageVersion.Major) {
     $version = $ReleaseVersion.ToString()
-    choco pack "./$packageName.nuspec" --version=$version
+    choco pack "./$packageName.nuspec" --version=$version | Out-Null
   }
   # If the release major version is the same as the chocolatey version we will create a new package
   # using the old chocolatey version and then we will check the new package's file hash against the old
@@ -59,21 +59,21 @@ try {
   # hash even if everything else remained unchanged.
   elseif ($ReleaseVersion.Major -eq $PackageVersion.Major) {
     $version = $PackageVersion.ToString()
-    choco pack "./$packageName.nuspec" --version=$version
+    choco pack "./$packageName.nuspec" --version=$version | Out-Null
     $fileHash = (Get-FileHash -Path "./*.nupkg").Hash
 
     # If the file hash's do not match then that means we have a material change and we should
     # build the NuGet package with the correct version.
     if ($fileHash -ne $PackageFileHash) {
       $version = [Version]::new($PackageVersion.Major, $PackageVersion.Minor + 1, 0)
-      choco pack "./$packageName.nuspec" --version=$version
+      choco pack "./$packageName.nuspec" --version=$version | Out-Null
     }
   }
   else {
     throw "The release major version should never be less than the package major version. Something has gone terribly wrong."
   }
 
-  Move-Item "./*.nupkg" $HOME
+  Move-Item "./*.nupkg" $HOME | Out-Null
   $fileHash = (Get-FileHash -Path "$HOME/*.nupkg").Hash
 
   @{
