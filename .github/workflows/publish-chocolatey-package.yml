@@ -59,11 +59,11 @@ jobs:
           $packageInfo =
             ./Publish/PowerShellScripts/CreateNuGetPackage `
               -ReleasePrefix ${{ inputs.release-prefix }} `
-              -ReleaseDownloadUrl ${{ steps.latest-release-info.download-url }} `
-              -ReleaseVersion [Version]::new("${{ steps.latest-release-info.version-number }}") `
-              -ReleaseFileHash ${{ steps.latest-release-info.file-hash }} `
-              -PackageVersion [Version]::new("${{ steps.chocolatey-package-info.version-number }}") `
-              -PackageFieHash ${{ steps.chocolatey-package-info.file-hash }}
+              -ReleaseDownloadUrl ${{ steps.latest-release-info.outputs.download-url }} `
+              -ReleaseVersion [Version]::new("${{ steps.latest-release-info.outputs.version-number }}") `
+              -ReleaseFileHash ${{ steps.latest-release-info.outputs.file-hash }} `
+              -PackageVersion [Version]::new("${{ steps.chocolatey-package-info.outputs.version-number }}") `
+              -PackageFieHash ${{ steps.chocolatey-package-info.outputs.file-hash }}
 
           ./Publish/PowerShellScripts/WriteGitHubOutputs.ps1 -HashTable $packageInfo
 

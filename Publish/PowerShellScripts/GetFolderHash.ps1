@@ -8,7 +8,7 @@ param (
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$hashes = Get-ChildItem -Path $Path -Recurse -File | Get-FileHash | Select-Object -ExpandProperty Hash
+$hashes = @(,(Get-ChildItem -Path $Path -Recurse -File | Get-FileHash | Select-Object -ExpandProperty Hash))
 
 $hex = '0123456789ABCDEF'
 
