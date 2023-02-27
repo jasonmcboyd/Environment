@@ -71,5 +71,5 @@ jobs:
         if: ${{ steps.chocolatey-package-info.outputs.file-hash != steps.create-nuget-package.outputs.file-hash }}
         shell: pwsh
         run: |
-          dotnet nuget add source '${{ inputs.azure_devops_nuget_url_v2 }}' --name environment --username ${{ inputs.azure_devops_username }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
+          dotnet nuget add source '${{ inputs.azure-devops-nuget-url-v2 }}' --name environment --username ${{ inputs.azure-devops-username }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
           dotnet nuget push ${{ steps.create-nuget-package.outputs.package-path }} --source environment --api-key AzureDevOps
