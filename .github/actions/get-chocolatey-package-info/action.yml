@@ -1,45 +1,45 @@
 # Action to get the latest release information for a given environment configuration.
 
-name: get-chocolatey-package-and-version
-description: Get the Chocolatey package name and version.
+name: get-chocolatey-package-info
+description: Get the Chocolatey package information.
 
 inputs:
   release-prefix:
     description: The prefix of the environment configuration.
     required: true
-  AZURE_DEVOPS_NUGET_URL_V3:
+  azure-devops-nuget-url-v3:
     description: The Azure nuget feed
-  AZURE_DEVOPS_USERNAME:
+  azure_devops_username:
     description: The Azure DevOps user
-  AZURE_DEVOPS_PAT:
+  azure_devops_pat:
     description: The Azure DevOps PAT with package read permissions
 outputs:
   package-name:
     description: The chocolatey package name and version
-    value: ${{ steps.get-chocolatey-package-and-version.outputs.chocolatey-package }}
+    value: ${{ steps.get-chocolatey-package-info.outputs.package-name }}
   version-number:
-    description: The chocolatey package version.
-    value: ${{ steps.get-chocolatey-package-and-version.outputs.chocolatey-package-version }}
+    description: The chocolatey package full version number.
+    value: ${{ steps.get-chocolatey-package-info.outputs.version-number }}
   major-version-number:
-    description: The chocolatey package major version.
-    value: ${{ steps.get-chocolatey-package-and-version.outputs.chocolatey-package-major-version }}
+    description: The chocolatey package major version number.
+    value: ${{ steps.get-chocolatey-package-info.outputs.major-version-number }}
   minor-version-number:
-    description: The chocolatey package minor version.
-    value: ${{ steps.get-chocolatey-package-and-version.outputs.chocolatey-package-minor-version }}
+    description: The chocolatey package minor version number.
+    value: ${{ steps.get-chocolatey-package-info.outputs.minor-version-number }}
   build-version-number:
-    description: The chocolatey package build version.
-    value: ${{ steps.get-chocolatey-package-and-version.outputs.chocolatey-package-build-version }}
+    description: The chocolatey package build version number.
+    value: ${{ steps.get-chocolatey-package-info.outputs.build-version-number }}
   file-hash:
     description: The chocolatey package file hash.
-    value: ${{ steps.get-chocolatey-package-and-version.outputs.chocolatey-package-file-hash }}
+    value: ${{ steps.get-chocolatey-package-info.outputs.file-hash }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 runs:
   using: composite
   # Steps represent a sequence of tasks that will be executed as part of the job
   steps:
-    - name: Get Chocolatey Package And Version
-      id: get-chocolatey-package-and-version
+    - name: Get Chocolatey Package Info
+      id: get-chocolatey-package-info
       shell: powershell
       run: |
         $packageName = "environment-${{ inputs.release-prefix }}"
@@ -47,9 +47,9 @@ runs:
         $packageInfo =
           ./Publish/PowerShellScripts/GetChocolateyPackageInfo.ps1 `
             -PackageName $packageName `
-            -NuGetUrl ${{ inputs.AZURE_DEVOPS_NUGET_URL_V3 }} `
-            -AzureDevOpsUserName ${{ inputs.AZURE_DEVOPS_USERNAME }} `
-            -AzureDevOpsPersonalAccessToken ${{ inputs.AZURE_DEVOPS_PAT }}
+            -NuGetUrl ${{ inputs.azure_devops_nuget_url_v3 }} `
+            -AzureDevOpsUserName ${{ inputs.azure_devops_username }} `
+            -AzureDevOpsPersonalAccessToken ${{ inputs.azure_devops_pat }}
 
         echo "package-name=$packageName"                         >> $env:GITHUB_OUTPUT
         echo "version-number=$($packageInfo.Version)"            >> $env:GITHUB_OUTPUT

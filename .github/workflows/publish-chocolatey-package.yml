@@ -6,6 +6,12 @@ name: Publish Chocolatey Package
 on:
   workflow_call:
     inputs:
+      azure_devops_nuget_url_v3:
+        required: true
+        type: string
+      azure_devops_username:
+        required: true
+        type: string
       github-releases-url:
         required: true
         type: string
@@ -32,9 +38,8 @@ jobs:
         uses: ./.github/actions/get-chocolatey-package-info
         with:
           release-prefix: ${{ inputs.release-prefix }}
-          AZURE_DEVOPS_NUGET_URL_V3: ${{ env.AZURE_DEVOPS_NUGET_URL_V3 }}
-          AZURE_DEVOPS_USERNAME: ${{ env.AZURE_DEVOPS_USERNAME }}
-          AZURE_DEVOPS_PAT: ${{ secrets.AZURE_dEVOPS_PAT }}
+          azure_devops_nuget_url_v3: ${{ inputs.azure_devops_nuget_url_v3 }}
+          azure_devops_username: ${{ inputs.azure_devops_username }}
 
       - name: Get Latest Release Information
         id: latest-release-info
@@ -61,5 +66,5 @@ jobs:
       - name: Push NuGet Package
         if: ${{ steps.chocolatey-package-info.file-hash != steps.create-nuget-package.file-hash }}
         run: |
-          dotnet nuget add source '${{ env.AZURE_DEVOPS_NUGET_URL_V2 }}' --name environment --username ${{ env.AZURE_DEVOPS_USERNAME }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
+          dotnet nuget add source '${{ inputs.azure_devops_nuget_url_v2 }}' --name environment --username ${{ inputs.azure_devops_username }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
           dotnet nuget push ${{ steps.create-nuget-package.outputs.package-path }} --source environment --api-key AzureDevOps

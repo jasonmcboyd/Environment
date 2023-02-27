@@ -6,6 +6,12 @@ name: Publish Release And Chocolatey Package
 on:
   workflow_call:
     inputs:
+      azure-devops-nuget-url-v3:
+        required: true
+        type: string
+      azure-devops-username:
+        required: true
+        type: string
       github-releases-url:
         required: true
         type: string
@@ -33,6 +39,8 @@ jobs:
     needs: publish-release
     uses: jasonmcboyd/Environment/.github/workflows/publish-chocolatey-package.yml@master
     with:
+      azure-devops-nuget-url-v3: ${{ inputs.azure-devops-nuget-url-v3 }}
+      azure-devops-username: ${{ inputs.azure-devops-username }}
       github-releases-url: ${{ inputs.github-releases-url }}
       release-prefix: ${{ inputs.release-prefix }}
     secrets: inherit
