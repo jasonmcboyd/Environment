@@ -51,4 +51,7 @@ runs:
             -AzureDevOpsUserName ${{ inputs.azure-devops-username }} `
             -AzureDevOpsPersonalAccessToken ${{ inputs.azure-devops-pat }}
 
+        # TODO: Remove This
+        $packageInfo | % { Write-Host $_ }
+
         ./Publish/PowerShellScripts/WriteGitHubOutputs.ps1 -HashTable $packageInfo
