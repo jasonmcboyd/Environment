@@ -67,6 +67,8 @@ jobs:
 
           # TODO: Remove This
           $packageInfo.GetType()
+          $packageInfo.Count
+          $packageInfo[0]
 
           ./Publish/PowerShellScripts/WriteGitHubOutputs.ps1 -HashTable $packageInfo
 
