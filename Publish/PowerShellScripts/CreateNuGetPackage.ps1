@@ -76,7 +76,7 @@ try {
   }
 
   $nupkgFileName = "$packageName.$version.nupkg"
-  Move-Item $nupkgFilePath $HOME | Out-Null
+  Move-Item $nupkgFileName $HOME | Out-Null
   $fileHash = (Get-FileHash -Path "$HOME/$nupkgFileName").Hash
 
   @{
