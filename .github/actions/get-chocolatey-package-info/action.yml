@@ -9,9 +9,9 @@ inputs:
     required: true
   azure-devops-nuget-url-v3:
     description: The Azure nuget feed
-  azure_devops_username:
+  azure-devops-username:
     description: The Azure DevOps user
-  azure_devops_pat:
+  azure-devops-pat:
     description: The Azure DevOps PAT with package read permissions
 outputs:
   package-name:
@@ -47,20 +47,8 @@ runs:
         $packageInfo =
           ./Publish/PowerShellScripts/GetChocolateyPackageInfo.ps1 `
             -PackageName $packageName `
-            -NuGetUrl ${{ inputs.azure_devops_nuget_url_v3 }} `
-            -AzureDevOpsUserName ${{ inputs.azure_devops_username }} `
-            -AzureDevOpsPersonalAccessToken ${{ inputs.azure_devops_pat }}
+            -NuGetUrl ${{ inputs.azure-devops-nuget-url-v3 }} `
+            -AzureDevOpsUserName ${{ inputs.azure-devops-username }} `
+            -AzureDevOpsPersonalAccessToken ${{ inputs.azure-devops-pat }}
 
-        echo "package-name=$packageName"                         >> $env:GITHUB_OUTPUT
-        echo "version-number=$($packageInfo.Version)"            >> $env:GITHUB_OUTPUT
-        echo "major-version-number=$($packageInfo.MajorVersion)" >> $env:GITHUB_OUTPUT
-        echo "minor-version-number=$($packageInfo.MinorVersion)" >> $env:GITHUB_OUTPUT
-        echo "build-version-number=$($packageInfo.BuildVersion)" >> $env:GITHUB_OUTPUT
-        echo "file-hash=$($packageInfo.FileHash)"                >> $env:GITHUB_OUTPUT
-
-        echo "Package Name: $packageName"
-        echo "Version Number: $($packageInfo.Version)"
-        echo "Major Version Number: $($packageInfo.MajorVersion)"
-        echo "Minor Version Number: $($packageInfo.MinorVersion)"
-        echo "Build Version Number: $($packageInfo.BuildVersion)"
-        echo "File Hash: $($packageInfo.FileHash)"
+        ./Publish/PowerShellScripts/WriteGitHubOutputs.ps1 -HashTable $packageInfo

@@ -55,11 +55,7 @@ jobs:
             }
           }
 
-          echo "archive-name=$archiveName" >> $env:GITHUB_OUTPUT
-          echo "folder-hash=$folderHash"   >> $env:GITHUB_OUTPUT
-
-          echo "Archive Name: $archiveName"
-          echo "Folder Hash: $folderHash"
+          ./Publish/PowerShellScripts/WriteGitHubOutputs.ps1 -HashTable @{ ArchiveName = $archiveName; FolderHash = $folderHash }
 
       - name: Get Next Release Information
         id: get-next-release
@@ -67,9 +63,7 @@ jobs:
           $nextVersion ="$([int]${{ steps.latest-release.outputs.major-version-number }} + 1).0.0"
           $nextRelease = "${{ inputs.release-prefix }}-v$nextVersion"
 
-          echo "next-release=$nextRelease" >> $env:GITHUB_OUTPUT
-
-          echo "Next Release: $nextRelease"
+          ./Publish/PowerShellScripts/WriteGitHubOutputs.ps1 -HashTable @{ NextRelease = $nextRelease; }
 
       - name: Release
         if: ${{ steps.latest-release.outputs.folder-hash != steps.zip-files.outputs.folder-hash }}

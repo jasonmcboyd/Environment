@@ -63,8 +63,7 @@ jobs:
               -PackageVersion [Version]::new("${{ steps.chocolatey-package-info.version-number }}") `
               -PackageFieHash ${{ steps.chocolatey-package-info.file-hash }}
 
-          echo "package-path=$($packageInfo.PackagePath)"  >> $env:GITHUB_OUTPUT
-          echo "file-hash=$($packageInfo.PackageFileHash)" >> $env:GITHUB_OUTPUT
+          ./Publish/PowerShellScripts/WriteGitHubOutputs.ps1 -HashTable $packageInfo
 
       - name: Push NuGet Package
         if: ${{ steps.chocolatey-package-info.file-hash != steps.create-nuget-package.file-hash }}

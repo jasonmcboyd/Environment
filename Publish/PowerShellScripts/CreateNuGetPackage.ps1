@@ -79,7 +79,7 @@ try {
 
   @{
     PackagePath = $packagePath
-    PackageFileHash = $fileHash
+    FileHash = $fileHash
   }
 }
 finally {

@@ -45,10 +45,10 @@ finally {
 }
 
 @{
-  PackageName  = $PackageName
-  Version      = $versionString
-  MajorVersion = $version.Major
-  MinorVersion = $version.Minor
-  BuildVersion = $version.Build
-  FileHash     = $fileHash.Hash
+  PackageName        = $PackageName
+  VersionNumber      = $versionString
+  MajorVersionNumber = $version.Major
+  MinorVersionNumber = $version.Minor
+  BuildVersionNumber = $version.Build
+  FileHash           = $fileHash.Hash
 }

@@ -12,41 +12,42 @@ param (
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$ReleaseTag -match '(?<packageName>[^\d]+)-v(?<versionString>[\d\.]+)$' | Out-Null
+$ReleaseTag -match '(?<releaseName>[^\d]+)-v(?<versionString>[\d\.]+)$' | Out-Null
 
-$packageName = $Matches.packageName
+$releaseName = $Matches.releaseName
 $versionString = $Matches.versionString
 $version = [Version]::Parse($versionString)
-$fileName = "$packageName.zip"
+$fileName = "$releaseName.zip"
 $filePath = "$HOME/$fileName"
 
-$releaseUrl = "$GitHubReleasesUrl/download/$ReleaseTag/$fileName"
+$downloadUrl = "$GitHubReleasesUrl/download/$ReleaseTag/$fileName"
 
-Write-Debug "releaseUrl: $releaseUrl"
+Write-Debug "downloadUrl: $downloadUrl"
 
 try {
-  Invoke-WebRequest -Uri $releaseUrl -OutFile $filePath
-  Expand-Archive -Path $filePath -DestinationPath $packageName
+  Invoke-WebRequest -Uri $downloadUrl -OutFile $filePath
+  Expand-Archive -Path $filePath -DestinationPath $releaseName
   $fileHash = Get-FileHash -Path $filePath -Algorithm SHA256
-  $folderHash = & $PSScriptRoot/GetFolderHash.ps1 -Path $packageName
+  $folderHash = & $PSScriptRoot/GetFolderHash.ps1 -Path $releaseName
 }
 finally {
   if (Test-Path $filePath) {
     Remove-Item $filePath
   }
 
-  if (Test-Path $packageName) {
-    Remove-Item $packageName -Recurse
+  if (Test-Path $releaseName) {
+    Remove-Item $releaseName -Recurse
   }
 }
 
 @{
-  PackageName  = $PackageName
-  ReleaseUrl   = $releaseUrl
-  Version      = $versionString
-  MajorVersion = $version.Major
-  MinorVersion = $version.Minor
-  BuildVersion = $version.Build
-  FolderHash   = $folderHash
-  FileHash     = $fileHash.Hash
+  ReleaseName        = $releaseName
+  ReleaseTag         = $ReleaseTag
+  DownloadUrl        = $downloadUrl
+  VersionNumber      = $versionString
+  MajorVersionNumber = $version.Major
+  MinorVersionNumber = $version.Minor
+  BuildVersionNumber = $version.Build
+  FolderHash         = $folderHash
+  FileHash           = $fileHash.Hash
 }
