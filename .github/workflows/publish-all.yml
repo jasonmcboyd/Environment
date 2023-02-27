@@ -21,7 +21,7 @@ jobs:
     with:
       azure-devops-nuget-url-v2: ${{ vars.AZURE_DEVOPS_NUGET_URL_V2 }}
       azure-devops-nuget-url-v3: ${{ vars.AZURE_DEVOPS_NUGET_URL_V3 }}
-      azure_devops_username: ${{ vars.AZURE_DEVOPS_USERNAME }}
+      azure-devops-username: ${{ vars.AZURE_DEVOPS_USERNAME }}
       github-releases-url: ${{ vars.RELEASES_URL }}
       release-prefix: powershell-core-profile
       subdirectory: PowerShellProfiles/CurrentUserAllHosts
@@ -31,7 +31,7 @@ jobs:
     with:
       azure-devops-nuget-url-v2: ${{ vars.AZURE_DEVOPS_NUGET_URL_V2 }}
       azure-devops-nuget-url-v3: ${{ vars.AZURE_DEVOPS_NUGET_URL_V3 }}
-      azure_devops_username: ${{ vars.AZURE_DEVOPS_USERNAME }}
+      azure-devops-username: ${{ vars.AZURE_DEVOPS_USERNAME }}
       github-releases-url: ${{ vars.RELEASES_URL }}
       release-prefix: starship-config
       subdirectory: Starship
@@ -41,7 +41,7 @@ jobs:
     with:
       azure-devops-nuget-url-v2: ${{ vars.AZURE_DEVOPS_NUGET_URL_V2 }}
       azure-devops-nuget-url-v3: ${{ vars.AZURE_DEVOPS_NUGET_URL_V3 }}
-      azure_devops_username: ${{ vars.AZURE_DEVOPS_USERNAME }}
+      azure-devops-username: ${{ vars.AZURE_DEVOPS_USERNAME }}
       github-releases-url: ${{ vars.RELEASES_URL }}
       release-prefix: vim-config
       subdirectory: Vim
@@ -51,7 +51,7 @@ jobs:
     with:
       azure-devops-nuget-url-v2: ${{ vars.AZURE_DEVOPS_NUGET_URL_V2 }}
       azure-devops-nuget-url-v3: ${{ vars.AZURE_DEVOPS_NUGET_URL_V3 }}
-      azure_devops_username: ${{ vars.AZURE_DEVOPS_USERNAME }}
+      azure-devops-username: ${{ vars.AZURE_DEVOPS_USERNAME }}
       github-releases-url: ${{ vars.RELEASES_URL }}
       release-prefix: windows-terminal-settings
       subdirectory: WindowsTerminal
