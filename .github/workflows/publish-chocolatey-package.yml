@@ -43,6 +43,7 @@ jobs:
           release-prefix: ${{ inputs.release-prefix }}
           azure-devops-nuget-url-v3: ${{ inputs.azure-devops-nuget-url-v3 }}
           azure-devops-username: ${{ inputs.azure-devops-username }}
+          azure-devops-pat: ${{ secrets.AZURE_DEVOPS_PAT }}
 
       - name: Get Latest Release Information
         id: latest-release-info
