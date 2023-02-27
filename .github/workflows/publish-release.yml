@@ -62,7 +62,7 @@ jobs:
         id: get-next-release
         shell: pwsh
         run: |
-          $nextVersion ="$([int]${{ steps.latest-release.outputs.major-version-number }} + 1).0.0"
+          $nextVersion = "$([int]${{ steps.latest-release.outputs.major-version-number }} + 1).0.0"
           $nextRelease = "${{ inputs.release-prefix }}-v$nextVersion"
 
           ./Publish/PowerShellScripts/WriteGitHubOutputs.ps1 -HashTable @{ NextRelease = $nextRelease; }

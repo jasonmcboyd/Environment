@@ -25,7 +25,7 @@ if (Test-Path "`$destination/Imports/Personal") {
   unzipLocation = `$destination
   url           = '$ReleaseUrl'
   checksum      = '$ReleaseFileHash'
-  checksumType  = 'sha512'
+  checksumType  = 'sha256'
 }
 
 Install-ChocolateyZipPackage @packageArgs

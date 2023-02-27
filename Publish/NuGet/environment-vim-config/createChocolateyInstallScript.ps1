@@ -19,7 +19,7 @@ Set-StrictMode -Version Latest
   unzipLocation = `$env:USERPROFILE
   url           = '$ReleaseUrl'
   checksum      = '$ReleaseFileHash'
-  checksumType  = 'sha512'
+  checksumType  = 'sha256'
 }
 
 Install-ChocolateyZipPackage @packageArgs
