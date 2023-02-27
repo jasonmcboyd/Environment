@@ -77,7 +77,7 @@ try {
   $fileHash = (Get-FileHash -Path "$HOME/*.nupkg").Hash
 
   @{
-    PackagePath = (Get-ChildItem -Path $Home -Filter *.nupkg | Select-Object -First 1 -ExpandProperty FullNmae)
+    PackagePath = (Get-ChildItem -Path $Home -Filter *.nupkg | Select-Object -First 1 -ExpandProperty FullName)
     FileHash = $fileHash
   }
 }
