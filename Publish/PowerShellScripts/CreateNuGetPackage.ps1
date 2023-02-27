@@ -61,6 +61,8 @@ try {
     $version = $PackageVersion.ToString()
     choco pack "./$packageName.nuspec" --version=$version
     # TODO: remove this
+    Write-Output "pwd: $(pwd)"
+    Write-Output "ls:"
     ls
     $fileHash = (Get-FileHash -Path "./$packageName.nupkg").Hash
 
