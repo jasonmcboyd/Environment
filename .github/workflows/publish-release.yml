@@ -42,17 +42,29 @@ jobs:
         run: |
           Compress-Archive ./${{ inputs.subdirectory }}/* ./${{ inputs.release-prefix }}.zip
 
-          $folderHash = ./Publish/PowerShellScripts/GetFolderHash.ps1
+          $archiveName = "${{ inputs.release-prefix }}.zip"
 
-          echo "archive-name=${{ inputs.release-prefix }}.zip" >> $env:GITHUB_OUTPUT
-          echo "folder-hash=$folderHash" >> $env:GITHUB_OUTPUT
+          try {
+            mkdir working-zip-files
+            Expand-Archive -Path $archiveName -DestinationPath working-zip-files
+            $folderHash = ./Publish/PowerShellScripts/GetFolderHash.ps1 -Path working-zip-files
+          }
+          finally {
+            if (Test-Path working-zip-files) {
+              Remove-Item working-zip-files -Recurse
+            }
+          }
 
+          echo "archive-name=$archiveName" >> $env:GITHUB_OUTPUT
+          echo "folder-hash=$folderHash"   >> $env:GITHUB_OUTPUT
+
+          echo "Archive Name: $archiveName"
           echo "Folder Hash: $folderHash"
 
       - name: Get Next Release Information
         id: get-next-release
         run: |
-          $nextVersion ="$([int]${{ steps.latest-release.outputs.latest-release-major-version-number }} + 1).0.0"
+          $nextVersion ="$([int]${{ steps.latest-release.outputs.major-version-number }} + 1).0.0"
           $nextRelease = "${{ inputs.release-prefix }}-v$nextVersion"
 
           echo "next-release=$nextRelease" >> $env:GITHUB_OUTPUT
@@ -60,7 +72,7 @@ jobs:
           echo "Next Release: $nextRelease"
 
       - name: Release
-        if: ${{ steps.latest-release.outputs.latest-release-folder-hash != steps.zip-files.outputs.folder-hash }}
+        if: ${{ steps.latest-release.outputs.folder-hash != steps.zip-files.outputs.folder-hash }}
         uses: softprops/action-gh-release@v1
         with:
           files: ${{ steps.zip-files.outputs.archive-name }}
