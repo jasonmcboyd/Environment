@@ -8,7 +8,7 @@ function Update-ChocoEnvironment {
 
   $packages =
     & choco list -l -r --id-only `
-    | select-string ^environment.* `
+    | Select-String '^environment.*' `
     | Join-String -Separator ' '
 
   choco upgrade $packages -y
