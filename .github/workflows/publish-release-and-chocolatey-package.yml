@@ -6,6 +6,9 @@ name: Publish Release And Chocolatey Package
 on:
   workflow_call:
     inputs:
+      azure-devops-nuget-url-v2:
+        required: true
+        type: string
       azure-devops-nuget-url-v3:
         required: true
         type: string

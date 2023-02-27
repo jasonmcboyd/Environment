@@ -19,6 +19,7 @@ jobs:
   powershell-core-profile:
     uses: jasonmcboyd/Environment/.github/workflows/publish-release-and-chocolatey-package.yml@master
     with:
+      azure_devops_nuget_url_v2: ${{ vars.AZURE_DEVOPS_NUGET_URL_V2 }}
       azure_devops_nuget_url_v3: ${{ vars.AZURE_DEVOPS_NUGET_URL_V3 }}
       azure_devops_username: ${{ vars.AZURE_DEVOPS_USERNAME }}
       github-releases-url: ${{ vars.RELEASES_URL }}
@@ -28,6 +29,7 @@ jobs:
   starship-config:
     uses: jasonmcboyd/Environment/.github/workflows/publish-release-and-chocolatey-package.yml@master
     with:
+      azure_devops_nuget_url_v2: ${{ vars.AZURE_DEVOPS_NUGET_URL_V2 }}
       azure_devops_nuget_url_v3: ${{ vars.AZURE_DEVOPS_NUGET_URL_V3 }}
       azure_devops_username: ${{ vars.AZURE_DEVOPS_USERNAME }}
       github-releases-url: ${{ vars.RELEASES_URL }}
@@ -37,6 +39,7 @@ jobs:
   vim-config:
     uses: jasonmcboyd/Environment/.github/workflows/publish-release-and-chocolatey-package.yml@master
     with:
+      azure_devops_nuget_url_v2: ${{ vars.AZURE_DEVOPS_NUGET_URL_V2 }}
       azure_devops_nuget_url_v3: ${{ vars.AZURE_DEVOPS_NUGET_URL_V3 }}
       azure_devops_username: ${{ vars.AZURE_DEVOPS_USERNAME }}
       github-releases-url: ${{ vars.RELEASES_URL }}
@@ -46,6 +49,7 @@ jobs:
   windows-terminal-settings:
     uses: jasonmcboyd/Environment/.github/workflows/publish-release-and-chocolatey-package.yml@master
     with:
+      azure_devops_nuget_url_v2: ${{ vars.AZURE_DEVOPS_NUGET_URL_V2 }}
       azure_devops_nuget_url_v3: ${{ vars.AZURE_DEVOPS_NUGET_URL_V3 }}
       azure_devops_username: ${{ vars.AZURE_DEVOPS_USERNAME }}
       github-releases-url: ${{ vars.RELEASES_URL }}
