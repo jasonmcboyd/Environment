@@ -61,9 +61,9 @@ try {
     $version = $PackageVersion.ToString()
     choco pack "./$packageName.nuspec" --version=$version
     # TODO: remove this
-    Write-Output "pwd: $(pwd)"
-    Write-Output "ls:"
-    ls
+    Write-Host "pwd: $(pwd)"
+    Write-Host "ls:"
+    ls | % { Write-Host $_.FullName }
     $fileHash = (Get-FileHash -Path "./$packageName.nupkg").Hash
 
     # If the file hash's do not match then that means we have a material change and we should
