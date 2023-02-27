@@ -60,6 +60,8 @@ try {
   elseif ($ReleaseVersion.Major -eq $PackageVersion.Major) {
     $version = $PackageVersion.ToString()
     choco pack "./$packageName.nuspec" --version=$version
+    # TODO: remove this
+    ls
     $fileHash = (Get-FileHash -Path "./$packageName.nupkg").Hash
 
     # If the file hash's do not match then that means we have a material change and we should
