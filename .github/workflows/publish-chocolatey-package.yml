@@ -68,7 +68,7 @@ jobs:
           ./Publish/PowerShellScripts/WriteGitHubOutputs.ps1 -HashTable $packageInfo
 
       - name: Push NuGet Package
-        if: ${{ steps.chocolatey-package-info.file-hash != steps.create-nuget-package.file-hash }}
+        if: ${{ steps.chocolatey-package-info.outputs.file-hash != steps.create-nuget-package.outputs.file-hash }}
         shell: pwsh
         run: |
           dotnet nuget add source '${{ inputs.azure_devops_nuget_url_v2 }}' --name environment --username ${{ inputs.azure_devops_username }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
