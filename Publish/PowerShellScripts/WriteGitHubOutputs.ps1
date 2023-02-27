@@ -25,7 +25,7 @@ foreach ($key in $HashTable.Keys) {
 }
 
 foreach ($key in $HashTable.Keys) {
-  Write-Object "$([string]::Join("-", ($parsedKeys[$key] | ForEach-Object { $_.ToLower() })))=$($HashTable[$key])" >> $env:GITHUB_OUTPUT
+  Write-Output "$([string]::Join("-", ($parsedKeys[$key] | ForEach-Object { $_.ToLower() })))=$($HashTable[$key])" >> $env:GITHUB_OUTPUT
 }
 
 foreach ($key in $HashTable.Keys) {
