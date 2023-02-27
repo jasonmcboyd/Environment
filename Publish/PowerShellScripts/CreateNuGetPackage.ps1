@@ -83,8 +83,8 @@ try {
   }
 }
 finally {
-  Pop-Location | Out-Null
+  Pop-Location
   if (Test-Path /working) {
-    Remove-Item /working -Recurse | Out-Null
+    Remove-Item /working -Recurse
   }
 }

@@ -66,7 +66,7 @@ jobs:
               -PackageFileHash ${{ steps.chocolatey-package-info.outputs.file-hash }}
 
           # TODO: Remove This
-          $packageInfo | % { Write-Host $_ }
+          $packageInfo.GetType()
 
           ./Publish/PowerShellScripts/WriteGitHubOutputs.ps1 -HashTable $packageInfo
 
