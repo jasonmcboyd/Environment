@@ -63,7 +63,7 @@ jobs:
               -ReleaseVersion ([Version]::new("${{ steps.latest-release-info.outputs.version-number }}")) `
               -ReleaseFileHash ${{ steps.latest-release-info.outputs.file-hash }} `
               -PackageVersion ([Version]::new("${{ steps.chocolatey-package-info.outputs.version-number }}")) `
-              -PackageFieHash ${{ steps.chocolatey-package-info.outputs.file-hash }}
+              -PackageFileHash ${{ steps.chocolatey-package-info.outputs.file-hash }}
 
           ./Publish/PowerShellScripts/WriteGitHubOutputs.ps1 -HashTable $packageInfo
 
