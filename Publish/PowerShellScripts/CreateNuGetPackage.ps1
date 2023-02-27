@@ -61,7 +61,8 @@ try {
   elseif ($ReleaseVersion.Major -eq $PackageVersion.Major) {
     $version = $PackageVersion.ToString()
     choco pack "./$packageName.nuspec" --version=$version | Out-Null
-    $fileHash = (Get-FileHash -Path "./*.nupkg").Hash
+    $nupkgFileName = "$packageName.$version.nupkg"
+    $fileHash = (Get-FileHash -Path $nupkgFileName).Hash
 
     # If the file hash's do not match then that means we have a material change and we should
     # build the NuGet package with the correct version.
@@ -74,8 +75,9 @@ try {
     throw "The release major version should never be less than the package major version. Something has gone terribly wrong."
   }
 
-  Move-Item "./*.nupkg" $HOME | Out-Null
-  $fileHash = (Get-FileHash -Path "$HOME/*.nupkg").Hash
+  $nupkgFileName = "$packageName.$version.nupkg"
+  Move-Item $nupkgFilePath $HOME | Out-Null
+  $fileHash = (Get-FileHash -Path "$HOME/$nupkgFileName").Hash
 
   @{
     PackagePath = (Get-ChildItem -Path $Home -Filter *.nupkg | Select-Object -First 1 -ExpandProperty FullName)
