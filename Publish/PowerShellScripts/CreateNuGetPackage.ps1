@@ -30,7 +30,7 @@ $ErrorActionPreference = 'Stop'
 
 $packageName = "environment-$ReleasePrefix"
 
-Push-Location -Path "./PublishNuGet/$packageName"
+Push-Location -Path "./Publish/NuGet/$packageName"
 
 try {
   mkdir /working/tools
