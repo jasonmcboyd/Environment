@@ -34,7 +34,7 @@ $packageName = "environment-$ReleasePrefix"
 Push-Location -Path "./Publish/NuGet/$packageName"
 
 try {
-  mkdir /working/tools
+  mkdir /working/tools | Out-Null
 
   Copy-Item ./*.nuspec /working | Out-Null
 

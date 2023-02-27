@@ -65,11 +65,6 @@ jobs:
               -PackageVersion ([Version]::new("${{ steps.chocolatey-package-info.outputs.version-number }}")) `
               -PackageFileHash ${{ steps.chocolatey-package-info.outputs.file-hash }}
 
-          # TODO: Remove This
-          $packageInfo.GetType()
-          $packageInfo.Count
-          $packageInfo[0]
-
           ./Publish/PowerShellScripts/WriteGitHubOutputs.ps1 -HashTable $packageInfo
 
       - name: Push NuGet Package
