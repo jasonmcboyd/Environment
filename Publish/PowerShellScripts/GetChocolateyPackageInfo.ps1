@@ -20,7 +20,7 @@ param (
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$credentials = [pscredential]::new($AzureDevOpsUserName, (ConvertTo-SecureString -String $AzureDevOpsPersonalAccessToken -AsPlainText))
+$credentials = [pscredential]::new($AzureDevOpsUserName, (ConvertTo-SecureString -String $AzureDevOpsPersonalAccessToken -AsPlainText -Force))
 
 $json = Invoke-RestMethod -Uri $NuGetUrl -Authentication Basic -Credential $credentials
 
