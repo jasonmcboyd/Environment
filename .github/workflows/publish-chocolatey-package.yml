@@ -6,13 +6,13 @@ name: Publish Chocolatey Package
 on:
   workflow_call:
     inputs:
-      azure_devops_nuget_url_v2:
+      azure-devops-nuget-url-v2:
         required: true
         type: string
-      azure_devops_nuget_url_v3:
+      azure-devops-nuget-url-v3:
         required: true
         type: string
-      azure_devops_username:
+      azure-devops-username:
         required: true
         type: string
       github-releases-url:
@@ -41,8 +41,8 @@ jobs:
         uses: ./.github/actions/get-chocolatey-package-info
         with:
           release-prefix: ${{ inputs.release-prefix }}
-          azure_devops_nuget_url_v3: ${{ inputs.azure_devops_nuget_url_v3 }}
-          azure_devops_username: ${{ inputs.azure_devops_username }}
+          azure-devops-nuget-url-v3: ${{ inputs.azure-devops-nuget-url-v3 }}
+          azure-devops-username: ${{ inputs.azure-devops-username }}
 
       - name: Get Latest Release Information
         id: latest-release-info
