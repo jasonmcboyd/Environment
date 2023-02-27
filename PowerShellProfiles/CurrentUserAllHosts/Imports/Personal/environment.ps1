@@ -11,5 +11,5 @@ function Update-ChocoEnvironment {
     | Select-String '^environment.*' `
     | Join-String -Separator ' '
 
-  choco upgrade $packages -y
+  sudo choco upgrade $packages -y
 }
