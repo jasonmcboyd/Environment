@@ -57,7 +57,7 @@ runs:
     # is different from Compress-Archive. The different algorithm results in a different zip file with a different file hash.
     - name: Get Latest Release Information
       id: latest-release
-      shell: powershell
+      shell: pwsh
       run: |
         $latestReleaseTag = '${{ steps.get-latest-tag.outputs.tag }}'
         $releaseInfo =

@@ -40,7 +40,7 @@ runs:
   steps:
     - name: Get Chocolatey Package Info
       id: get-chocolatey-package-info
-      shell: powershell
+      shell: pwsh
       run: |
         $packageName = "environment-${{ inputs.release-prefix }}"
 

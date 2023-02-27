@@ -54,6 +54,7 @@ jobs:
 
       - name: Create NuGet Package
         id: create-nuget-package
+        shell: pwsh
         run: |
           $packageInfo =
             ./Publish/PowerShellScripts/CreateNuGetPackage `
@@ -68,6 +69,7 @@ jobs:
 
       - name: Push NuGet Package
         if: ${{ steps.chocolatey-package-info.file-hash != steps.create-nuget-package.file-hash }}
+        shell: pwsh
         run: |
           dotnet nuget add source '${{ inputs.azure_devops_nuget_url_v2 }}' --name environment --username ${{ inputs.azure_devops_username }} -p ${{ secrets.AZURE_DEVOPS_PAT }}
           dotnet nuget push ${{ steps.create-nuget-package.outputs.package-path }} --source environment --api-key AzureDevOps
