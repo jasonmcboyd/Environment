@@ -20,7 +20,7 @@ param (
   [Parameter(Mandatory = $true)]
   $PackageVersion,
 
-  [Version]
+  [string]
   [Parameter(Mandatory = $true)]
   $PackageFileHash
 )
