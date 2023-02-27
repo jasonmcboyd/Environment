@@ -39,6 +39,7 @@ jobs:
     needs: publish-release
     uses: jasonmcboyd/Environment/.github/workflows/publish-chocolatey-package.yml@master
     with:
+      azure-devops-nuget-url-v2: ${{ inputs.azure-devops-nuget-url-v2 }}
       azure-devops-nuget-url-v3: ${{ inputs.azure-devops-nuget-url-v3 }}
       azure-devops-username: ${{ inputs.azure-devops-username }}
       github-releases-url: ${{ inputs.github-releases-url }}
