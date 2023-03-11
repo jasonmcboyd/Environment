@@ -224,6 +224,19 @@ Configuration InternetOptions {
     }
 }
 
+Configuration Desktop {
+    $internetExplorerRegistryKey = 'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds'
+
+    Registry TurnOffNewsAndInterests {
+        Key                  = $internetExplorerRegistryKey
+        ValueName            = 'ShellFeedsTaskbarViewMode'
+        Ensure               = 'Present'
+        ValueType            = 'String'
+        ValueData            = '2'
+        PsDscRunAsCredential = $Node.Credential
+    }
+}
+
 Configuration User {
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
@@ -247,6 +260,8 @@ Configuration User {
         Touchpad Touchpad {}
 
         InternetOptions InternetOptions {}
+
+        Desktop Desktop {}
 
         # I like the idea of clipboard history but, unfortunately, it makes copying sensitive information problematic since you
         # simply copy something else to replace the sensitive information in the clipboard.
