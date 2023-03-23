@@ -3,10 +3,21 @@ function dhere {
   param (
     [Parameter(Mandatory = $true)]
     [string]
-    $Image
+    $Image,
+
+    [Parameter()]
+    [string]
+    $Command,
+
+    [switch]
+    $Write
   )
 
-  & docker run -it --rm -v "$(Get-Location):/wrk:ro" -w '/wrk' $Image
+  $dockerCommand = "docker run -it --rm -v '$(Get-Location):/wrk:$(if ($Write) { 'rw' } else { 'ro' })' -w '/wrk' $Image $Command"
+
+  Write-Debug "dockerCommand: $dockerCommand"
+
+  Invoke-Expression $dockerCommand
 }
 
 Set-Alias -Name k -Value kubectl
