@@ -2,7 +2,7 @@
 function Prop {
   [CmdletBinding()]
   param (
-    [parameter(Mandatory = $true)]
+    [Parameter(Mandatory = $true)]
     [string]
     $Property,
 
@@ -20,6 +20,16 @@ function Prop {
       Select-Object -InputObject $obj -ExpandProperty $Property
     }
   }
+}
+
+function WhatIs {
+  [CmdletBinding()]
+  param (
+    [Parameter(Mandatory = $true)]
+    [string]
+    $Command)
+
+  Get-Command $Command | Select-Object -ExpandProperty Definition
 }
 
 function Any {
