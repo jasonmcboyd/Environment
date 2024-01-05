@@ -12,7 +12,7 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
 
 Aside from having this enabled being handy, **this must be enabled for DSC to work**.
 
-This cannot be done by default on a public network. When setting up a machine for the first time, Windows defaults new network connections to public. It must be remembered to set the network to private after the initial connection.
+**This cannot be done by default on a public network. When setting up a machine for the first time, Windows defaults new network connections to public. It must be remembered to set the network to private after the initial connection.**
 
 `SkipNetworkProfileCheck` switch to skip network profile check. This can be useful
 when I are using a VM with a network profile that is not connected to the network.
