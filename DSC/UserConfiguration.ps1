@@ -34,7 +34,6 @@ Configuration Chocolatey {
         PsDscRunAsCredential = $Node.Credential
         DependsOn            = '[cChocoInstaller]Chocolatey'
     }
-
 }
 
 Configuration ChocolateyPackages {
@@ -44,28 +43,10 @@ Configuration ChocolateyPackages {
     $chocolateyPackages = @(
         'cascadia-code-nerd-font'
         'environment-powershell-core-profile'
-        'environment-vim-config'
         'git'
         'gsudo'
-        'notepadplusplus'
         'powershell-core'
-        'sysinternals'
-        'vscode'
     )
-
-    $windowsBuild = [Environment]::OSVersion.Version.Build
-
-    if ($windowsBuild -ge 18362) {
-        $chocolateyPackages += @(
-            'environment-windows-terminal-settings'
-            'microsoft-windows-terminal'
-            'starship'
-        )
-    }
-
-    if ((Get-WindowsOptionalFeature -Online -FeatureName 'Microsoft-Hyper-V-All').State -eq 'Enabled') {
-        $chocolateyPackages += 'wsl2'
-    }
 
     foreach ($package in $chocolateyPackages) {
         cChocoPackageInstaller $package {
@@ -77,7 +58,7 @@ Configuration ChocolateyPackages {
 
 Configuration PowerShellPackageManagement {
 
-    Import-DscResource -ModuleName PackageManagement -ModuleVersion '1.4.7'
+    Import-DscResource -ModuleName PackageManagement
 
     PackageManagement SecretManagement {
         Ensure               = 'Present'
@@ -122,32 +103,6 @@ Configuration ScreenSaver {
         Ensure               = 'Present'
         ValueType            = 'String'
         ValueData            = '300'
-        PsDscRunAsCredential = $Node.Credential
-    }
-}
-
-Configuration WindowsSnapping {
-    $desktopRegistryKey = "HKEY_CURRENT_USER\Control Panel\Desktop"
-
-    # Enable window snapping
-    Registry EnableWindowSnapping {
-        Key                  = $desktopRegistryKey
-        ValueName            = 'WindowArrangementActive'
-        Ensure               = 'Present'
-        ValueType            = 'String'
-        ValueData            = '1'
-        PsDscRunAsCredential = $Node.Credential
-    }
-
-    $snapRegistryKey = 'HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
-
-    # Disable snap assist (this is what asks what you want to snap next to the window you just snapped).
-    Registry DisableSnapAssist {
-        Key                  = $snapRegistryKey
-        ValueName            = 'SnapAssist'
-        Ensure               = 'Present'
-        ValueType            = 'Dword'
-        ValueData            = '0'
         PsDscRunAsCredential = $Node.Credential
     }
 }
@@ -200,13 +155,48 @@ Configuration WindowsExplorer {
 Configuration Touchpad {
     $touchpadRegistryKey = 'HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PrecisionTouchPad'
 
-    # Hide protected operating system files
+    # Three finger tap for middle click.
     Registry ThreeFingerMiddleClick {
         Key                  = $touchpadRegistryKey
         ValueName            = 'ThreeFingerTapEnabled'
         Ensure               = 'Present'
         ValueType            = 'Dword'
         ValueData            = '4'
+        PsDscRunAsCredential = $Node.Credential
+    }
+}
+
+Configuration Desktop {
+    $themeRegistryKey = 'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes'
+    $darkModeRegistryKey = 'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize'
+
+    # Dark mode for apps.
+    Registry AppsDarkMode {
+        Key                  = $darkModeRegistryKey
+        ValueName            = 'AppsUseLightTheme'
+        Ensure               = 'Present'
+        ValueType            = 'Dword'
+        ValueData            = '0'
+        PsDscRunAsCredential = $Node.Credential
+    }
+
+    # Dark mode for system.
+    Registry SystemDarkMode {
+        Key                  = $darkModeRegistryKey
+        ValueName            = 'SystemUsesLightTheme'
+        Ensure               = 'Present'
+        ValueType            = 'Dword'
+        ValueData            = '0'
+        PsDscRunAsCredential = $Node.Credential
+    }
+
+    # Dark theme.
+    Registry DarkTheme {
+        Key                  = $themeRegistryKey
+        ValueName            = 'CurrentTheme'
+        Ensure               = 'Present'
+        ValueType            = 'String'
+        ValueData            = 'C:\Windows\resources\Themes\dark.theme'
         PsDscRunAsCredential = $Node.Credential
     }
 }
@@ -220,19 +210,6 @@ Configuration InternetOptions {
         Ensure               = 'Present'
         ValueType            = 'String'
         ValueData            = 'https://www.duckduckgo.com'
-        PsDscRunAsCredential = $Node.Credential
-    }
-}
-
-Configuration Desktop {
-    $internetExplorerRegistryKey = 'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds'
-
-    Registry TurnOffNewsAndInterests {
-        Key                  = $internetExplorerRegistryKey
-        ValueName            = 'ShellFeedsTaskbarViewMode'
-        Ensure               = 'Present'
-        ValueType            = 'String'
-        ValueData            = '2'
         PsDscRunAsCredential = $Node.Credential
     }
 }
@@ -253,18 +230,17 @@ Configuration User {
 
         ScreenSaver ScreenSaver {}
 
-        WindowsSnapping WindowsSnapping {}
-
         WindowsExplorer WindowsExplorer {}
 
         Touchpad Touchpad {}
 
-        InternetOptions InternetOptions {}
-
         Desktop Desktop {}
 
-        # I like the idea of clipboard history but, unfortunately, it makes copying sensitive information problematic since you
-        # simply copy something else to replace the sensitive information in the clipboard.
+        InternetOptions InternetOptions {}
+
+        # I like the idea of clipboard history but, unfortunately, it makes copying sensitive information problematic.
+        # With the regular clipboard, simply copying something else replaces the sensitive information in the clipboard.
+        # With clipboard history, the sensitive information is still available in the history.
         Registry ClipboardHistory {
             Key                  = 'HKEY_CURRENT_USER\Software\Microsoft\Clipboard'
             ValueName            = 'EnableClipboardHistory'

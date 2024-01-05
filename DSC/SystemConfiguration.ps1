@@ -1,7 +1,7 @@
 [CmdletBinding()]
 
 Configuration DscResources {
-    Import-DscResource -ModuleName PackageManagement -ModuleVersion '1.4.7'
+    Import-DscResource -ModuleName PackageManagement
 
     # Install Chocolatey DSC resources
     PackageManagement cChocoPackage {
@@ -47,15 +47,9 @@ Configuration System {
             ValueData = '0'
         }
 
-        # Enable Hyper V
-        WindowsOptionalFeature EnableHyperV {
-            Name   = 'Microsoft-Hyper-V-All'
-            Ensure = 'Enable'
-        }
-
-        # Enable Windows containers
-        WindowsOptionalFeature WindowsContainers {
-            Name   = 'Containers'
+        # Enable Hypervisor Platform. Allows Docker and other 3rd party virtualization applications.
+        WindowsOptionalFeature EnableHypervisorPlatform {
+            Name   = 'HypervisorPlatform'
             Ensure = 'Enable'
         }
 
