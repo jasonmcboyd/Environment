@@ -164,6 +164,16 @@ Configuration Touchpad {
         ValueData            = '4'
         PsDscRunAsCredential = $Node.Credential
     }
+
+    # Double tap for multi-select.
+    Registry DoubleTapAndDrag {
+        Key                  = $touchpadRegistryKey
+        ValueName            = 'TapAndDrag'
+        Ensure               = 'Present'
+        ValueType            = 'Dword'
+        ValueData            = 0xffffffff
+        PsDscRunAsCredential = $Node.Credential
+    }
 }
 
 Configuration Desktop {
