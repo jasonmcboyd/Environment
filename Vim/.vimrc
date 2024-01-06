@@ -9,6 +9,12 @@ autocmd GUIEnter * set visualbell t_vb=
 set number
 set relativenumber
 
+" Map the unnamed register to the system clipboard
+set clipboard=unnamed
+
+" Disable paste on middle mouse click
+map <MiddleMouse> <Nop>
+
 " Pick a leader key
 let mapleader = " "
 
@@ -24,8 +30,6 @@ set hlsearch
 " Return to normal mode from insert mode
 inoremap jj <Esc>
 inoremap JJ <Esc>
-
-inoremap <S-Tab> <C-d>
 
 " Turn off search highlight
 nnoremap <esc> :noh<cr><esc>
@@ -49,7 +53,7 @@ nnoremap <leader>cc cc
 nnoremap ciw "_ciw
 nnoremap caw "_caw
 
-" Delete the current line and copy to the unnamed register
+" Delete the current line and do not copy to the unnamed register
 nnoremap <leader>dd "_dd
 
 " x does not copy to unnamed register
