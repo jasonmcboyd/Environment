@@ -47,6 +47,12 @@ Configuration System {
             ValueData = '0'
         }
 
+        # Enable Hyper V - Requires Windows Pro
+        WindowsOptionalFeature EnableHyperV {
+            Name   = 'Microsoft-Hyper-V-All'
+            Ensure = 'Enable'
+        }
+
         # Enable Hypervisor Platform. Allows Docker and other 3rd party virtualization applications.
         WindowsOptionalFeature EnableHypervisorPlatform {
             Name   = 'HypervisorPlatform'
