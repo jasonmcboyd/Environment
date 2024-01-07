@@ -31,6 +31,9 @@ set hlsearch
 inoremap jj <Esc>
 inoremap JJ <Esc>
 
+" Restore Shift-Tab to reverse indent
+inoremap <S-Tab> <C-d>
+
 " Turn off search highlight
 nnoremap <esc> :noh<cr><esc>
 
