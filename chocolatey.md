@@ -48,6 +48,7 @@ Install sysinternals apps individually rather than using the `sysinternals` Choc
 - procexp
 - procmon
 - screentogif
+- sql-server-management-studio
 - starship
 - terraform
 - visualstudio2019community
