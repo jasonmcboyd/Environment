@@ -1,21 +1,13 @@
 [CmdletBinding()]
 param (
-    [Parameter(Position = 0, ParameterSetName = 'Credential')]
+    [Parameter(Position = 0, Mandatory = $true)]
     [pscredential]
     $Credential,
 
-    [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'NoCredential')]
-    [switch]
-    $NoCredential,
-
     [Parameter(Position = 1, Mandatory = $true)]
     [pscredential]
-    $AzureDevOpsPAT
+    $AzureDevOpsPATCredential
 )
-
-if (!$NoCredential -and ($null -eq $Credential)) {
-    $Credential = Get-Credential -Message 'Supply credentials for localhost'
-}
 
 Configuration Chocolatey {
 
@@ -25,38 +17,9 @@ Configuration Chocolatey {
     cChocoInstaller Chocolatey {
         InstallDir = 'C:\ProgramData\chocolatey'
     }
-
-    # Add environment config Chocolatey source
-    cChocoSource Environment {
-        Name                 = 'environment'
-        Source               = 'https://jasonmcboyd.pkgs.visualstudio.com/be7551c8-9f9d-4c13-b99b-8ee316e13f02/_packaging/environment-settings/nuget/v2'
-        Credentials          = $AzureDevOpsPAT
-        PsDscRunAsCredential = $Node.Credential
-        DependsOn            = '[cChocoInstaller]Chocolatey'
-    }
 }
 
-Configuration ChocolateyPackages {
-
-    Import-DscResource -ModuleName cChoco
-
-    $chocolateyPackages = @(
-        'cascadia-code-nerd-font'
-        'environment-powershell-core-profile'
-        'git'
-        'gsudo'
-        'powershell-core'
-    )
-
-    foreach ($package in $chocolateyPackages) {
-        cChocoPackageInstaller $package {
-            Name                 = $package
-            PsDscRunAsCredential = $Node.Credential
-        }
-    }
-}
-
-Configuration PowerShellPackageManagement {
+Configuration PowerShellSecretManagement {
 
     Import-DscResource -ModuleName PackageManagement
 
@@ -71,9 +34,85 @@ Configuration PowerShellPackageManagement {
         Name                 = 'Microsoft.PowerShell.SecretStore'
         PsDscRunAsCredential = $Node.Credential
     }
+
+    Script SecretVault {
+        TestScript = {
+            $secretVault = Get-SecretVault -Name 'LocalStore' -ErrorAction SilentlyContinue
+            return $null -ne $secretVault
+        }
+        GetScript = { @{ Result = Get-SecretVault -Name 'LocalStore' -ErrorAction SilentlyContinue } }
+        SetScript = {
+            $secretVault = Get-SecretVault -Name 'LocalStore' -ErrorAction SilentlyContinue
+            if ($null -eq $secretVault) {
+                Register-SecretVault `
+                    -Name 'LocalStore' `
+                    -ModuleName 'Microsoft.PowerShell.SecretStore' `
+                    -DefaultVault
+
+                Set-SecretStoreConfiguration `
+                    -Name 'LocalStore' `
+                    -Password $($using:Node.Credential.Password)
+            }
+        }
+        DependsOn = '[PackageManagement]SecretStore'
+        PsDscRunAsCredential = $Node.Credential
+    }
+
+    Script EnvironmentPersonalAccessToken {
+        TestScript = {
+            Unlock-SecretStore -Password $($using:Node.Credential.Password)
+            $secret = Get-SecretInfo -Name 'environment-pat' -ErrorAction SilentlyContinue
+            return $null -ne $secret
+        }
+        GetScript = {
+            Unlock-SecretStore -Password $($using:Node.Credential.Password)
+            @{ Result = Get-SecretInfo -Name 'environment-pat' -ErrorAction SilentlyContinue }
+        }
+        SetScript = {
+            Unlock-SecretStore -Password $($using:Node.Credential.Password)
+            $secret = Get-SecretInfo -Name 'environment-pat' -ErrorAction SilentlyContinue
+            if ($null -eq $secret) {
+                Set-Secret -Vault 'LocalStore' -Name 'environment-pat' -Secret $($using:Node.AzureDevOpsPATCredential.Password)
+            }
+        }
+        DependsOn = '[Script]SecretVault'
+        PsDscRunAsCredential = $Node.Credential
+    }
+}
+
+Configuration ChocolateyPackages {
+
+    Import-DscResource -ModuleName cChoco
+
+    # Add environment config Chocolatey source
+    cChocoSource Environment {
+        Name                 = 'environment'
+        Source               = 'https://jasonmcboyd.pkgs.visualstudio.com/be7551c8-9f9d-4c13-b99b-8ee316e13f02/_packaging/environment-settings/nuget/v2'
+        Credentials          = $Node.AzureDevOpsPATCredential
+        PsDscRunAsCredential = $Node.Credential
+    }
+
+    $chocolateyPackages = @(
+        'cascadia-code-nerd-font'
+        'environment-powershell-core-profile'
+        'environment-starship-config'
+        'environment-vim-config'
+        'git'
+        'gsudo'
+        'powershell-core'
+    )
+
+    foreach ($package in $chocolateyPackages) {
+        cChocoPackageInstaller $package {
+            Name                 = $package
+            PsDscRunAsCredential = $Node.Credential
+            DependsOn            = '[cChocoSource]Environment'
+        }
+    }
 }
 
 Configuration ScreenSaver {
+
     $controlPanelDesktopRegistryKey = 'HKEY_CURRENT_USER\Control Panel\Desktop'
 
     # Turn on the screen saver.
@@ -232,11 +271,13 @@ Configuration User {
 
         Chocolatey Chocolatey {}
 
-        ChocolateyPackages ChocolateyPackages {
-            DependsOn = '[Chocolatey]Chocolatey'
-        }
+        PowerShellSecretManagement PowerShellSecretManagement {}
 
-        PowerShellPackageManagement PowerShellPackageManagement {}
+        ChocolateyPackages ChocolateyPackages {
+            DependsOn = @(
+                '[PowerShellSecretManagement]PowerShellSecretManagement'
+                '[Chocolatey]Chocolatey')
+        }
 
         ScreenSaver ScreenSaver {}
 
@@ -262,26 +303,15 @@ Configuration User {
     }
 }
 
-if ($NoCredential) {
-    $configurationData = @{
-        AllNodes = @(
-            @{
-                NodeName                    = 'localhost'
-                PsDscAllowPlainTextPassword = $true
-            }
-        )
-    }
-}
-else {
-    $configurationData = @{
-        AllNodes = @(
-            @{
-                NodeName                    = 'localhost'
-                PsDscAllowPlainTextPassword = $true
-                Credential                  = $Credential
-            }
-        )
-    }
+$configurationData = @{
+    AllNodes = @(
+        @{
+            NodeName                    = 'localhost'
+            PsDscAllowPlainTextPassword = $true
+            Credential                  = $Credential
+            AzureDevOpsPATCredential    = $AzureDevOpsPATCredential
+        }
+    )
 }
 
 User -ConfigurationData $configurationData
