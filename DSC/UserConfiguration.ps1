@@ -33,6 +33,7 @@ Configuration PowerShellSecretManagement {
         Ensure               = 'Present'
         Name                 = 'Microsoft.PowerShell.SecretStore'
         PsDscRunAsCredential = $Node.Credential
+        DependsOn            = '[PackageManagement]SecretManagement'
     }
 
     Script SecretVault {
@@ -54,8 +55,8 @@ Configuration PowerShellSecretManagement {
                     -Password $($using:Node.Credential.Password)
             }
         }
-        DependsOn = '[PackageManagement]SecretStore'
         PsDscRunAsCredential = $Node.Credential
+        DependsOn            = '[PackageManagement]SecretStore'
     }
 
     Script EnvironmentPersonalAccessToken {
@@ -75,8 +76,8 @@ Configuration PowerShellSecretManagement {
                 Set-Secret -Vault 'LocalStore' -Name 'environment-pat' -Secret $($using:Node.AzureDevOpsPATCredential.Password)
             }
         }
-        DependsOn = '[Script]SecretVault'
         PsDscRunAsCredential = $Node.Credential
+        DependsOn            = '[Script]SecretVault'
     }
 }
 
