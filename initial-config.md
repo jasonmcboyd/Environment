@@ -9,7 +9,7 @@ Run PowerShell as **admin**.
 ### Set Script Execution Policy
 
 ```powershell
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
+Set-ExecutionPolicy -Scope LocalMachine -ExecutionPolicy RemoteSigned -Force
 ```
 
 ### Enable PSRemoting
