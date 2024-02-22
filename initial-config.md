@@ -8,6 +8,8 @@ Run PowerShell as **admin**.
 
 ### Set Script Execution Policy
 
+This has to be scoped to the local machine for PowerShell DSC to work.
+
 ```powershell
 Set-ExecutionPolicy -Scope LocalMachine -ExecutionPolicy RemoteSigned -Force
 ```
