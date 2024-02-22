@@ -87,6 +87,8 @@ Invoke-WebRequest https://raw.githubusercontent.com/jasonmcboyd/Environment/mast
 ```
 Run the configuration. This will create a MOF file at ./User/localhost.mof. This will require an Azure DevOps PAT to access the Azure DevOps environment package feed. The PAT must have read permissions for the **Packaging** scope. Also, the DSC engine will be running as admin, but we need to target the user for the user config. Use the `Credential` parameter to run as the target user.
 
+**!!!!! WARNING !!!!!**
+
 **The mof file will store the PAT and the credentials in plain text**. This repo has gitignore configured so that Git will ignore mof files, but care should still be taken to delete the mof file after the configuration is applied.
 
 ```powershell
