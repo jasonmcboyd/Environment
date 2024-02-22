@@ -4,7 +4,7 @@ Run PowerShell as **admin**.
 
 ``` Windows PowerShell ctrl+shift+enter```
 
-**It is best to do this with Windows PowerShell**. Trying to do this with Pwsh can cause issues with conflicting PackageManagement versions.
+**It is best to do this with Windows PowerShell**. Trying to do this with PowerShell Core can cause issues with conflicting PackageManagement versions.
 
 ### Set Script Execution Policy
 
@@ -19,7 +19,7 @@ Aside from having this enabled being handy, **this must be enabled for DSC to wo
 **This cannot be done by default on a public network. When setting up a machine for the first time, Windows defaults new network connections to public. It must be remembered to set the network to private after the initial connection.**
 
 The `SkipNetworkProfileCheck` switch can be used to skip network profile check. This can be useful
-when I are using a VM with a network profile that is not connected to the network.
+when I am using a VM with a network profile that is not connected to the network.
 
 ```powershell
 Enable-PSRemoting -Force
