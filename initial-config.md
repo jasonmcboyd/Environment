@@ -2,9 +2,9 @@
 
 Run PowerShell as **admin**.
 
-``` Windows PowerShell ctrl+shift+enter```
-
 **It is best to do this with Windows PowerShell**. Trying to do this with PowerShell Core can cause issues with conflicting PackageManagement versions.
+
+``` Windows PowerShell ctrl+shift+enter```
 
 ### Set Script Execution Policy
 
