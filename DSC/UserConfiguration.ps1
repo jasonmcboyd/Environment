@@ -98,6 +98,7 @@ Configuration ChocolateyPackages {
         'environment-powershell-core-profile'
         'environment-starship-config'
         'environment-vim-config'
+        'environment-windows-terminal-settings'
         'git'
         'gsudo'
         'powershell-core'
