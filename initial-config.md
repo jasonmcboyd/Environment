@@ -89,7 +89,7 @@ Run the configuration. This will create a MOF file at ./User/localhost.mof. This
 
 **!!!!! WARNING !!!!!**
 
-**The mof file will store the PAT and the credentials in plain text**. This repo has gitignore configured so that Git will ignore mof files, but care should still be taken to delete the mof file after the configuration is applied.
+**The mof file will store the PAT and the credentials in plain text**. This repo has gitignore configured so that Git will ignore mof files to prevent them from being checked in on accident, but care should still be taken to delete the mof file after the configuration is applied.
 
 ```powershell
 $creds = Get-Credential
