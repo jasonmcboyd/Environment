@@ -36,6 +36,7 @@ Install sysinternals apps individually rather than using the `sysinternals` Choc
 - git
 - googlechrome
 - gsudo
+- ilspy
 - kubernetes-cli
 - linqpad5
 - linqpad6
@@ -46,6 +47,7 @@ Install sysinternals apps individually rather than using the `sysinternals` Choc
 - powertoys
 - procexp
 - procmon
+- screentogif
 - starship
 - terraform
 - visualstudio2019community
