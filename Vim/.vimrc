@@ -77,3 +77,8 @@ nnoremap <leader><leader> :vsc Tools.InvokePeasyMotion<cr>
 " Tools.InvokePeasyMotionJumpToDocumentTab
 " Tools.InvokePeasyMotionJumpToLineBegining
 " Tools.InvokePeasyMotionTwoCharJump
+
+" Swap visual mode and visual block mode commands
+" I must also ensure Visual Studio is configured for VsVim to handle Ctrl+V
+nnoremap v <C-v>
+nnoremap <C-v> v
