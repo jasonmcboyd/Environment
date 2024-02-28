@@ -13,3 +13,23 @@ function Update-ChocoEnvironment {
 
   sudo choco upgrade $packages -y
 }
+
+function Update-ProcessEnvironmentVariable {
+  [CmdletBinding()]
+  param (
+    # TODO: Add '[string[]] Variable' parameter some day.
+  )
+
+  $environmentVariableTargets = @('Machine', 'User')
+
+  # TODO: I want to update all environment variables eventually, but Path is the only one I care about right now.
+  $paths =
+    $environmentVariableTargets `
+    | ForEach-Object {
+      [System.Environment]::GetEnvironmentVariable('Path', $_).Split(';', [System.StringSplitOptions]::RemoveEmptyEntries)
+    } `
+    | Select-Object -Unique `
+    | Sort-Object
+
+  $env:Path = $paths -join ';'
+}
