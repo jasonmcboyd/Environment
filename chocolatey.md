@@ -42,6 +42,7 @@ Install sysinternals apps individually rather than using the `sysinternals` Choc
 - linqpad6
 - microsoft-windows-terminal
 - microsoftazurestorageexplorer
+- neovim
 - notepadplusplus
 - powershell-core
 - powertoys
