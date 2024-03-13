@@ -8,3 +8,4 @@
 - Microsoft.PowerShell.SecretStore
 - PackageManagement
 - psHosts
+- posh-git (git command line autocompletion)
