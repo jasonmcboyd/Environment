@@ -8,3 +8,5 @@ function wgig { watch { Git-Graph -Full -AdditionalGitParameters '--color --deco
 
 Set-Alias -Name gig -Value Git-Graph
 Set-Alias -Name gid -Value Git-Diff
+
+Import-Module posh-git
