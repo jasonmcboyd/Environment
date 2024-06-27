@@ -2,12 +2,15 @@ function ConvertTo-Base64Encoding {
   param (
     [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
     [string[]]
-    $Value
+    $Value,
+
+    [System.Text.Encoding]
+    $Encoding = [System.Text.Encoding]::UTF8
   )
 
   Process {
     foreach ($val in $Value) {
-      [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes($val))
+      [Convert]::ToBase64String($Encoding.GetBytes($val))
     }
   }
 }
@@ -16,12 +19,15 @@ function ConvertFrom-Base64Encoding {
   param (
     [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
     [string[]]
-    $Value
+    $Value,
+
+    [System.Text.Encoding]
+    $Encoding = [System.Text.Encoding]::UTF8
   )
 
   Process {
     foreach ($val in $Value) {
-      [System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String($val))
+      $Encoding.GetString([System.Convert]::FromBase64String($val))
     }
   }
 }
