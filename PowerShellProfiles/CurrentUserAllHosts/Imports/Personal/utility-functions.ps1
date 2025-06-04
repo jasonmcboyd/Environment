@@ -29,7 +29,14 @@ function WhatIs {
     [string]
     $Command)
 
-  Get-Command $Command | Select-Object -ExpandProperty Definition
+  $c = Get-Command $Command
+
+  while ($c.CommandType -eq 'Alias') {
+    Write-Verbose "Alias: $c -> $($c.Definition)"
+    $c = Get-Command $c.Definition
+  }
+
+  $c | Select-Object -ExpandProperty Definition
 }
 
 function Any {
@@ -51,31 +58,6 @@ function Guid {
   New-Guid | Set-Clipboard -PassThru
 }
 
-function Start-Presentation {
-  [CmdletBinding()]
-  param (
-      $Seconds = 30
-  )
-
-  Start-Job `
-    -Name 'Presentation Mode' `
-    -ScriptBlock {
-      $myShell = New-Object -com "Wscript.Shell"
-
-      while ($true) {
-        Start-Sleep -Seconds $Seconds
-        $myShell.sendkeys("{F13}")
-      }
-    }
-}
-
-function Get-Presentation {
-  [CmdletBinding()]
-  param ()
-
-  Get-Job -Name 'Presentation Mode'
-}
-
 function To {
   [CmdletBinding()]
   param (
@@ -91,5 +73,50 @@ function To {
     Set-Variable -Name $Variable -Scope Global -Value $InputObject
 
     $InputObject
+  }
+}
+
+function Touch {
+  [CmdletBinding()]
+  param (
+    [parameter(ValueFromPipeline = $true)]
+    [string[]]
+    $Path
+  )
+
+  Process {
+    foreach ($p in $Path) {
+      if (-not (Test-Path $Path)) {
+        Write-Debug "Path does not exist, creating it."
+        Set-Content -Path $Path -Value ''
+      }
+      else {
+        Write-Debug "Path exists, updating timestamp."
+        (Get-Item -Path $Path).LastWriteTime = Get-Date
+      }
+    }
+  }
+}
+
+function Tail {
+  [CmdletBinding()]
+  param (
+    [parameter(ValueFromPipeline = $true)]
+    [string]
+    $Path,
+
+    [int]
+    $Count
+  )
+
+  if (-not (Test-Path $Path)) {
+    Touch $Path
+  }
+
+  if ($Count -gt 0) {
+    Get-Content -Path $Path -Tail $Count -Wait
+  }
+  else {
+    Get-Content -Path $Path -Wait
   }
 }
