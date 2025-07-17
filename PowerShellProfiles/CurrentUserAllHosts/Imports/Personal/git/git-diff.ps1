@@ -10,7 +10,13 @@ function Git-Diff {
     $Branch,
 
     [switch]
-    $NameOnly
+    $NameOnly,
+
+    [switch]
+    $ExcludeWhiteSpace,
+
+    [string[]]
+    $Exclude = @('*.config', '*.Designer.cs')
   )
 
   $command = 'git diff'
@@ -27,7 +33,13 @@ function Git-Diff {
     $command += ' --name-only'
   }
 
-  $command += " ':(exclude)*.config'"
+  if ($ExcludeWhiteSpace) {
+    $command += ' --ignore-all-space'
+  }
+
+  foreach ($ex in $Exclude) {
+    $command += " ':(exclude)$ex'"
+  }
 
   Write-Debug "command: $command"
 

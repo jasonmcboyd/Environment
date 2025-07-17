@@ -17,6 +17,7 @@ function gim {
   foreach ($branchName in $branchNames) {
     $pattern = "\s*$branchName`$"
 
+    Write-Verbose "Checking for '$branchName' branch."
     if ((git branch | sls -Pattern $branchName | measure).Count -eq 1) {
       Write-Verbose "Found '$branchName' branch."
 
