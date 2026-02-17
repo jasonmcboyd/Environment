@@ -29,14 +29,28 @@ function WhatIs {
     [string]
     $Command)
 
+  $count = 1
+
   $c = Get-Command $Command
 
   while ($c.CommandType -eq 'Alias') {
-    Write-Verbose "Alias: $c -> $($c.Definition)"
+    Write-Output ([PSCustomObject]@{
+      CommandCount = $count
+      Name         = $c.Name
+      Type         = $c.CommandType
+      Definition   = $c.Definition
+    })
+
     $c = Get-Command $c.Definition
+    $count++
   }
 
-  $c | Select-Object -ExpandProperty Definition
+  Write-Output ([PSCustomObject]@{
+    CommandCount = $count
+    Name         = $c.Name
+    Type         = $c.CommandType
+    Definition   = $c.Definition
+  })
 }
 
 function Any {
