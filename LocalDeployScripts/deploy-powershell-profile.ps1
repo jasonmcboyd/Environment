@@ -1,3 +1,4 @@
 $profilePath = Split-Path $profile.CurrentUserAllHosts
+$sourcePath = "$PSScriptRoot/../PowerShellProfiles/CurrentUserAllHosts"
 
-Copy-Item -Path "$PSScriptRoot/../PowerShellProfiles/CurrentUserAllHosts/*" -Destination $profilePath -Recurse -Force
+robocopy $sourcePath $profilePath /MIR /NJH /NJS
