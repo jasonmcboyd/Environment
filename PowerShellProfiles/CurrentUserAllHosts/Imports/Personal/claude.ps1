@@ -21,3 +21,5 @@ function Remove-Nul {
     }
   }
 }
+
+Set-Alias -Name rnul -Value Remove-Nul
