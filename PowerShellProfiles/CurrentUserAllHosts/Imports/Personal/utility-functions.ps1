@@ -29,16 +29,15 @@ function WhatIs {
     [string] $Command
   )
 
-  $count = 1
   $commandInfo = Get-Command $Command
 
   while ($true) {
     $result = [PSCustomObject]@{
-      PSTypeName   = 'WhatIs.CommandInfo'
-      CommandCount = $count
-      Name         = $commandInfo.Name
-      Type         = $commandInfo.CommandType
-      Definition   = $commandInfo.Definition
+      PSTypeName = 'WhatIs.CommandInfo'
+      Name       = $commandInfo.Name
+      Type       = $commandInfo.CommandType
+      Definition = $commandInfo.Definition
+      Source     = $commandInfo.Source
     }
 
     $result
@@ -48,14 +47,10 @@ function WhatIs {
     }
 
     $commandInfo = Get-Command $commandInfo.Definition
-    $count++
   }
 }
 
-Update-TypeData `
-  -TypeName 'WhatIs.CommandInfo' `
-  -DefaultDisplayPropertySet 'CommandCount', 'Name', 'Type', 'Definition' `
-  -Force
+Update-FormatData -PrependPath "$PSScriptRoot\WhatIs.format.ps1xml"
 
 function Any {
   [CmdletBinding()]
