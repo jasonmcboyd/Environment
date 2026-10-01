@@ -26,32 +26,36 @@ function WhatIs {
   [CmdletBinding()]
   param (
     [Parameter(Mandatory = $true)]
-    [string]
-    $Command)
+    [string] $Command
+  )
 
   $count = 1
+  $commandInfo = Get-Command $Command
 
-  $c = Get-Command $Command
-
-  while ($c.CommandType -eq 'Alias') {
-    Write-Output ([PSCustomObject]@{
+  while ($true) {
+    $result = [PSCustomObject]@{
+      PSTypeName   = 'WhatIs.CommandInfo'
       CommandCount = $count
-      Name         = $c.Name
-      Type         = $c.CommandType
-      Definition   = $c.Definition
-    })
+      Name         = $commandInfo.Name
+      Type         = $commandInfo.CommandType
+      Definition   = $commandInfo.Definition
+    }
 
-    $c = Get-Command $c.Definition
+    $result
+
+    if ($commandInfo.CommandType -ne 'Alias') {
+      break
+    }
+
+    $commandInfo = Get-Command $commandInfo.Definition
     $count++
   }
-
-  Write-Output ([PSCustomObject]@{
-    CommandCount = $count
-    Name         = $c.Name
-    Type         = $c.CommandType
-    Definition   = $c.Definition
-  })
 }
+
+Update-TypeData `
+  -TypeName 'WhatIs.CommandInfo' `
+  -DefaultDisplayPropertySet 'CommandCount', 'Name', 'Type', 'Definition' `
+  -Force
 
 function Any {
   [CmdletBinding()]
